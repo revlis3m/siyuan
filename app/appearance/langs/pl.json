@@ -1,4 +1,17 @@
 {
+	"status": "Status",
+	"statusGroup": "Grupa statusu",
+	"statusGroupTodo": "Do zrobienia",
+	"statusGroupInProgress": "W toku",
+	"statusGroupComplete": "Ukończone",
+	"filterOperatorIsComplete": "Jest ukończone",
+	"filterOperatorIsNotComplete": "Nie jest ukończone",
+	"calcOperatorCountComplete": "Liczba ukończonych",
+	"calcOperatorCountNotComplete": "Liczba nieukończonych",
+	"calcOperatorPercentComplete": "Procent ukończonych",
+	"calcResultCountComplete": "Liczba ukończonych",
+	"calcResultCountNotComplete": "Liczba nieukończonych",
+	"calcResultPercentComplete": "Procent ukończonych",
 	"databaseAttrLayout": "Układ pól panelu bazy danych",
 	"databaseAttrLayoutTip": "Ustawia układ pól w panelu bazy danych u góry dokumentu i w osobnym panelu elementu; przy braku miejsca automatycznie używana jest jedna kolumna",
 	"databaseAttrLayoutSingle": "Jedna kolumna",
@@ -3013,6 +3026,9 @@
 		"quit": "Zamknij aplikację"
 	},
 	"_attrView": {
+		"statusNotStarted": "Nie rozpoczęto",
+		"statusInProgress": "W toku",
+		"statusDone": "Gotowe",
 		"dateCalendar": "Kalendarz",
 		"solarCalendar": "Gregoriański",
 		"lunarCalendar": "Chiński księżycowy",

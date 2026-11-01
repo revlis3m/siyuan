@@ -1,4 +1,17 @@
 {
+	"status": "Status",
+	"statusGroup": "Status group",
+	"statusGroupTodo": "To-do",
+	"statusGroupInProgress": "In progress",
+	"statusGroupComplete": "Complete",
+	"filterOperatorIsComplete": "Is complete",
+	"filterOperatorIsNotComplete": "Is not complete",
+	"calcOperatorCountComplete": "Count complete",
+	"calcOperatorCountNotComplete": "Count not complete",
+	"calcOperatorPercentComplete": "Percent complete",
+	"calcResultCountComplete": "Count complete",
+	"calcResultCountNotComplete": "Count not complete",
+	"calcResultPercentComplete": "Percent complete",
 	"databaseAttrLayout": "Database panel field layout",
 	"databaseAttrLayoutTip": "Set the field layout in the database panel at the top of a document and the standalone item panel; one column is used automatically when space is limited",
 	"databaseAttrLayoutSingle": "One column",
@@ -3013,6 +3026,9 @@
 		"quit": "Quit application"
 	},
 	"_attrView": {
+		"statusNotStarted": "Not started",
+		"statusInProgress": "In progress",
+		"statusDone": "Done",
 		"dateCalendar": "Calendar",
 		"solarCalendar": "Gregorian",
 		"lunarCalendar": "Chinese lunar",

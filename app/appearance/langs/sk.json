@@ -1,4 +1,17 @@
 {
+	"status": "Stav",
+	"statusGroup": "Skupina stavu",
+	"statusGroupTodo": "Na vykonanie",
+	"statusGroupInProgress": "Prebieha",
+	"statusGroupComplete": "Dokončené",
+	"filterOperatorIsComplete": "Je dokončené",
+	"filterOperatorIsNotComplete": "Nie je dokončené",
+	"calcOperatorCountComplete": "Počet dokončených",
+	"calcOperatorCountNotComplete": "Počet nedokončených",
+	"calcOperatorPercentComplete": "Percento dokončených",
+	"calcResultCountComplete": "Počet dokončených",
+	"calcResultCountNotComplete": "Počet nedokončených",
+	"calcResultPercentComplete": "Percento dokončených",
 	"databaseAttrLayout": "Rozloženie polí panela databázy",
 	"databaseAttrLayoutTip": "Nastaví rozloženie polí na paneli databázy v hornej časti dokumentu a na samostatnom paneli položky; pri nedostatku miesta sa automaticky použije jeden stĺpec",
 	"databaseAttrLayoutSingle": "Jeden stĺpec",
@@ -3013,6 +3026,9 @@
 		"quit": "Ukončiť aplikáciu"
 	},
 	"_attrView": {
+		"statusNotStarted": "Nezačaté",
+		"statusInProgress": "Prebieha",
+		"statusDone": "Hotovo",
 		"dateCalendar": "Kalendár",
 		"solarCalendar": "Gregoriánsky",
 		"lunarCalendar": "Čínsky lunárny",

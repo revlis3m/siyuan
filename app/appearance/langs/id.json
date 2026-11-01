@@ -1,4 +1,17 @@
 {
+	"status": "Status",
+	"statusGroup": "Grup status",
+	"statusGroupTodo": "Akan dikerjakan",
+	"statusGroupInProgress": "Sedang berjalan",
+	"statusGroupComplete": "Selesai",
+	"filterOperatorIsComplete": "Selesai",
+	"filterOperatorIsNotComplete": "Belum selesai",
+	"calcOperatorCountComplete": "Hitung selesai",
+	"calcOperatorCountNotComplete": "Hitung belum selesai",
+	"calcOperatorPercentComplete": "Persentase selesai",
+	"calcResultCountComplete": "Hitung selesai",
+	"calcResultCountNotComplete": "Hitung belum selesai",
+	"calcResultPercentComplete": "Persentase selesai",
 	"databaseAttrLayout": "Tata letak bidang panel basis data",
 	"databaseAttrLayoutTip": "Atur tata letak bidang pada panel basis data di bagian atas dokumen dan panel item terpisah; satu kolom digunakan secara otomatis jika ruang tidak cukup",
 	"databaseAttrLayoutSingle": "Satu kolom",
@@ -3013,6 +3026,9 @@
 		"quit": "Keluar aplikasi"
 	},
 	"_attrView": {
+		"statusNotStarted": "Belum dimulai",
+		"statusInProgress": "Sedang berjalan",
+		"statusDone": "Selesai",
 		"dateCalendar": "Kalender",
 		"solarCalendar": "Gregorian",
 		"lunarCalendar": "Lunar Tionghoa",

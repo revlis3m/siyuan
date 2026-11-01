@@ -473,6 +473,10 @@ func executeTemplateField(tpl *template.Template, ial map[string]string, keyValu
 				contents = append(contents, s.Content)
 			}
 			dataModel[keyValue.Key.Name] = contents
+		} else if av.KeyTypeStatus == v.Type {
+			dataModel[keyValue.Key.Name] = v.String(true)
+			// 状态字段额外提供是否已完成，模板可直接用 {{if .状态_complete}} 判断。
+			dataModel[keyValue.Key.Name+"_complete"] = v.IsStatusComplete(keyValue.Key)
 		} else {
 			dataModel[keyValue.Key.Name] = v.String(true)
 		}
@@ -1188,7 +1192,7 @@ func FillAttributeViewNilValue(value *av.Value, typ av.KeyType) {
 		if nil == value.Date {
 			value.Date = &av.ValueDate{}
 		}
-	case av.KeyTypeSelect:
+	case av.KeyTypeSelect, av.KeyTypeStatus:
 		if 1 > len(value.MSelect) {
 			value.MSelect = []*av.ValueSelect{}
 		}

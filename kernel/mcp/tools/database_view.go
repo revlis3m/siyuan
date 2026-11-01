@@ -355,7 +355,7 @@ func databaseValidateViewGroup(attrView *av.AttributeView, view *av.View, group 
 	if group.Order < av.GroupOrderAsc || group.Order > av.GroupOrderSelectOption {
 		return errors.New("invalid group order")
 	}
-	if group.Order == av.GroupOrderSelectOption && key.Type != av.KeyTypeSelect && key.Type != av.KeyTypeMSelect {
+	if group.Order == av.GroupOrderSelectOption && !av.IsSelectKeyType(key.Type) {
 		return errors.New("select option order requires a select field")
 	}
 	if group.ValueSource != "" && group.ValueSource != av.ValueSourceStored && group.ValueSource != av.ValueSourceRendered {

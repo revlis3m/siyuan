@@ -67,6 +67,10 @@
     "",
     ""
   ],
+  "status": [
+    "<option  value=\"=\">filterOperatorContains</option><option  value=\"!=\">filterOperatorDoesNotContain</option><option  value=\"Is empty\">filterOperatorIsEmpty</option><option  value=\"Is not empty\">filterOperatorIsNotEmpty</option><option  value=\"Is complete\">filterOperatorIsComplete</option><option  value=\"Is not complete\">filterOperatorIsNotComplete</option>",
+    "<option  value=\"=\">filterOperatorIs</option><option  value=\"!=\">filterOperatorIsNot</option><option  value=\"Is empty\">filterOperatorIsEmpty</option><option  value=\"Is not empty\">filterOperatorIsNotEmpty</option>"
+  ],
   "unknown": [
     "",
     ""

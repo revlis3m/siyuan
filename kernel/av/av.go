@@ -177,6 +177,7 @@ const (
 	KeyTypeRelation   KeyType = "relation"   // 关联
 	KeyTypeRollup     KeyType = "rollup"     // 汇总
 	KeyTypeLineNumber KeyType = "lineNumber" // 行号
+	KeyTypeStatus     KeyType = "status"     // 状态
 )
 
 // Key 描述了属性视图属性字段的基础结构。
@@ -276,6 +277,7 @@ type SelectOption struct {
 	Name          string              `json:"name"`                    // 选项名称
 	Color         string              `json:"color"`                   // 选项颜色
 	Desc          string              `json:"desc"`                    // 选项描述
+	Group         StatusGroup         `json:"group,omitempty"`         // 状态分组，仅状态字段使用，单选和多选忽略
 	ResolvedColor *AttributeViewColor `json:"resolvedColor,omitempty"` // 渲染阶段解析后的自定义颜色
 }
 

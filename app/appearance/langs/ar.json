@@ -1,4 +1,17 @@
 {
+	"status": "الحالة",
+	"statusGroup": "مجموعة الحالة",
+	"statusGroupTodo": "للتنفيذ",
+	"statusGroupInProgress": "قيد التنفيذ",
+	"statusGroupComplete": "مكتمل",
+	"filterOperatorIsComplete": "مكتمل",
+	"filterOperatorIsNotComplete": "غير مكتمل",
+	"calcOperatorCountComplete": "عدد المكتمل",
+	"calcOperatorCountNotComplete": "عدد غير المكتمل",
+	"calcOperatorPercentComplete": "نسبة الاكتمال",
+	"calcResultCountComplete": "عدد المكتمل",
+	"calcResultCountNotComplete": "عدد غير المكتمل",
+	"calcResultPercentComplete": "نسبة الاكتمال",
 	"databaseAttrLayout": "تخطيط حقول لوحة قاعدة البيانات",
 	"databaseAttrLayoutTip": "تحديد تخطيط الحقول في لوحة قاعدة البيانات أعلى المستند ولوحة العنصر المستقلة، مع استخدام عمود واحد تلقائيًا عند عدم توفر مساحة كافية",
 	"databaseAttrLayoutSingle": "عمود واحد",
@@ -3013,6 +3026,9 @@
 		"quit": "خروج من التطبيق"
 	},
 	"_attrView": {
+		"statusNotStarted": "لم يبدأ",
+		"statusInProgress": "قيد التنفيذ",
+		"statusDone": "تم",
 		"dateCalendar": "التقويم",
 		"solarCalendar": "الميلادي",
 		"lunarCalendar": "القمري الصيني",

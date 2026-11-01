@@ -1,4 +1,4 @@
-import {isAVDateType, isAVSelectType, isAVTextType} from "./capabilities";
+import {isAVDateType, isAVSelectType, isAVSingleSelectType, isAVTextType} from "./capabilities";
 import type {IAVSelectedCell} from "./selectionState";
 import {createAVLocationReplacement, isAVLocationEmpty} from "./locationValue";
 
@@ -77,7 +77,7 @@ export const cellValueIsEmpty = (value: IAVCellValue, useRenderedContent = false
         return value.number ? !value.number.isNotEmpty : true;
     }
     if ((isAVSelectType(value.type) || value.type === "mAsset")) {
-        if (value[(value.type === "select" ? "mSelect" : value.type) as "mSelect"]?.length > 0) {
+        if (value[(isAVSingleSelectType(value.type) ? "mSelect" : value.type) as "mSelect"]?.length > 0) {
             return false;
         }
         return true;
@@ -115,7 +115,7 @@ export const genEmptyAVCellValue = (colType: TAVCol): IAVCellValue => {
         cellValue[colType as "text"] = {
             content: "",
         };
-    } else if (colType === "mSelect" || colType === "select") {
+    } else if (isAVSelectType(colType)) {
         cellValue.mSelect = [];
     } else if (colType === "mAsset") {
         cellValue.mAsset = [];
@@ -151,7 +151,7 @@ export const genEmptyAVCellValue = (colType: TAVCol): IAVCellValue => {
 export const cloneAVCellValueSnapshot = (value: IAVCellValue): IAVCellValue => {
     const snapshot = JSON.parse(JSON.stringify(value, (key, item) =>
         ["renderedContent", "hasRenderTemplate"].includes(key) ? undefined : item)) as IAVCellValue;
-    if ((snapshot.type === "mSelect" || snapshot.type === "select") && !snapshot.mSelect) {
+    if (isAVSelectType(snapshot.type) && !snapshot.mSelect) {
         snapshot.mSelect = [];
     } else if (snapshot.type === "mAsset" && !snapshot.mAsset) {
         snapshot.mAsset = [];

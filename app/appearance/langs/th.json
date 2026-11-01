@@ -1,4 +1,17 @@
 {
+	"status": "สถานะ",
+	"statusGroup": "กลุ่มสถานะ",
+	"statusGroupTodo": "สิ่งที่ต้องทำ",
+	"statusGroupInProgress": "กำลังดำเนินการ",
+	"statusGroupComplete": "เสร็จสมบูรณ์",
+	"filterOperatorIsComplete": "เสร็จสมบูรณ์",
+	"filterOperatorIsNotComplete": "ยังไม่เสร็จ",
+	"calcOperatorCountComplete": "นับที่เสร็จ",
+	"calcOperatorCountNotComplete": "นับที่ยังไม่เสร็จ",
+	"calcOperatorPercentComplete": "เปอร์เซ็นต์ที่เสร็จ",
+	"calcResultCountComplete": "นับที่เสร็จ",
+	"calcResultCountNotComplete": "นับที่ยังไม่เสร็จ",
+	"calcResultPercentComplete": "เปอร์เซ็นต์ที่เสร็จ",
 	"databaseAttrLayout": "รูปแบบการจัดวางฟิลด์ในแผงฐานข้อมูล",
 	"databaseAttrLayoutTip": "กำหนดการจัดวางฟิลด์ในแผงฐานข้อมูลด้านบนเอกสารและแผงรายการแยก โดยใช้คอลัมน์เดียวโดยอัตโนมัติเมื่อพื้นที่ไม่เพียงพอ",
 	"databaseAttrLayoutSingle": "หนึ่งคอลัมน์",
@@ -3013,6 +3026,9 @@
 		"quit": "ออก"
 	},
 	"_attrView": {
+		"statusNotStarted": "ยังไม่เริ่ม",
+		"statusInProgress": "กำลังดำเนินการ",
+		"statusDone": "เสร็จแล้ว",
 		"dateCalendar": "ระบบปฏิทิน",
 		"solarCalendar": "เกรกอเรียน",
 		"lunarCalendar": "จันทรคติจีน",

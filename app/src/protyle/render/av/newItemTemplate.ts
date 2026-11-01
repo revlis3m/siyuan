@@ -80,6 +80,7 @@ const hasFieldValue = (column: IAVColumn, value: IAVCellValue) => {
             return value.date?.isNotEmpty;
         case "select":
         case "mSelect":
+        case "status":
             return value.mSelect?.length > 0;
         case "url":
             return !!value.url?.content;

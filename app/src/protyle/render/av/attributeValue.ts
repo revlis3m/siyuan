@@ -1,4 +1,4 @@
-import {hasAVAttributePlaceholder, isAVLinkType, isAVTimestampType, usesAVRollupCellRenderer} from "./capabilities";
+import {hasAVAttributePlaceholder, isAVLinkType, isAVSingleSelectType, isAVTimestampType, usesAVRollupCellRenderer} from "./capabilities";
 import {escapeAriaLabel, escapeAttr, escapeHtml, escapeHtmlTextAndAttr} from "../../../util/escape";
 import {unicode2Emoji} from "../../../emoji";
 import {renderAVBlockIcon} from "./blockIcon";
@@ -157,8 +157,9 @@ export const genAVValueHTML = (value: IAVCellValue, dateFormat: TAVDateFormat = 
             break;
         case "mSelect":
         case "select":
+        case "status":
             value.mSelect?.forEach((item, index) => {
-                if (value.type === "select" && index > 0) {
+                if (isAVSingleSelectType(value.type) && index > 0) {
                     return;
                 }
                 html += `<span class="b3-chip b3-chip--middle" data-color="${escapeAttr(item.color)}" style="${getAVColorStyle(item)}">${escapeHtml(item.content)}</span>`;

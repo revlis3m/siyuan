@@ -1,4 +1,17 @@
 {
+	"status": "סטטוס",
+	"statusGroup": "קבוצת סטטוס",
+	"statusGroupTodo": "לביצוע",
+	"statusGroupInProgress": "בתהליך",
+	"statusGroupComplete": "הושלם",
+	"filterOperatorIsComplete": "הושלם",
+	"filterOperatorIsNotComplete": "לא הושלם",
+	"calcOperatorCountComplete": "ספירת הושלמו",
+	"calcOperatorCountNotComplete": "ספירת לא הושלמו",
+	"calcOperatorPercentComplete": "אחוז השלמה",
+	"calcResultCountComplete": "ספירת הושלמו",
+	"calcResultCountNotComplete": "ספירת לא הושלמו",
+	"calcResultPercentComplete": "אחוז השלמה",
 	"databaseAttrLayout": "פריסת השדות בחלונית מסד הנתונים",
 	"databaseAttrLayoutTip": "קביעת פריסת השדות בלוח מסד הנתונים בראש המסמך ובלוח הפריט העצמאי, עם מעבר אוטומטי לעמודה אחת כשאין מספיק מקום",
 	"databaseAttrLayoutSingle": "עמודה אחת",
@@ -3013,6 +3026,9 @@
 		"quit": "צא מהאפליקציה"
 	},
 	"_attrView": {
+		"statusNotStarted": "לא התחיל",
+		"statusInProgress": "בתהליך",
+		"statusDone": "בוצע",
 		"dateCalendar": "לוח שנה",
 		"solarCalendar": "גרגוריאני",
 		"lunarCalendar": "ירחי סיני",

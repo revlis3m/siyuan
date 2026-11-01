@@ -1,4 +1,17 @@
 {
+	"status": "Статус",
+	"statusGroup": "Група статусу",
+	"statusGroupTodo": "До виконання",
+	"statusGroupInProgress": "У роботі",
+	"statusGroupComplete": "Завершено",
+	"filterOperatorIsComplete": "Завершено",
+	"filterOperatorIsNotComplete": "Не завершено",
+	"calcOperatorCountComplete": "Кількість завершених",
+	"calcOperatorCountNotComplete": "Кількість незавершених",
+	"calcOperatorPercentComplete": "Відсоток завершених",
+	"calcResultCountComplete": "Кількість завершених",
+	"calcResultCountNotComplete": "Кількість незавершених",
+	"calcResultPercentComplete": "Відсоток завершених",
 	"databaseAttrLayout": "Розташування полів панелі бази даних",
 	"databaseAttrLayoutTip": "Задає розташування полів панелі бази даних угорі документа й окремої панелі запису; за браку місця автоматично використовується один стовпець",
 	"databaseAttrLayoutSingle": "Один стовпець",
@@ -3013,6 +3026,9 @@
 		"quit": "Вийти із застосунку"
 	},
 	"_attrView": {
+		"statusNotStarted": "Не розпочато",
+		"statusInProgress": "У роботі",
+		"statusDone": "Готово",
 		"dateCalendar": "Календар",
 		"solarCalendar": "Григоріанський",
 		"lunarCalendar": "Китайський місячний",

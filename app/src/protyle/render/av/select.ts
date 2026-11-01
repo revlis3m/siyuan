@@ -27,6 +27,15 @@ import {
 } from "./color";
 import {openAVCustomColorDialog} from "./colorDialog";
 import {isMobile} from "../../../util/functions";
+import {isAVSingleSelectType} from "./capabilities";
+import {
+    AV_STATUS_GROUPS,
+    getAVStatusGroup,
+    getAVStatusGroupHeadingHTML,
+    getAVStatusGroupLabel,
+    moveAVStatusOption,
+    withAVStatusGroups,
+} from "./status";
 
 let cellValues: IAVCellValue[];
 
@@ -34,10 +43,13 @@ const filterSelectHTML = (key: string, options: {
     name: string,
     color: string,
     resolvedColor?: IAVColor,
-    desc?: string
-}[], selected: string[] = []) => {
+    desc?: string,
+    group?: TAVStatusGroup | "",
+}[], selected: string[] = [], isStatus = false) => {
     let html = "";
     let hasMatch = false;
+    // 状态字段按分组展示选项，分组标题为只读项，空分组不显示标题。
+    const groupHTML: Record<string, string> = {};
     if (selected.length === 0) {
         document.querySelectorAll(".av__panel .b3-chips .b3-chip").forEach((item: HTMLElement) => {
             selected.push(item.dataset.content);
@@ -50,7 +62,8 @@ const filterSelectHTML = (key: string, options: {
                 (key.toLowerCase().indexOf(item.name.toLowerCase()) > -1 ||
                     item.name.toLowerCase().indexOf(key.toLowerCase()) > -1)) {
                 const airaLabel = item.desc ? `${escapeAriaLabel(item.name)}<div class='ft__on-surface'>${escapeAriaLabel(item.desc || "")}</div>` : "";
-                html += `<button data-type="addColOptionOrCell" class="b3-menu__item${currentName === item.name ? " b3-menu__item--current" : ""}" data-name="${escapeAttr(item.name)}" data-desc="${escapeAttr(item.desc || "")}" data-option-row="true" data-color="${escapeAttr(item.color)}">
+                const group = isStatus ? getAVStatusGroup(item) : "";
+                groupHTML[group] = (groupHTML[group] || "") + `<button data-type="addColOptionOrCell" class="b3-menu__item${currentName === item.name ? " b3-menu__item--current" : ""}" data-name="${escapeAttr(item.name)}" data-desc="${escapeAttr(item.desc || "")}" data-option-row="true" data-color="${escapeAttr(item.color)}">
     <span draggable="true" class="b3-menu__icon b3-menu__icon--custom fn__grab"><svg><use xlink:href="#iconDrag"></use></svg></span>
     <div class="fn__flex-1 ariaLabel" data-position="parentW" aria-label="${airaLabel}">
         <span class="b3-chip" style="${getAVColorStyle(item)}">
@@ -65,6 +78,15 @@ const filterSelectHTML = (key: string, options: {
                 hasMatch = true;
             }
         });
+        if (isStatus) {
+            AV_STATUS_GROUPS.forEach(group => {
+                if (groupHTML[group]) {
+                    html += getAVStatusGroupHeadingHTML(group) + groupHTML[group];
+                }
+            });
+        } else {
+            html = groupHTML[""] || "";
+        }
     }
     if (!hasMatch && key) {
         html = html.replace('class="b3-menu__item b3-menu__item--current"', 'class="b3-menu__item"');
@@ -401,6 +423,56 @@ ${isMobile() ? "" : '<div class="fn__hr--small"></div>'}`,
             }, undefined, true);
         }
     });
+    const statusColumn = fields.find(column => column.id === colId && column.type === "status");
+    if (statusColumn) {
+        // 状态选项可以移动到其他分组，移动后排在目标分组末尾。
+        const currentGroup = getAVStatusGroup(statusColumn.options?.find(item => item.name === name));
+        menu.addItem({
+            id: "statusGroup",
+            icon: "iconTaskInProgress",
+            label: window.siyuan.languages.statusGroup,
+            submenu: AV_STATUS_GROUPS.map(group => ({
+                iconHTML: "",
+                label: getAVStatusGroupLabel(group),
+                checked: currentGroup === group,
+                click() {
+                    const newOptions = moveAVStatusOption(statusColumn.options, name, group);
+                    if (!newOptions) {
+                        return;
+                    }
+                    const oldOptions = withAVStatusGroups(statusColumn.options);
+                    transaction(protyle, [{
+                        action: "updateAttrViewColOptions",
+                        id: colId,
+                        avID: data.id,
+                        blockID,
+                        data: newOptions,
+                    }, {
+                        action: "doUpdateUpdated",
+                        id: blockID,
+                        data: dayjs().format("YYYYMMDDHHmmss"),
+                    }], [{
+                        action: "updateAttrViewColOptions",
+                        id: colId,
+                        avID: data.id,
+                        blockID,
+                        data: oldOptions,
+                    }]);
+                    statusColumn.options = newOptions;
+                    const oldScroll = menuElement.querySelector(".b3-menu__items").scrollTop;
+                    if (!cellElements) {
+                        menuElement.innerHTML = getEditHTML({protyle, data, colId, isCustomAttr});
+                        bindEditEvent({protyle, data, menuElement, isCustomAttr, blockID});
+                    } else {
+                        menuElement.innerHTML = getSelectHTML(fields, cellElements, false, blockElement);
+                        bindSelectEvent(protyle, data, menuElement, cellElements, blockElement);
+                        setSelectMenuPosition(menuElement, cellElements[cellElements.length - 1]);
+                    }
+                    menuElement.querySelector(".b3-menu__items").scrollTop = oldScroll;
+                }
+            })),
+        });
+    }
     menu.addSeparator();
     const html = `<div class="fn__flex fn__flex-wrap av__option-colors">${getAVColorGridHTML(
         getAVCustomColors(), color, window.siyuan.languages.manageColors, getAVColorOrder())}</div>`;
@@ -548,10 +620,10 @@ export const bindSelectEvent = (protyle: IProtyle, data: IAV, menuElement: HTMLE
         if (event.isComposing) {
             return;
         }
-        listElement.innerHTML = filterSelectHTML(inputElement.value, colData.options);
+        listElement.innerHTML = filterSelectHTML(inputElement.value, colData.options, [], colData.type === "status");
     });
     inputElement.addEventListener("compositionend", () => {
-        listElement.innerHTML = filterSelectHTML(inputElement.value, colData.options);
+        listElement.innerHTML = filterSelectHTML(inputElement.value, colData.options, [], colData.type === "status");
     });
     inputElement.addEventListener("keydown", (event: KeyboardEvent) => {
         if (event.isComposing) {
@@ -725,7 +797,7 @@ export const addColOptionOrCell = (protyle: IProtyle, data: IAV, cellElements: H
         });
         transaction(protyle, cellDoOperations, cellUndoOperations);
     }
-    if (colData.type === "select") {
+    if (isAVSingleSelectType(colData.type)) {
         if (blockElement.classList.contains("av")) {
             blockElement.setAttribute("data-rendering", "true");
         }
@@ -783,7 +855,7 @@ export const getSelectHTML = (fields: IAVColumn[], cellElements: HTMLElement[], 
     ${selectedHTML}
     <input spellcheck="false" placeholder="${escapeAttr(window.siyuan.languages.search)} / ${escapeAttr(window.siyuan.languages.addAttr)}" aria-label="${escapeAttr(window.siyuan.languages.search)} / ${escapeAttr(window.siyuan.languages.addAttr)}">
 </div>
-<div class="av__select-list" style="flex: 1;overflow: auto;">${filterSelectHTML("", colData.options, selected)}</div>
+<div class="av__select-list" style="flex: 1;overflow: auto;">${filterSelectHTML("", colData.options, selected, colData.type === "status")}</div>
 </div>`;
 };
 

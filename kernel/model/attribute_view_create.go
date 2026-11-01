@@ -138,7 +138,7 @@ func configureCreatedAttributeView(attrView *av.AttributeView, name, primaryKeyN
 	var kanbanGroupKey *av.Key
 	if av.LayoutTypeKanban == currentView.LayoutType {
 		for _, key := range preparedKeys {
-			if av.KeyTypeSelect == key.Type {
+			if av.IsSingleSelectKeyType(key.Type) {
 				kanbanGroupKey = key
 				break
 			}

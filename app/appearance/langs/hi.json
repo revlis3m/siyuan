@@ -1,4 +1,17 @@
 {
+	"status": "स्थिति",
+	"statusGroup": "स्थिति समूह",
+	"statusGroupTodo": "करना है",
+	"statusGroupInProgress": "प्रगति में",
+	"statusGroupComplete": "पूर्ण",
+	"filterOperatorIsComplete": "पूर्ण है",
+	"filterOperatorIsNotComplete": "पूर्ण नहीं है",
+	"calcOperatorCountComplete": "पूर्ण की गिनती",
+	"calcOperatorCountNotComplete": "अपूर्ण की गिनती",
+	"calcOperatorPercentComplete": "पूर्णता प्रतिशत",
+	"calcResultCountComplete": "पूर्ण की गिनती",
+	"calcResultCountNotComplete": "अपूर्ण की गिनती",
+	"calcResultPercentComplete": "पूर्णता प्रतिशत",
 	"databaseAttrLayout": "डेटाबेस पैनल के फ़ील्ड का लेआउट",
 	"databaseAttrLayoutTip": "दस्तावेज़ के शीर्ष पर डेटाबेस पैनल और अलग आइटम पैनल के फ़ील्ड का लेआउट चुनें, जगह कम होने पर अपने आप एक कॉलम का उपयोग होता है",
 	"databaseAttrLayoutSingle": "एक कॉलम",
@@ -3013,6 +3026,9 @@
 		"quit": "एप्लिकेशन से बाहर निकलें"
 	},
 	"_attrView": {
+		"statusNotStarted": "शुरू नहीं हुआ",
+		"statusInProgress": "प्रगति में",
+		"statusDone": "हो गया",
 		"dateCalendar": "पंचांग",
 		"solarCalendar": "ग्रेगोरियन",
 		"lunarCalendar": "चीनी चंद्र पंचांग",

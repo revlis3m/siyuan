@@ -1,4 +1,17 @@
 {
+	"status": "Status",
+	"statusGroup": "Grupa statusa",
+	"statusGroupTodo": "Za uraditi",
+	"statusGroupInProgress": "U toku",
+	"statusGroupComplete": "Završeno",
+	"filterOperatorIsComplete": "Je završeno",
+	"filterOperatorIsNotComplete": "Nije završeno",
+	"calcOperatorCountComplete": "Broj završenih",
+	"calcOperatorCountNotComplete": "Broj nezavršenih",
+	"calcOperatorPercentComplete": "Procenat završenih",
+	"calcResultCountComplete": "Broj završenih",
+	"calcResultCountNotComplete": "Broj nezavršenih",
+	"calcResultPercentComplete": "Procenat završenih",
 	"databaseAttrLayout": "Распоред поља панела базе података",
 	"databaseAttrLayoutTip": "Подешава распоред поља у панелу базе података на врху документа и у засебном панелу ставке; када нема довољно простора, аутоматски се користи једна колона",
 	"databaseAttrLayoutSingle": "Једна колона",
@@ -3013,6 +3026,9 @@
 		"quit": "Ugasi aplikaciju"
 	},
 	"_attrView": {
+		"statusNotStarted": "Nije započeto",
+		"statusInProgress": "U toku",
+		"statusDone": "Gotovo",
 		"dateCalendar": "Календар",
 		"solarCalendar": "Грегоријански",
 		"lunarCalendar": "Кинески лунарни",

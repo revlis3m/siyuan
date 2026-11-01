@@ -8,6 +8,7 @@ import { getLanguageByIndex } from "../groups";
 import { hasClosestByAttribute } from "../../../util/hasClosest";
 import { getPropertiesHTML } from "./properties";
 import type { IAVPanelContext } from "./types";
+import { getAVStatusGroup, withAVStatusGroups } from "../status";
 export const bindAVPanelDrag = (context: IAVPanelContext) => {
     let counter = 0;
     context.avPanelElement.addEventListener("dragstart", (event: DragEvent) => {
@@ -153,12 +154,15 @@ export const bindAVPanelDrag = (context: IAVPanelContext) => {
         // 选项拖拽排序
         if (targetElement.querySelector('[data-type="setColOption"]')) {
             const colId = context.options.cellElements ? getColId(context.options.cellElements[0], context.data.viewType) : context.menuElement.querySelector(".b3-menu__item").getAttribute("data-col-id");
-            const changeData = context.fields.find((column) => column.id === colId).options;
-            const oldData = Object.assign([], changeData);
-            let targetOption: {
-                name: string;
-                color: string;
-            };
+            const changeColumn = context.fields.find((column) => column.id === colId);
+            const isStatus = changeColumn.type === "status";
+            // 状态选项的分组随拖放目标变化，撤销数据需要保留原分组。
+            if (isStatus) {
+                changeColumn.options = withAVStatusGroups(changeColumn.options);
+            }
+            const changeData = changeColumn.options;
+            const oldData = changeData.map(option => ({...option}));
+            let targetOption: IAVColumn["options"][number];
             changeData.find((option, index: number) => {
                 if (option.name === sourceElement.dataset.name) {
                     targetOption = changeData.splice(index, 1)[0];
@@ -167,6 +171,9 @@ export const bindAVPanelDrag = (context: IAVPanelContext) => {
             });
             changeData.find((option, index: number) => {
                 if (option.name === targetElement.dataset.name) {
+                    if (isStatus && targetOption) {
+                        targetOption.group = getAVStatusGroup(option);
+                    }
                     if (isTop) {
                         changeData.splice(index, 0, targetOption);
                     }

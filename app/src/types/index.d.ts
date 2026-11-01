@@ -30,6 +30,7 @@ type TAVAlign = "" | "left" | "center" | "right"
 type TAVDateFormat = "" | "full" | "month-day-year" | "day-month-year" | "year-month-day" | "lunar"
 type TAVCol = import("./av").AVKeyType;
 type TAVFilterOperator = import("./av").AVFilterOperator;
+type TAVStatusGroup = "todo" | "inProgress" | "complete";
 
 type TRecentDocsSort = "viewedAt" | "closedAt" | "openAt" | "created" | "updated"
 type TPublishAccessLevel = "public" | "protected" | "hidden" | "private" | "forbidden";
@@ -1425,6 +1426,8 @@ interface IAVColumn {
         color: string,
         resolvedColor?: IAVColor,
         desc?: string,
+        // 状态字段的选项分组，缺省视为待办；单选和多选忽略该字段
+        group?: TAVStatusGroup | "",
     }[],
     relation?: IAVColumnRelation,
     rollup?: IAVCellRollupValue

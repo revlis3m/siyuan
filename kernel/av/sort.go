@@ -63,18 +63,14 @@ func Sort(viewable Viewable, attrView *AttributeView) {
 	for _, fis := range fieldIndexSorts {
 		field := fields[fis.Index]
 		fieldType := field.GetType()
-		if KeyTypeSelect != fieldType && KeyTypeMSelect != fieldType {
+		if !IsSelectKeyType(fieldType) {
 			continue
 		}
 		key, _ := attrView.GetKey(field.GetID())
 		if nil == key {
 			continue
 		}
-		optionSort := map[string]int{}
-		for i, op := range key.Options {
-			optionSort[op.Name] = i
-		}
-		optionSortByIndex[fis.Index] = optionSort
+		optionSortByIndex[fis.Index] = OptionSortMap(key)
 	}
 
 	items := collection.GetItems()
@@ -147,6 +143,25 @@ func Sort(viewable Viewable, attrView *AttributeView) {
 	if 1 > len(collection.GetItems()) {
 		collection.SetItems([]Item{})
 	}
+}
+
+// OptionSortMap 返回选项排序序号，状态字段先按分组（待办、进行中、已完成）再按选项顺序。
+func OptionSortMap(key *Key) map[string]int {
+	ret := map[string]int{}
+	if nil == key {
+		return ret
+	}
+	for i, op := range key.Options {
+		if nil == op {
+			continue
+		}
+		if KeyTypeStatus == key.Type {
+			ret[op.Name] = key.StatusOptionRank(op.Name)
+		} else {
+			ret[op.Name] = i
+		}
+	}
+	return ret
 }
 
 func isSortValueEmpty(value *Value, dateEndpoint DateEndpoint) bool {
@@ -271,7 +286,7 @@ func (value *Value) compare(other *Value, optionSort map[string]int, dateEndpoin
 			}
 			return 0
 		}
-	case KeyTypeSelect, KeyTypeMSelect:
+	case KeyTypeSelect, KeyTypeMSelect, KeyTypeStatus:
 		if nil != value.MSelect && nil != other.MSelect {
 			// 按设置的选项顺序排序，optionSort 由外层 Sort 按字段预算好后传入
 			if nil == optionSort {

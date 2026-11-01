@@ -1,4 +1,17 @@
 {
+	"status": "ステータス",
+	"statusGroup": "ステータスグループ",
+	"statusGroupTodo": "ToDo",
+	"statusGroupInProgress": "進行中",
+	"statusGroupComplete": "完了",
+	"filterOperatorIsComplete": "完了",
+	"filterOperatorIsNotComplete": "未完了",
+	"calcOperatorCountComplete": "完了数",
+	"calcOperatorCountNotComplete": "未完了数",
+	"calcOperatorPercentComplete": "完了率",
+	"calcResultCountComplete": "完了数",
+	"calcResultCountNotComplete": "未完了数",
+	"calcResultPercentComplete": "完了率",
 	"databaseAttrLayout": "データベースパネルのフィールドレイアウト",
 	"databaseAttrLayoutTip": "ドキュメント上部のデータベースパネルと独立した項目パネルのフィールドの配置を設定し、スペースが不足する場合は自動的に1列で表示",
 	"databaseAttrLayoutSingle": "1列",
@@ -3013,6 +3026,9 @@
 		"quit": "アプリケーションを終了"
 	},
 	"_attrView": {
+		"statusNotStarted": "未着手",
+		"statusInProgress": "進行中",
+		"statusDone": "完了",
 		"dateCalendar": "暦",
 		"solarCalendar": "グレゴリオ暦",
 		"lunarCalendar": "旧暦（中国暦）",

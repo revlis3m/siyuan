@@ -133,7 +133,7 @@ func (av *AttributeView) updateNewItemTemplateSelectOption(keyID, oldName, newNa
 			continue
 		}
 		value := fieldValue.Value
-		if KeyTypeSelect != value.Type && KeyTypeMSelect != value.Type {
+		if !IsSelectKeyType(value.Type) {
 			continue
 		}
 
@@ -247,7 +247,7 @@ func (av *AttributeView) PruneInvalidNewItemTemplateFieldValues() (ret []*Pruned
 				delete(itemTemplate.FieldValues, keyID)
 				continue
 			}
-			if KeyTypeSelect == key.Type || KeyTypeMSelect == key.Type {
+			if IsSelectKeyType(key.Type) {
 				selections := normalized.MSelect[:0]
 				var invalidValues []string
 				for _, selection := range normalized.MSelect {
@@ -320,7 +320,7 @@ func (av *AttributeView) normalizeNewItemTemplateFieldValues(itemTemplate *NewIt
 			if nil != err {
 				return fmt.Errorf("new item template field [%s] value is invalid: %w", keyID, err)
 			}
-			if KeyTypeSelect == key.Type || KeyTypeMSelect == key.Type {
+			if IsSelectKeyType(key.Type) {
 				for _, selection := range fieldValue.Value.MSelect {
 					if nil != selection && nil == key.GetOption(selection.Content) {
 						return fmt.Errorf("new item template field [%s] option [%s] not found", keyID, selection.Content)
@@ -364,14 +364,14 @@ func normalizeNewItemTemplateValue(value *Value, key *Key) (*Value, error) {
 			return nil, errors.New("date value is missing")
 		}
 		value.Text, value.Number, value.MSelect, value.URL, value.Email, value.Phone, value.MAsset, value.Checkbox, value.Relation = nil, nil, nil, nil, nil, nil, nil, nil, nil
-	case KeyTypeSelect, KeyTypeMSelect:
+	case KeyTypeSelect, KeyTypeMSelect, KeyTypeStatus:
 		var selections []*ValueSelect
 		for _, selection := range value.MSelect {
 			if nil != selection && "" != strings.TrimSpace(selection.Content) {
 				selections = append(selections, selection)
 			}
 		}
-		if KeyTypeSelect == key.Type && 1 < len(selections) {
+		if IsSingleSelectKeyType(key.Type) && 1 < len(selections) {
 			selections = selections[:1]
 		}
 		value.MSelect = selections

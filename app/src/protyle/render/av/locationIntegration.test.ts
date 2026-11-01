@@ -22,7 +22,7 @@ const unusedDependencies = [
     "../../../util/setPosition", "./selectionState", "./color", "./richText", "./richTextEditor", "./virtualScroll",
     "./cellEditor", "./blockIcon", "../../../dialog/anchoredInputPosition", "./locationEditor", "../../../dialog/message",
     "../../../util/hostCapabilities", "../../../plugin/Menu", "../../../util/upDownHint", "./richTextValue",
-    "../../../emoji/fileTreeIcon", "./lunarDate",
+    "../../../emoji/fileTreeIcon", "./lunarDate", "./status",
 ];
 
 const loadModule = <T>(file: string, extra: Record<string, unknown> = {}) => {
@@ -313,6 +313,7 @@ test("location filter input uses text.content and never generates a location val
         exports: methods,
         genEmptyCellValue: (type: TAVCol) => ({type}),
         wrapFilterCellValue: (_filter: IAVFilter, value: IAVCellValue) => value,
+        isAVValuelessFilterOperator: capabilities.isAVValuelessFilterOperator,
     });
     const row = {querySelector: () => ({value: "Home"})};
     const {newValue} = methods.readInlineValue(row, "location", "Contains", {}, {});

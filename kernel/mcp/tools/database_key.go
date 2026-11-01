@@ -6,6 +6,8 @@ package tools
 
 import "github.com/siyuan-note/siyuan/kernel/model"
 
+var statusOptionGroups = []string{"todo", "inProgress", "complete"}
+
 var databaseKeyConfigProperty = Property{
 	Type:        "object",
 	Description: "For key_update: exactly ONE setting per call. Inspect keys first; omitted settings are preserved. Type conversion follows the UI and can change how existing values are interpreted; primary key type is immutable. Render after updating to verify.",
@@ -22,15 +24,17 @@ var databaseKeyConfigProperty = Property{
 		"fillSpecificTime": {Type: "boolean", Description: "Date field: include a specific time by default"},
 		"includeTime":      {Type: "boolean", Description: "Created or updated field: include time"},
 		"options": {
-			Type: "array", Description: "Add/update and order select/mSelect options. Existing unlisted options are retained. Color and desc default to empty. Use optionUpdate to rename and optionRemove to delete.",
+			Type: "array", Description: "Add/update and order select/mSelect/status options. Existing unlisted options are retained. Color and desc default to empty. Use optionUpdate to rename and optionRemove to delete.",
 			Items: &Property{Type: "object", Properties: map[string]Property{
 				"name": {Type: "string"}, "color": {Type: "string", Description: "Empty, palette index 1-14, or an existing custom color ID"}, "desc": {Type: "string"},
+				"group": {Type: "string", Enum: statusOptionGroups, Description: "Status field only: option group; omitted keeps the existing group, new options default to todo"},
 			}, Required: []string{"name"}},
 		},
 		"optionUpdate": {
 			Type: "object", Description: "Update an existing option, preserving omitted properties and synchronizing row selections and filters",
 			Properties: map[string]Property{
 				"name": {Type: "string", Description: "Existing option name"}, "newName": {Type: "string"}, "color": {Type: "string"}, "desc": {Type: "string"},
+				"group": {Type: "string", Enum: statusOptionGroups, Description: "Status field only: move the option to this group"},
 			}, Required: []string{"name"},
 		},
 		"optionRemove": {Type: "string", Description: "Existing option name to delete, also removing its selections and filter references"},

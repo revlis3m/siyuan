@@ -2,7 +2,7 @@
 
 import type {AVKeyType, AVKeyCapability, AVFilterProfile, AVFilterCapability, AVCalcOperator} from "../../../types/av";
 
-export const AV_KEY_TYPES: readonly AVKeyType[] = ["block","text","number","date","select","mSelect","url","email","phone","mAsset","template","created","updated","checkbox","relation","rollup","lineNumber","location"];
+export const AV_KEY_TYPES: readonly AVKeyType[] = ["block","text","number","date","select","mSelect","url","email","phone","mAsset","template","created","updated","checkbox","relation","rollup","lineNumber","location","status"];
 
 export const AV_KEY_CAPABILITIES: Readonly<Record<AVKeyType, AVKeyCapability>> = {
     "block": {"groups":["richText","link","scalarContent"],"filterProfile":"text","valueKind":"text","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"Contains"},
@@ -23,6 +23,7 @@ export const AV_KEY_CAPABILITIES: Readonly<Record<AVKeyType, AVKeyCapability>> =
     "rollup": {"groups":["noFilterDefault","renderDependentFilter","skipRowCopy"],"filterProfile":"rollup","valueKind":"rollup","editable":false,"filterable":true,"sortable":true,"groupable":false,"defaultOperator":"Contains"},
     "lineNumber": {"groups":["none"],"filterProfile":"none","valueKind":"lineNumber","editable":false,"filterable":false,"sortable":false,"groupable":false,"defaultOperator":""},
     "location": {"groups":["attributePlaceholder","rollupCell","newItemTemplate","noFilterDefault"],"filterProfile":"text","valueKind":"location","editable":true,"filterable":true,"sortable":true,"groupable":false,"defaultOperator":"Contains"},
+    "status": {"groups":["rollupCell","newItemTemplate"],"filterProfile":"status","valueKind":"options","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"="},
 };
 
 export const AV_FILTER_CAPABILITIES: Readonly<Record<AVFilterProfile, AVFilterCapability>> = {
@@ -34,8 +35,9 @@ export const AV_FILTER_CAPABILITIES: Readonly<Record<AVFilterProfile, AVFilterCa
     "relation": {"accepted":["Contains any item","Does not contain any item","Contains","Does not contains","Is empty","Is not empty"],"offered":["Contains any item","Does not contain any item","Contains","Does not contains","Is empty","Is not empty"],"offeredRollup":["Contains","Does not contains","Is empty","Is not empty"]},
     "rollup": {"accepted":["=","!=","\u003e","\u003e=","\u003c","\u003c=","Contains","Does not contains","Contains any item","Does not contain any item","Is empty","Is not empty","Starts with","Ends with","Is between"],"offered":[]},
     "select": {"accepted":["=","!=","Is empty","Is not empty"],"offered":["=","!=","Is empty","Is not empty"]},
+    "status": {"accepted":["=","!=","Is empty","Is not empty","Is complete","Is not complete"],"offered":["=","!=","Is empty","Is not empty","Is complete","Is not complete"]},
     "template": {"accepted":["=","!=","Contains","Does not contains","Starts with","Ends with","Is empty","Is not empty","\u003e","\u003c","\u003e=","\u003c="],"offered":["=","!=","Contains","Does not contains","Starts with","Ends with","Is empty","Is not empty","\u003e","\u003c","\u003e=","\u003c="]},
     "text": {"accepted":["=","!=","Contains","Does not contains","Starts with","Ends with","Is empty","Is not empty"],"offered":["=","!=","Contains","Does not contains","Starts with","Ends with","Is empty","Is not empty"]},
 };
 
-export const AV_CALC_FILTER_NUMBER_OPERATORS: readonly AVCalcOperator[] = ["Average","Checked","Count all","Count empty","Count not empty","Count unique values","Count values","Max","Median","Min","Percent checked","Percent empty","Percent not empty","Percent unchecked","Percent unique values","Sum","Unchecked"];
+export const AV_CALC_FILTER_NUMBER_OPERATORS: readonly AVCalcOperator[] = ["Average","Checked","Count all","Count complete","Count empty","Count not complete","Count not empty","Count unique values","Count values","Max","Median","Min","Percent checked","Percent complete","Percent empty","Percent not empty","Percent unchecked","Percent unique values","Sum","Unchecked"];

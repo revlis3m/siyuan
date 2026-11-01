@@ -105,7 +105,7 @@ func (value *Value) String(format bool) string {
 		}
 		formatted := NewFormattedValueDate(value.Date.Content, value.Date.Content2, DateFormatNone, value.Date.IsNotTime, value.Date.HasEndDate)
 		return formatted.FormattedContent
-	case KeyTypeSelect:
+	case KeyTypeSelect, KeyTypeStatus:
 		if 1 > len(value.MSelect) {
 			return ""
 		}
@@ -249,7 +249,7 @@ func (value *Value) isEmpty(trimSpace bool) bool {
 		return nil == value.Number || !value.Number.IsNotEmpty
 	case KeyTypeDate:
 		return nil == value.Date || !value.Date.IsNotEmpty
-	case KeyTypeSelect:
+	case KeyTypeSelect, KeyTypeStatus:
 		return 1 > len(value.MSelect) || nil == value.MSelect[0] || isBlankContent(value.MSelect[0].Content, trimSpace)
 	case KeyTypeMSelect:
 		return 1 > len(value.MSelect)
@@ -302,7 +302,7 @@ func (value *Value) SetValByType(typ KeyType, val any) {
 		value.Number = val.(*ValueNumber)
 	case KeyTypeDate:
 		value.Date = val.(*ValueDate)
-	case KeyTypeSelect:
+	case KeyTypeSelect, KeyTypeStatus:
 		value.MSelect = val.([]*ValueSelect)
 	case KeyTypeMSelect:
 		value.MSelect = val.([]*ValueSelect)
@@ -349,7 +349,7 @@ func (value *Value) GetValByType(typ KeyType) (ret any) {
 		return value.Number
 	case KeyTypeDate:
 		return value.Date
-	case KeyTypeSelect:
+	case KeyTypeSelect, KeyTypeStatus:
 		return value.MSelect
 	case KeyTypeMSelect:
 		return value.MSelect
@@ -2629,7 +2629,7 @@ func (r *ValueRollup) BuildContents(attrView *AttributeView, destKey *Key, relat
 		return
 	}
 	var customColors []*AttributeViewCustomColor
-	if KeyTypeSelect == destKey.Type || KeyTypeMSelect == destKey.Type {
+	if IsSelectKeyType(destKey.Type) {
 		customColors, _ = attrView.customColorPalette()
 	}
 	for _, blockID := range relationVal.Relation.BlockIDs {
@@ -2644,8 +2644,9 @@ func (r *ValueRollup) BuildContents(attrView *AttributeView, destKey *Key, relat
 		}
 
 		if nil == destVal {
-			if KeyTypeCheckbox == destKey.Type {
+			if KeyTypeCheckbox == destKey.Type || (KeyTypeStatus == destKey.Type && nil != calc && IsStatusCalcOperator(calc.Operator)) {
 				// 没有编辑过复选框的时候没有值，没有值等同于未选中，所以这里补一个未选中的值 https://github.com/siyuan-note/siyuan/issues/15858
+				// 完成统计需要以关联条目数为分母，未填写的状态同样补一个空值并按未完成统计。
 				defaultVal := GetAttributeViewDefaultValue(ast.NewNodeID(), destKey.ID, blockID, destKey.Type, false)
 				r.Contents = append(r.Contents, defaultVal)
 			}
@@ -2665,6 +2666,9 @@ func (r *ValueRollup) BuildContents(attrView *AttributeView, destKey *Key, relat
 		}
 		if val := destVal.GetValByType(destKey.Type); nil == val || reflect.ValueOf(val).IsNil() {
 			// 目标字段因为修改类型导致空值
+			if KeyTypeStatus == destKey.Type && nil != calc && IsStatusCalcOperator(calc.Operator) {
+				r.Contents = append(r.Contents, GetAttributeViewDefaultValue(ast.NewNodeID(), destKey.ID, blockID, destKey.Type, false))
+			}
 			continue
 		}
 
@@ -2682,7 +2686,7 @@ func (r *ValueRollup) BuildContents(attrView *AttributeView, destKey *Key, relat
 		}
 
 		cloned := destVal.Clone()
-		if KeyTypeSelect == destKey.Type || KeyTypeMSelect == destKey.Type {
+		if IsSelectKeyType(destKey.Type) {
 			resolveValueSelectColors(cloned, customColors)
 		}
 		r.Contents = append(r.Contents, cloned)
@@ -3163,6 +3167,29 @@ func (r *ValueRollup) calcContents(calc *RollupCalc, destKey *Key) {
 		if 0 < len(r.Contents) {
 			r.Contents = []*Value{{Type: KeyTypeNumber, Number: newRollupCheckboxPercent(countUnchecked, len(r.Contents))}}
 		}
+	case CalcOperatorCountComplete, CalcOperatorCountNotComplete, CalcOperatorPercentComplete:
+		// 非状态目标字段没有完成分组，所有值都按未完成统计。
+		var statusKey *Key
+		if KeyTypeStatus == destKey.Type {
+			statusKey = destKey
+		}
+		countComplete := 0
+		for _, v := range r.Contents {
+			if nil != statusKey && v.IsStatusComplete(statusKey) {
+				countComplete++
+			}
+		}
+		total := len(r.Contents)
+		switch calc.Operator {
+		case CalcOperatorCountComplete:
+			r.Contents = []*Value{{Type: KeyTypeNumber, Number: NewFormattedValueNumber(float64(countComplete), NumberFormatNone)}}
+		case CalcOperatorCountNotComplete:
+			r.Contents = []*Value{{Type: KeyTypeNumber, Number: NewFormattedValueNumber(float64(total-countComplete), NumberFormatNone)}}
+		case CalcOperatorPercentComplete:
+			if 0 < total {
+				r.Contents = []*Value{{Type: KeyTypeNumber, Number: newRollupCheckboxPercent(countComplete, total)}}
+			}
+		}
 	}
 }
 
@@ -3201,7 +3228,7 @@ func GetAttributeViewDefaultValue(valueID, keyID, blockID string, typ KeyType, k
 		ret.Number = &ValueNumber{}
 	case KeyTypeDate:
 		ret.Date = &ValueDate{IsNotTime: !keyDateIsTime}
-	case KeyTypeSelect:
+	case KeyTypeSelect, KeyTypeStatus:
 		ret.MSelect = []*ValueSelect{}
 	case KeyTypeMSelect:
 		ret.MSelect = []*ValueSelect{}

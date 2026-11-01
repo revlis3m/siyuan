@@ -43,7 +43,7 @@ type AVViewFilter struct {
 	Column        string          `json:"column" api:"optional,nullable"`
 	ValueSource   string          `json:"valueSource,omitempty" api:"optional,nullable,enum=stored|rendered"`
 	Qualifier     string          `json:"quantifier,omitempty" api:"optional,nullable"`
-	Operator      string          `json:"operator" api:"optional,nullable,enum=|=|!=|>|>=|<|<=|Contains|Does not contains|Contains any item|Does not contain any item|Is empty|Is not empty|Starts with|Ends with|Is between|Is true|Is false"`
+	Operator      string          `json:"operator" api:"optional,nullable,enum=|=|!=|>|>=|<|<=|Contains|Does not contains|Contains any item|Does not contain any item|Is empty|Is not empty|Starts with|Ends with|Is between|Is true|Is false|Is complete|Is not complete"`
 	Value         *AVValue        `json:"value" api:"optional,nullable"`
 	RelativeDate  *AVRelativeDate `json:"relativeDate,omitempty" api:"optional,nullable"`
 	RelativeDate2 *AVRelativeDate `json:"relativeDate2,omitempty" api:"optional,nullable"`
@@ -56,7 +56,7 @@ type AVValue struct {
 	ID              string           `json:"id,omitempty" api:"optional,nullable"`
 	KeyID           string           `json:"keyID,omitempty" api:"optional,nullable"`
 	BlockID         string           `json:"blockID,omitempty" api:"optional,nullable"`
-	Type            string           `json:"type,omitempty" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber"`
+	Type            string           `json:"type,omitempty" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber|status"`
 	IsDetached      bool             `json:"isDetached,omitempty" api:"optional,nullable"`
 	CreatedAt       int64            `json:"createdAt,omitempty" api:"optional,nullable"`
 	UpdatedAt       int64            `json:"updatedAt,omitempty" api:"optional,nullable"`
@@ -236,7 +236,7 @@ type AVKey struct {
 	AttributePanelVisibility string            `json:"attributePanelVisibility,omitempty" api:"optional,nullable,enum=|always|hide-empty|hide"`
 	ID                       string            `json:"id" api:"optional,nullable"`
 	Name                     string            `json:"name" api:"optional,nullable"`
-	Type                     string            `json:"type" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber"`
+	Type                     string            `json:"type" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber|status"`
 	Icon                     string            `json:"icon" api:"optional,nullable"`
 	Desc                     string            `json:"desc" api:"optional,nullable"`
 	Options                  []*AVSelectOption `json:"options,omitempty" api:"optional,nullable"`
@@ -257,6 +257,7 @@ type AVSelectOption struct {
 	Name          string                `json:"name" api:"optional,nullable"`
 	Color         string                `json:"color" api:"optional,nullable"`
 	Desc          string                `json:"desc" api:"optional,nullable"`
+	Group         string                `json:"group,omitempty" api:"optional,nullable,enum=|todo|inProgress|complete"`
 	ResolvedColor *AVAttributeViewColor `json:"resolvedColor,omitempty" api:"optional,nullable"`
 }
 
@@ -313,7 +314,7 @@ type AVTableColumn struct {
 type AVBaseInstanceField struct {
 	ID           string            `json:"id" api:"optional,nullable"`
 	Name         string            `json:"name" api:"optional,nullable"`
-	Type         string            `json:"type" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber"`
+	Type         string            `json:"type" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber|status"`
 	Icon         string            `json:"icon" api:"optional,nullable"`
 	Wrap         bool              `json:"wrap" api:"optional,nullable"`
 	Hidden       bool              `json:"hidden" api:"optional,nullable"`
@@ -347,7 +348,7 @@ type AVTableCell struct {
 type AVBaseValue struct {
 	ID        string   `json:"id" api:"optional,nullable"`
 	Value     *AVValue `json:"value" api:"optional,nullable"`
-	ValueType string   `json:"valueType" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber"`
+	ValueType string   `json:"valueType" api:"optional,nullable,enum=block|text|number|date|select|mSelect|url|email|phone|location|mAsset|template|created|updated|checkbox|relation|rollup|lineNumber|status"`
 }
 
 type AVGallery struct {

@@ -1,4 +1,17 @@
 {
+	"status": "상태",
+	"statusGroup": "상태 그룹",
+	"statusGroupTodo": "할 일",
+	"statusGroupInProgress": "진행 중",
+	"statusGroupComplete": "완료",
+	"filterOperatorIsComplete": "완료됨",
+	"filterOperatorIsNotComplete": "완료되지 않음",
+	"calcOperatorCountComplete": "완료 개수",
+	"calcOperatorCountNotComplete": "미완료 개수",
+	"calcOperatorPercentComplete": "완료 비율",
+	"calcResultCountComplete": "완료 개수",
+	"calcResultCountNotComplete": "미완료 개수",
+	"calcResultPercentComplete": "완료 비율",
 	"databaseAttrLayout": "데이터베이스 패널 필드 배치",
 	"databaseAttrLayoutTip": "문서 상단의 데이터베이스 패널과 독립 항목 패널의 필드 배치를 설정하며 공간이 부족하면 자동으로 한 열로 표시",
 	"databaseAttrLayoutSingle": "한 열",
@@ -3013,6 +3026,9 @@
 		"quit": "애플리케이션 종료"
 	},
 	"_attrView": {
+		"statusNotStarted": "시작 전",
+		"statusInProgress": "진행 중",
+		"statusDone": "완료",
 		"dateCalendar": "달력 체계",
 		"solarCalendar": "양력",
 		"lunarCalendar": "중국 음력",

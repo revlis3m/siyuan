@@ -209,7 +209,7 @@ func (context AutomationTemplateContext) field(id string, zone *time.Location, r
 		return time.UnixMilli(value.Date.Content).In(zone), nil
 	case KeyTypeCheckbox:
 		return value.Checkbox.Checked, nil
-	case KeyTypeSelect, KeyTypeMSelect:
+	case KeyTypeSelect, KeyTypeMSelect, KeyTypeStatus:
 		return value.MSelect, nil
 	case KeyTypeRelation:
 		return value.Relation.BlockIDs, nil
@@ -313,9 +313,9 @@ func ParseAutomationTemplateValue(key *Key, source string, zone *time.Location) 
 				err = fmt.Errorf("automation date is outside the supported range")
 			}
 		}
-	case KeyTypeSelect, KeyTypeMSelect:
+	case KeyTypeSelect, KeyTypeMSelect, KeyTypeStatus:
 		var names []string
-		if key.Type == KeyTypeSelect && !strings.HasPrefix(trimmed, "[") {
+		if IsSingleSelectKeyType(key.Type) && !strings.HasPrefix(trimmed, "[") {
 			names = []string{source}
 		} else {
 			err = decodeAutomationJSON(trimmed, &value.MSelect)
@@ -332,7 +332,7 @@ func ParseAutomationTemplateValue(key *Key, source string, zone *time.Location) 
 			}
 		}
 		value.MSelect = nil
-		if key.Type == KeyTypeSelect && len(names) > 1 {
+		if IsSingleSelectKeyType(key.Type) && len(names) > 1 {
 			err = fmt.Errorf("automation select requires one option")
 		}
 		seen := map[string]bool{}

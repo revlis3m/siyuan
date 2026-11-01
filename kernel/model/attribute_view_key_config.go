@@ -18,7 +18,7 @@ import (
 
 var AttributeViewKeyNumberFormats = []string{"", "commas", "percent", "USD", "CNY", "EUR", "GBP", "JPY", "RUB", "INR", "KRW", "TRY", "CAD", "CHF", "THB", "AUD", "HKD", "TWD", "MOP", "SGD", "NZD", "ILS", "SKK"}
 
-var AttributeViewKeyRollupOperators = []string{"", "Unique values", "Count all", "Count values", "Count unique values", "Count empty", "Count not empty", "Percent empty", "Percent not empty", "Percent unique values", "Sum", "Average", "Median", "Min", "Max", "Range", "Earliest", "Latest", "Checked", "Unchecked", "Percent checked", "Percent unchecked"}
+var AttributeViewKeyRollupOperators = []string{"", "Unique values", "Count all", "Count values", "Count unique values", "Count empty", "Count not empty", "Percent empty", "Percent not empty", "Percent unique values", "Sum", "Average", "Median", "Min", "Max", "Range", "Earliest", "Latest", "Checked", "Unchecked", "Percent checked", "Percent unchecked", "Count complete", "Count not complete", "Percent complete"}
 
 // UpdateAttributeViewKeyConfig 每次修改一个字段配置，先校验参数，再复用界面操作维护关联数据。
 func UpdateAttributeViewKeyConfig(avID, keyID string, config map[string]any) (err error) {
@@ -100,8 +100,8 @@ func UpdateAttributeViewKeyConfig(avID, keyID string, config map[string]any) (er
 			}
 			return setAttrViewColDateFillSpecificTime(op)
 		case "options", "optionUpdate", "optionRemove":
-			if av.KeyTypeSelect != key.Type && av.KeyTypeMSelect != key.Type {
-				return errors.New("option settings require a select or mSelect field")
+			if !av.IsSelectKeyType(key.Type) {
+				return errors.New("option settings require a select, mSelect or status field")
 			}
 			return updateAttributeViewKeyOptions(attrView, key, op, setting, value)
 		case "relation":
@@ -206,6 +206,9 @@ func updateAttributeViewKeyOptions(attrView *av.AttributeView, key *av.Key, op *
 			if attrView.FilterColorValue(option.Color) != option.Color {
 				return errors.New("invalid option color")
 			}
+			if err := validateAttributeViewOptionGroup(key, option.Group); nil != err {
+				return err
+			}
 			names[option.Name] = true
 		}
 		op.Data = options
@@ -224,6 +227,7 @@ func updateAttributeViewKeyOptions(attrView *av.AttributeView, key *av.Key, op *
 		NewName *string `json:"newName"`
 		Color   *string `json:"color"`
 		Desc    *string `json:"desc"`
+		Group   *string `json:"group"`
 	}
 	if err := decodeAttributeViewKeyConfig(value, &config); nil != err {
 		return err
@@ -251,12 +255,53 @@ func updateAttributeViewKeyOptions(attrView *av.AttributeView, key *av.Key, op *
 	if nil != config.Desc {
 		desc = *config.Desc
 	}
+	group := option.Group
+	if nil != config.Group {
+		group = av.StatusGroup(*config.Group)
+		if err := validateAttributeViewOptionGroup(key, group); nil != err {
+			return err
+		}
+	}
 	if name == option.Name {
-		op.Data = []*av.SelectOption{{Name: name, Color: color, Desc: desc}}
+		op.Data = []*av.SelectOption{{Name: name, Color: color, Desc: desc, Group: group}}
 		return updateAttributeViewColumnOptions(op)
 	}
 	op.Data = map[string]any{"oldName": option.Name, "newName": name, "newColor": color, "newDesc": desc}
-	return updateAttributeViewColumnOption(op)
+	if err := updateAttributeViewColumnOption(op); nil != err {
+		return err
+	}
+	if nil == config.Group || av.KeyTypeStatus != key.Type {
+		return nil
+	}
+	// 重命名后再单独调整分组，合并到已有选项时保留目标选项的颜色和描述。
+	renamed, err := av.ParseAttributeView(op.AvID)
+	if nil != err {
+		return err
+	}
+	renamedKey, err := renamed.GetKey(key.ID)
+	if nil != err {
+		return err
+	}
+	renamedOption := renamedKey.GetOption(name)
+	if nil == renamedOption {
+		return nil
+	}
+	op.Data = []*av.SelectOption{{Name: name, Color: renamedOption.Color, Desc: renamedOption.Desc, Group: group}}
+	return updateAttributeViewColumnOptions(op)
+}
+
+// validateAttributeViewOptionGroup 校验选项分组，仅状态字段可以设置分组。
+func validateAttributeViewOptionGroup(key *av.Key, group av.StatusGroup) error {
+	if "" == group {
+		return nil
+	}
+	if av.KeyTypeStatus != key.Type {
+		return errors.New("option group requires a status field")
+	}
+	if !group.IsValid() {
+		return errors.New("invalid status option group")
+	}
+	return nil
 }
 
 func updateAttributeViewKeyRelation(key *av.Key, op *Operation, value any) error {

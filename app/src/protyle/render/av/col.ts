@@ -30,6 +30,7 @@ import {createEmptyAVValue, genAVAttributeRowHTML} from "./attributeValue";
 import {getAVColumnIconWidth, getAVColumnTextMeasurer, getAVDistributedColumnWidth, getAVTableFitWidths} from "./columnWidth";
 import {getAVData} from "./virtualScroll";
 import {getAVColorStyle, getNextAVOptionColor} from "./color";
+import {AV_STATUS_GROUPS, getAVStatusGroup, getAVStatusGroupHeadingHTML, insertAVStatusOption} from "./status";
 /// #if MOBILE
 import {activeBlur} from "../../../mobile/util/keyboardToolbar";
 /// #endif
@@ -93,9 +94,9 @@ export const duplicateCol = (options: {
     options.blockElement.setAttribute("updated", newUpdated);
 };
 
-const getColOptionHTML = (item: IAVColumn["options"][number]) => {
+const getColOptionHTML = (item: IAVColumn["options"][number], group?: TAVStatusGroup) => {
     const ariaLabel = item.desc ? `${escapeAriaLabel(item.name)}<div class='ft__on-surface'>${escapeAriaLabel(item.desc)}</div>` : "";
-    return `<button class="b3-menu__item" data-option-row="true" data-name="${escapeAttr(item.name)}" data-desc="${escapeAttr(item.desc || "")}" data-color="${escapeAttr(item.color)}">
+    return `<button class="b3-menu__item" data-option-row="true"${group ? ` data-group="${group}"` : ""} data-name="${escapeAttr(item.name)}" data-desc="${escapeAttr(item.desc || "")}" data-color="${escapeAttr(item.color)}">
     <span draggable="true" class="b3-menu__icon b3-menu__icon--custom fn__grab"><svg><use xlink:href="#iconDrag"></use></svg></span>
     <div class="fn__flex-1 ariaLabel" data-position="parentW" aria-label="${ariaLabel}">
         <span class="b3-chip" style="${getAVColorStyle(item)}">
@@ -149,7 +150,23 @@ export const getEditHTML = (options: {
     <span class="b3-menu__accelerator" style="margin-left: 0">${getColNameByType(colData.type)}</span>
     <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
 </button>`;
-    if (isAVSelectType(colData.type)) {
+    if (colData.type === "status") {
+        // 状态选项按分组展示，每个分组可以直接新增选项。
+        html += '<button class="b3-menu__separator" data-id="separator_2"></button>';
+        if (!colData.options) {
+            colData.options = [];
+        }
+        AV_STATUS_GROUPS.forEach(group => {
+            html += `${getAVStatusGroupHeadingHTML(group)}
+<button class="b3-menu__item" data-type="nobg" data-group="${group}">
+    <svg class="b3-menu__icon"><use xlink:href="#iconAdd"></use></svg>
+    <input data-type="addOption" data-group="${group}" class="b3-text-field fn__block" type="text" placeholder="${window.siyuan.languages.enterKey} ${window.siyuan.languages.addAttr}" style="margin: 4px 0">
+</button>`;
+            colData.options.filter(item => getAVStatusGroup(item) === group).forEach(item => {
+                html += getColOptionHTML(item, group);
+            });
+        });
+    } else if (isAVSelectType(colData.type)) {
         html += `<button class="b3-menu__separator" data-id="separator_2"></button>
 <button class="b3-menu__item" data-type="nobg">
     <svg class="b3-menu__icon"><use xlink:href="#iconAdd"></use></svg>
@@ -280,6 +297,7 @@ export const getEditHTML = (options: {
     ${genUpdateColItem("number", colData.type)}
     ${genUpdateColItem("select", colData.type)}
     ${genUpdateColItem("mSelect", colData.type)}
+    ${genUpdateColItem("status", colData.type)}
     ${genUpdateColItem("date", colData.type)}
     ${genUpdateColItem("mAsset", colData.type)}
     ${genUpdateColItem("checkbox", colData.type)}
@@ -572,8 +590,9 @@ export const bindEditEvent = (options: {
         });
     }
 
-    const addOptionElement = options.menuElement.querySelector('[data-type="addOption"]') as HTMLInputElement;
-    if (addOptionElement) {
+    options.menuElement.querySelectorAll<HTMLInputElement>('[data-type="addOption"]').forEach(addOptionElement => {
+        // 状态字段每个分组各有一个输入框，新选项加入该分组末尾。
+        const statusGroup = addOptionElement.dataset.group as TAVStatusGroup;
         addOptionElement.addEventListener("keydown", (event: KeyboardEvent) => {
             if (event.isComposing) {
                 return;
@@ -593,10 +612,15 @@ export const bindEditEvent = (options: {
                 if (hasSelected || !addOptionElement.value) {
                     return;
                 }
-                colData.options.push({
+                const newOption = {
                     color: getNextAVOptionColor(colData.options.length || 0),
                     name: addOptionElement.value
-                });
+                };
+                if (statusGroup) {
+                    colData.options = insertAVStatusOption(colData.options, newOption, statusGroup);
+                } else {
+                    colData.options.push(newOption);
+                }
                 transaction(options.protyle, [{
                     action: "updateAttrViewColOptions",
                     id: colId,
@@ -609,10 +633,12 @@ export const bindEditEvent = (options: {
                     data: addOptionElement.value
                 }]);
                 // 保留输入框及其焦点，避免移动端软键盘因菜单重建而收起和弹出。
-                const optionElements = options.menuElement.querySelectorAll('[data-option-row="true"]');
+                const optionElements = options.menuElement.querySelectorAll(statusGroup ?
+                    `[data-option-row="true"][data-group="${statusGroup}"]` : '[data-option-row="true"]');
                 const lastOptionElement = optionElements.length > 0 ?
                     optionElements[optionElements.length - 1] : addOptionElement.parentElement;
-                lastOptionElement.insertAdjacentHTML("afterend", getColOptionHTML(colData.options[colData.options.length - 1]));
+                lastOptionElement.insertAdjacentHTML("afterend", getColOptionHTML(
+                    colData.options.find(item => item.name === newOption.name), statusGroup));
                 addOptionElement.value = "";
                 // 添加选项后面板增高，需按首次锚点重新定位（sticky 锁底部，顶部上移避免溢出视口）
                 const prevTop = parseFloat(options.menuElement.dataset.positionTop);
@@ -621,7 +647,7 @@ export const bindEditEvent = (options: {
                 }
             }
         });
-    }
+    });
 
     const fillCreatedElement = options.menuElement.querySelector('[data-type="fillCreated"]') as HTMLInputElement;
     if (fillCreatedElement) {
@@ -703,6 +729,8 @@ export const getColNameByType = (type: TAVCol) => {
             return window.siyuan.languages[type];
         case "mSelect":
             return window.siyuan.languages.multiSelect;
+        case "status":
+            return window.siyuan.languages.status;
         case "relation":
             return window.siyuan.languages.relation;
         case "rollup":
@@ -736,6 +764,8 @@ export const getColIconByType = (type: TAVCol) => {
             return "iconListItem";
         case "mSelect":
             return "iconList";
+        case "status":
+            return "iconTaskInProgress";
         case "relation":
             return "iconOpen";
         case "rollup":
@@ -1850,6 +1880,46 @@ export const addCol = (protyle: IProtyle, blockElement: Element, previousID?: st
                 protyle: protyle,
                 type: "mSelect",
                 name: window.siyuan.languages.multiSelect,
+                id,
+                previousID
+            });
+            blockElement.setAttribute("updated", newUpdated);
+        }
+    });
+    menu.addItem({
+        id: "status",
+        icon: "iconTaskInProgress",
+        label: window.siyuan.languages.status,
+        click() {
+            const id = Lute.NewNodeID();
+            const newUpdated = dayjs().format("YYYYMMDDHHmmss");
+            transaction(protyle, [{
+                action: "addAttrViewCol",
+                blockID: blockId,
+                viewID: blockElement.getAttribute(Constants.CUSTOM_SY_AV_VIEW) || "",
+                name: window.siyuan.languages.status,
+                avID,
+                type: "status",
+                id,
+                previousID
+            }, {
+                action: "doUpdateUpdated",
+                id: blockId,
+                data: newUpdated,
+            }], [{
+                action: "removeAttrViewCol",
+                id,
+                avID,
+            }, {
+                action: "doUpdateUpdated",
+                id: blockId,
+                data: blockElement.getAttribute("updated")
+            }]);
+            addAttrViewColAnimation({
+                blockElement: blockElement,
+                protyle: protyle,
+                type: "status",
+                name: window.siyuan.languages.status,
                 id,
                 previousID
             });

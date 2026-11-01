@@ -1,4 +1,17 @@
 {
+	"status": "Statut",
+	"statusGroup": "Groupe de statut",
+	"statusGroupTodo": "À faire",
+	"statusGroupInProgress": "En cours",
+	"statusGroupComplete": "Terminé",
+	"filterOperatorIsComplete": "Est terminé",
+	"filterOperatorIsNotComplete": "N'est pas terminé",
+	"calcOperatorCountComplete": "Compter terminés",
+	"calcOperatorCountNotComplete": "Compter non terminés",
+	"calcOperatorPercentComplete": "Pourcentage terminé",
+	"calcResultCountComplete": "Compter terminés",
+	"calcResultCountNotComplete": "Compter non terminés",
+	"calcResultPercentComplete": "Pourcentage terminé",
 	"databaseAttrLayout": "Disposition des champs du panneau de base de données",
 	"databaseAttrLayoutTip": "Définit la disposition des champs du panneau de base de données en haut du document et du panneau de fiche indépendant ; une seule colonne est utilisée automatiquement si l’espace est insuffisant",
 	"databaseAttrLayoutSingle": "Une colonne",
@@ -3013,6 +3026,9 @@
 		"quit": "Quitter le programme"
 	},
 	"_attrView": {
+		"statusNotStarted": "Pas commencé",
+		"statusInProgress": "En cours",
+		"statusDone": "Terminé",
 		"dateCalendar": "Calendrier",
 		"solarCalendar": "Grégorien",
 		"lunarCalendar": "Lunaire chinois",

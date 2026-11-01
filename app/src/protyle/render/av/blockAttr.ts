@@ -1,6 +1,6 @@
 import {clearAVAttributeDropTarget, getAVAttributeDropTarget, getAVAttributePreviousID, getAVAttributeSort, IAVAttributeDropTarget} from "./attributePanelDrag";
 import {observeAVAttributeLayout, updateAVAttributeLayout} from "./attributePanelLayout";
-import {isAVTextType} from "./capabilities";
+import {isAVSelectType, isAVTextType} from "./capabilities";
 import {fetchPost} from "../../../util/fetch";
 import {addCol, getColIconByType} from "./col";
 import {escapeAttr, escapeHtml} from "../../../util/escape";
@@ -785,7 +785,7 @@ const openEdit = (protyle: IProtyle, element: HTMLElement, event: MouseEvent) =>
             event.stopPropagation();
             event.preventDefault();
             break;
-        } else if (type === "select" || type === "mSelect") {
+        } else if (isAVSelectType(type)) {
             popTextCell(protyle, [target], target.getAttribute("data-type") as TAVCol);
             event.stopPropagation();
             event.preventDefault();

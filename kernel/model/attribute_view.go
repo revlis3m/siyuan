@@ -499,7 +499,7 @@ func getAttrViewAddingBlockDefaultValues(attrView *av.AttributeView, view, group
 	}
 
 	newValue := getNewValueByNearItem(nearItem, groupKey, addingItemID)
-	if av.KeyTypeSelect == groupKey.Type || av.KeyTypeMSelect == groupKey.Type {
+	if av.IsSelectKeyType(groupKey.Type) {
 		// 因为单选或多选只能按选项分组，并且可能存在空白分组（找不到临近项），所以单选或多选类型的分组字段使用分组值内容对应的选项
 		if opt := groupKey.GetOption(groupView.GetGroupValue()); nil != opt && groupValueDefault != groupView.GetGroupValue() {
 			if nil == newValue {
@@ -1227,7 +1227,7 @@ func setAttributeViewGroup(attrView *av.AttributeView, view *av.View, group *av.
 
 	if (firstInit || changeGroupField) && av.ValueSourceRendered != group.ValueSource { // 首次设置分组时
 		if groupKey := view.GetGroupKey(attrView); nil != groupKey {
-			if av.KeyTypeSelect == groupKey.Type || av.KeyTypeMSelect == groupKey.Type {
+			if av.IsSelectKeyType(groupKey.Type) {
 				// 如果分组字段是单选或多选，则将分组排序方式改为按选项排序 https://github.com/siyuan-note/siyuan/issues/15534
 				view.Group.Order = av.GroupOrderSelectOption
 				sortGroupsBySelectOption(view, groupKey)
@@ -2141,7 +2141,7 @@ func AppendAttributeViewDetachedBlocksWithValues(avID string, blocksValues [][]*
 			v.IsRenderAutoFill = false
 			keyValues.Values = append(keyValues.Values, v)
 
-			if av.KeyTypeSelect == v.Type || av.KeyTypeMSelect == v.Type {
+			if av.IsSelectKeyType(v.Type) {
 				// 保存选项 https://github.com/siyuan-note/siyuan/issues/12475
 				key, _ := attrView.GetKey(v.KeyID)
 				if nil != key && 0 < len(v.MSelect) {
@@ -2256,7 +2256,7 @@ func DuplicateAttributeViewRow(tx *Transaction, avID, previousItemID, srcRowID, 
 		}
 
 		// 单选/多选选项同步，保证目标属性视图存在对应选项 https://github.com/siyuan-note/siyuan/issues/12475
-		if av.KeyTypeSelect == newVal.Type || av.KeyTypeMSelect == newVal.Type {
+		if av.IsSelectKeyType(newVal.Type) {
 			if 0 < len(newVal.MSelect) {
 				for _, valOpt := range newVal.MSelect {
 					if opt := keyValues.Key.GetOption(valOpt.Content); nil == opt {
@@ -3997,7 +3997,7 @@ func genAttrViewGroupsWithItems(view *av.View, attrView *av.AttributeView, sourc
 		var groupVal string
 		switch groupMethod {
 		case av.GroupMethodValue:
-			if !groupByRendered && (av.KeyTypeSelect == groupKey.Type || av.KeyTypeMSelect == groupKey.Type) {
+			if !groupByRendered && av.IsSelectKeyType(groupKey.Type) {
 				for _, s := range value.MSelect {
 					groupItemsMap[s.Content] = append(groupItemsMap[s.Content], item)
 				}
@@ -4077,7 +4077,7 @@ func genAttrViewGroupsWithItems(view *av.View, attrView *av.AttributeView, sourc
 		groupItemsMap[groupVal] = append(groupItemsMap[groupVal], item)
 	}
 
-	if !groupByRendered && (av.KeyTypeSelect == groupKey.Type || av.KeyTypeMSelect == groupKey.Type) {
+	if !groupByRendered && av.IsSelectKeyType(groupKey.Type) {
 		for _, o := range groupKey.Options {
 			if _, ok := groupItemsMap[o.Name]; !ok {
 				groupItemsMap[o.Name] = []av.Item{}
@@ -4134,7 +4134,7 @@ func genAttrViewGroupsWithItems(view *av.View, attrView *av.AttributeView, sourc
 		v.GroupHidden = 1 // 默认隐藏空白分组
 		v.GroupKey = groupKey
 		v.GroupVal = &av.Value{Type: av.KeyTypeText, Text: &av.ValueText{Content: groupValue}}
-		if !groupByRendered && (av.KeyTypeSelect == groupKey.Type || av.KeyTypeMSelect == groupKey.Type) {
+		if !groupByRendered && av.IsSelectKeyType(groupKey.Type) {
 			if opt := groupKey.GetOption(groupValue); nil != opt {
 				v.GroupVal.Text = nil
 				v.GroupVal.Type = av.KeyTypeSelect
@@ -5234,7 +5234,7 @@ func addAttrViewViewNamed(avID, viewID, blockID, name string, layout av.LayoutTy
 
 func getKanbanPreferredGroupKey(attrView *av.AttributeView) (ret *av.Key) {
 	for _, kv := range attrView.KeyValues {
-		if av.KeyTypeSelect == kv.Key.Type {
+		if av.IsSingleSelectKeyType(kv.Key.Type) {
 			ret = kv.Key
 			break
 		}
@@ -6392,7 +6392,7 @@ func writeAttributeViewDefaultValues(attrView *av.AttributeView, groupView *av.V
 			continue
 		}
 
-		if nil != groupView && (av.KeyTypeSelect == newValue.Type || av.KeyTypeMSelect == newValue.Type) &&
+		if nil != groupView && av.IsSelectKeyType(newValue.Type) &&
 			1 > len(newValue.MSelect) && groupValueDefault != groupView.GetGroupValue() {
 			// 单选或多选类型的值可能需要从分组条件中获取默认值
 			if opt := keyValues.Key.GetOption(groupView.GetGroupValue()); nil != opt {
@@ -7525,6 +7525,9 @@ func newAttributeViewKey(keyID, keyName, keyType, keyIcon string, dateFormat av.
 	if av.KeyTypeRollup == keyTyp {
 		ret.Rollup = &av.Rollup{Calc: &av.RollupCalc{Operator: av.CalcOperatorNone}}
 	}
+	if av.KeyTypeStatus == keyTyp {
+		ret.Options = av.NewDefaultStatusOptions()
+	}
 	return
 }
 
@@ -7776,6 +7779,9 @@ func updateAttributeViewColumn(operation *Operation) (err error) {
 
 				changeType = keyValues.Key.Type != colType
 				keyValues.Key.Type = colType
+				if changeType && av.KeyTypeStatus == colType {
+					convertAttributeViewKeyToStatus(keyValues.Key)
+				}
 
 				for _, value := range keyValues.Values {
 					value.Type = colType
@@ -7831,6 +7837,16 @@ func updateAttributeViewColumn(operation *Operation) (err error) {
 		}
 	}
 	return
+}
+
+// convertAttributeViewKeyToStatus 在字段转换为状态时保留已有选项并按名称推断缺失分组，没有选项时补充默认状态选项。
+// 选项上已有的合法分组（例如从状态转出后再转回）保持不变。
+func convertAttributeViewKeyToStatus(key *av.Key) {
+	if 1 > len(key.Options) {
+		key.Options = av.NewDefaultStatusOptions()
+		return
+	}
+	av.NormalizeStatusOptions(key.Options, true)
 }
 
 func (tx *Transaction) doRemoveAttrViewColumn(operation *Operation) (ret *TxErr) {
@@ -8265,7 +8281,7 @@ func updateAttributeViewValue0(tx *Transaction, attrView *av.AttributeView, keyI
 				val.Date.FormatDate(key.DateFormat)
 			}
 		}
-	} else if av.KeyTypeSelect == val.Type || av.KeyTypeMSelect == val.Type {
+	} else if av.IsSelectKeyType(val.Type) {
 		if nil != key && 0 < len(val.MSelect) {
 			var tmp []*av.ValueSelect
 			// 移除空选项 https://github.com/siyuan-note/siyuan/issues/15533
@@ -8791,13 +8807,21 @@ func updateAttributeViewColumnOptions(operation *Operation) (err error) {
 			}
 			existingOpt.Color = newColor
 			existingOpt.Desc = opt.Desc
+			if av.KeyTypeStatus == selectKey.Type && opt.Group.IsValid() {
+				// 未携带分组的请求保留原分组，移动分组需要显式给出目标分组。
+				existingOpt.Group = opt.Group
+			}
 		} else {
 			// 如果选项不存在则添加新选项
-			selectKey.Options = append(selectKey.Options, &av.SelectOption{
+			newOpt := &av.SelectOption{
 				Name:  opt.Name,
 				Color: attrView.FilterColorValue(opt.Color),
 				Desc:  opt.Desc,
-			})
+			}
+			if av.KeyTypeStatus == selectKey.Type {
+				newOpt.Group = opt.Group.Normalize()
+			}
+			selectKey.Options = append(selectKey.Options, newOpt)
 		}
 	}
 

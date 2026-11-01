@@ -9010,7 +9010,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "updated": {
@@ -9087,7 +9088,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             }
           },
@@ -9715,7 +9717,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "updated": {
@@ -9792,7 +9795,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             }
           },
@@ -9898,7 +9902,8 @@
             "checkbox",
             "relation",
             "rollup",
-            "lineNumber"
+            "lineNumber",
+            "status"
           ]
         },
         "updated": {
@@ -11879,6 +11884,15 @@
         "desc": {
           "type": "string"
         },
+        "group": {
+          "type": "string",
+          "enum": [
+            "",
+            "todo",
+            "inProgress",
+            "complete"
+          ]
+        },
         "name": {
           "type": "string"
         },
@@ -11907,6 +11921,22 @@
           ]
         },
         "desc": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "group": {
+          "enum": [
+            "",
+            "todo",
+            "inProgress",
+            "complete"
+          ],
           "anyOf": [
             {
               "type": "string"
@@ -12242,7 +12272,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             }
           },
@@ -12380,7 +12411,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "updated": {
@@ -12607,7 +12639,8 @@
             "checkbox",
             "relation",
             "rollup",
-            "lineNumber"
+            "lineNumber",
+            "status"
           ]
         },
         "updated": {
@@ -13316,7 +13349,8 @@
             "checkbox",
             "relation",
             "rollup",
-            "lineNumber"
+            "lineNumber",
+            "status"
           ],
           "anyOf": [
             {
@@ -14254,7 +14288,9 @@
             "Ends with",
             "Is between",
             "Is true",
-            "Is false"
+            "Is false",
+            "Is complete",
+            "Is not complete"
           ]
         },
         "quantifier": {
@@ -14371,7 +14407,9 @@
             "Ends with",
             "Is between",
             "Is true",
-            "Is false"
+            "Is false",
+            "Is complete",
+            "Is not complete"
           ],
           "anyOf": [
             {
@@ -56974,7 +57012,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -57178,7 +57217,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -57382,7 +57422,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -57586,7 +57627,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -57810,7 +57852,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -58034,7 +58077,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -58258,7 +58302,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -58469,7 +58514,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -58690,7 +58736,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -58908,7 +58955,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -59125,7 +59173,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -59336,7 +59385,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -59560,7 +59610,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -59784,7 +59835,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -60001,7 +60053,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -60225,7 +60278,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -60449,7 +60503,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -60660,7 +60715,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -60864,7 +60920,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -61068,7 +61125,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -61279,7 +61337,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -61490,7 +61549,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -61701,7 +61761,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -61912,7 +61973,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -62123,7 +62185,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -62344,7 +62407,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -62565,7 +62629,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -62769,7 +62834,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -62990,7 +63056,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -63211,7 +63278,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -63432,7 +63500,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -63643,7 +63712,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -63854,7 +63924,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -64068,7 +64139,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -64279,7 +64351,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -64490,7 +64563,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -64701,7 +64775,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -64912,7 +64987,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -65123,7 +65199,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -65334,7 +65411,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -65545,7 +65623,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -65756,7 +65835,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -65960,7 +66040,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -66171,7 +66252,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -66375,7 +66457,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -66579,7 +66662,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -66790,7 +66874,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -66994,7 +67079,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -67198,7 +67284,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -67402,7 +67489,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -67613,7 +67701,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -67817,7 +67906,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -68038,7 +68128,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -68249,7 +68340,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -68460,7 +68552,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -68671,7 +68764,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -68906,7 +69000,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -69117,7 +69212,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -69321,7 +69417,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -69525,7 +69622,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -69736,7 +69834,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -69947,7 +70046,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -70151,7 +70251,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -70362,7 +70463,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -70573,7 +70675,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -70784,7 +70887,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -70995,7 +71099,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -71199,7 +71304,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -71403,7 +71509,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -71614,7 +71721,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -71818,7 +71926,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -72029,7 +72138,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -72240,7 +72350,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -72451,7 +72562,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -72662,7 +72774,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -72873,7 +72986,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -73084,7 +73198,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -73288,7 +73403,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -73499,7 +73615,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -73703,7 +73820,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -73914,7 +74032,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -74125,7 +74244,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -74336,7 +74456,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -74547,7 +74668,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -74758,7 +74880,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -74969,7 +75092,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -75180,7 +75304,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -75391,7 +75516,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -75602,7 +75728,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -75813,7 +75940,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -76024,7 +76152,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -76235,7 +76364,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -76439,7 +76569,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -76643,7 +76774,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -76847,7 +76979,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -77058,7 +77191,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -77269,7 +77403,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -77480,7 +77615,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -77691,7 +77827,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -77902,7 +78039,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -78113,7 +78251,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -78327,7 +78466,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -78531,7 +78671,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -78735,7 +78876,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -78939,7 +79081,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -79140,7 +79283,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ]
             },
             "viewID": {
@@ -79508,7 +79652,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -79859,7 +80004,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -80210,7 +80356,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -80561,7 +80708,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -80932,7 +81080,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -81303,7 +81452,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -81674,7 +81824,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -82032,7 +82183,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -82400,7 +82552,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -82765,7 +82918,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -83129,7 +83283,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -83487,7 +83642,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -83858,7 +84014,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -84229,7 +84386,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -84593,7 +84751,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -84964,7 +85123,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -85335,7 +85495,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -85693,7 +85854,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -86044,7 +86206,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -86395,7 +86558,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -86753,7 +86917,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -87111,7 +87276,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -87469,7 +87635,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -87827,7 +87994,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -88185,7 +88353,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -88553,7 +88722,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -88921,7 +89091,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -89272,7 +89443,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -89640,7 +89812,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -90008,7 +90181,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -90376,7 +90550,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -90734,7 +90909,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -91092,7 +91268,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -91453,7 +91630,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -91811,7 +91989,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -92169,7 +92348,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -92527,7 +92707,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -92885,7 +93066,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -93243,7 +93425,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -93601,7 +93784,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -93959,7 +94143,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -94317,7 +94502,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -94668,7 +94854,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -95026,7 +95213,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -95377,7 +95565,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -95728,7 +95917,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -96086,7 +96276,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -96437,7 +96628,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -96788,7 +96980,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -97139,7 +97332,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -97497,7 +97691,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -97848,7 +98043,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -98216,7 +98412,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -98574,7 +98771,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -98932,7 +99130,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -99290,7 +99489,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -99672,7 +99872,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -100030,7 +100231,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -100381,7 +100583,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -100732,7 +100935,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -101090,7 +101294,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -101448,7 +101653,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -101799,7 +102005,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -102157,7 +102364,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -102515,7 +102723,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -102873,7 +103082,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -103231,7 +103441,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -103582,7 +103793,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -103933,7 +104145,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -104291,7 +104504,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -104642,7 +104856,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -105000,7 +105215,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -105358,7 +105574,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -105716,7 +105933,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -106074,7 +106292,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -106432,7 +106651,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -106790,7 +107010,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -107141,7 +107362,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -107499,7 +107721,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -107850,7 +108073,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -108208,7 +108432,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -108566,7 +108791,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -108924,7 +109150,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -109282,7 +109509,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -109640,7 +109868,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -109998,7 +110227,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -110356,7 +110586,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -110714,7 +110945,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -111072,7 +111304,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -111430,7 +111663,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -111788,7 +112022,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -112146,7 +112381,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -112497,7 +112733,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -112848,7 +113085,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -113199,7 +113437,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -113557,7 +113796,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -113915,7 +114155,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -114273,7 +114514,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -114631,7 +114873,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -114989,7 +115232,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -115347,7 +115591,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -115708,7 +115953,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -116059,7 +116305,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -116410,7 +116657,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -116761,7 +117009,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {
@@ -117109,7 +117358,8 @@
                 "checkbox",
                 "relation",
                 "rollup",
-                "lineNumber"
+                "lineNumber",
+                "status"
               ],
               "anyOf": [
                 {

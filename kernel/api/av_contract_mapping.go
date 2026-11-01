@@ -654,6 +654,7 @@ func toContractAVSelectOption(value *av.SelectOption) *apicontract.AVSelectOptio
 		Name:          value.Name,
 		Color:         value.Color,
 		Desc:          value.Desc,
+		Group:         string(value.Group),
 		ResolvedColor: toContractAVAttributeViewColor(value.ResolvedColor),
 	}
 }

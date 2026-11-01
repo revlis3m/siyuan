@@ -162,7 +162,7 @@ func staticAttributeViewOrder(attrView *av.AttributeView, view *av.View) bool {
 func staticAttributeViewOrderType(typ av.KeyType) bool {
 	switch typ {
 	case av.KeyTypeBlock, av.KeyTypeText, av.KeyTypeNumber, av.KeyTypeCheckbox, av.KeyTypeSelect, av.KeyTypeMSelect,
-		av.KeyTypeURL, av.KeyTypeEmail, av.KeyTypePhone, av.KeyTypeTemplate:
+		av.KeyTypeURL, av.KeyTypeEmail, av.KeyTypePhone, av.KeyTypeTemplate, av.KeyTypeStatus:
 		return true
 	}
 	return false

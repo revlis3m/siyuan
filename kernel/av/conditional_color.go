@@ -143,7 +143,7 @@ func RenderConditionalColors(viewable Viewable, view *View, attrView *AttributeV
 			color := rule.Color
 			if rule.MatchOption {
 				if index >= len(values) || nil == values[index] ||
-					(values[index].Type != KeyTypeSelect && values[index].Type != KeyTypeMSelect) ||
+					!IsSelectKeyType(values[index].Type) ||
 					filter.ValueSource == ValueSourceRendered || len(values[index].MSelect) == 0 || nil == values[index].MSelect[0] {
 					continue
 				}

@@ -1,4 +1,4 @@
-import {hasAVScalarContent, isAVDateType, isAVReadonlyType, isAVRichTextType, isAVSelectType, isAVTextType, isAVTimestampType, usesAVRollupCellRenderer} from "./capabilities";
+import {hasAVScalarContent, isAVDateType, isAVReadonlyType, isAVRichTextType, isAVSelectType, isAVSingleSelectType, isAVTextType, isAVTimestampType, usesAVRollupCellRenderer} from "./capabilities";
 import {isTableLikeView} from "./viewType";
 import {isAVRenderData} from "./renderData";
 import {transaction} from "../../wysiwyg/transaction";
@@ -241,7 +241,7 @@ export const genCellValueByElement = (colType: TAVCol, cellElement: HTMLElement)
         const cellValue = storedCellValue;
         if (colType === "mAsset" && !cellValue.mAsset) {
             cellValue.mAsset = [];
-        } else if ((colType === "mSelect" || colType === "select") && !cellValue.mSelect) {
+        } else if (isAVSelectType(colType) && !cellValue.mSelect) {
             cellValue.mSelect = [];
         } else if (colType === "location") {
             cellValue.location = createAVLocationReplacement(cellValue.location);
@@ -275,7 +275,7 @@ export const genCellValueByElement = (colType: TAVCol, cellElement: HTMLElement)
             }
             cellValue.block.icon = cellElement.querySelector<HTMLElement>(".b3-menu__avemoji")?.dataset.unicode || "";
         }
-    } else if (colType === "mSelect" || colType === "select") {
+    } else if (isAVSelectType(colType)) {
         const mSelect: IAVCellSelectValue[] = [];
         cellElement.querySelectorAll(".b3-chip").forEach((item: HTMLElement) => {
             mSelect.push({
@@ -390,7 +390,7 @@ const transformCellValue = (colType: TAVCol, value: IAVCellValue): IAVCellValue 
         newValue[colType as "text"] = {
             content: getCellValueContent(value).toString()
         };
-    } else if (colType === "mSelect" || colType === "select") {
+    } else if (isAVSelectType(colType)) {
         newValue.mSelect = [{
             content: getCellValueContent(value).toString(),
             color: "1"
@@ -438,7 +438,7 @@ const transformCellValue = (colType: TAVCol, value: IAVCellValue): IAVCellValue 
 export const genCellValue = (colType: TAVCol, value: string | any, dateFormat: TAVDateFormat = "") => {
     let cellValue: IAVCellValue = {
         type: colType,
-        [colType === "select" ? "mSelect" : colType]: value as IAVCellDateValue
+        [isAVSingleSelectType(colType) ? "mSelect" : colType]: value as IAVCellDateValue
     };
     if (typeof value === "string" && value) {
         if (colType === "location") {
@@ -458,7 +458,7 @@ export const genCellValue = (colType: TAVCol, value: string | any, dateFormat: T
                     content: value
                 }
             };
-        } else if (colType === "mSelect" || colType === "select") {
+        } else if (isAVSelectType(colType)) {
             cellValue = {
                 type: colType,
                 mSelect: [{
@@ -1222,7 +1222,7 @@ export const updateCellsValue = async (protyle: IProtyle, nodeElement: HTMLEleme
                 }
                 newValue = (oldValue.mAsset || []).concat(htmlValue);
             }
-        } else if (type === "mSelect" || type === "select") {
+        } else if (isAVSelectType(type)) {
             // 不传入为删除
             if (typeof value === "string") {
                 const oldSelectValues = replaceSelectValues ? [] : oldValue.mSelect || [];
@@ -1297,7 +1297,7 @@ export const updateCellsValue = async (protyle: IProtyle, nodeElement: HTMLEleme
             (cellValue.type === "relation" && typeof cellValue.relation === "string")) {
             break;
         }
-        if (columns && (type === "select" || type === "mSelect")) {
+        if (columns && isAVSelectType(type)) {
             const operations = mergeAddOption(columns.find(e => e.id === colId), cellValue, avID);
             doOperations.push(...operations.doOperations);
             undoOperations.push(...operations.undoOperations);
@@ -1511,9 +1511,9 @@ export const renderCell = (cellValue: IAVCellValue, rowIndex = 0, showIcon = tru
         text += `<span class="av__row-actions"><button class="av__row-action av__cell-action ariaLabel" type="button" data-position="4north" aria-label="${window.siyuan.languages.openBy}" data-type="av-row-open"><svg><use xlink:href="#iconOpen"></use></svg></button><button class="av__row-action av__cell-action ariaLabel" type="button" data-position="4north" aria-label="${bindLabel}" data-type="av-row-update"><svg><use xlink:href="#${updateIcon}"></use></svg></button></span>`;
     } else if (cellValue.type === "number") {
         text = `<span class="av__celltext" data-content="${cellValue?.number.isNotEmpty ? cellValue?.number.content : ""}">${cellValue?.number.formattedContent || cellValue?.number.content || ""}</span>`;
-    } else if (cellValue.type === "mSelect" || cellValue.type === "select") {
+    } else if (isAVSelectType(cellValue.type)) {
         cellValue?.mSelect?.forEach((item, index) => {
-            if (cellValue.type === "select" && index > 0) {
+            if (isAVSingleSelectType(cellValue.type) && index > 0) {
                 return;
             }
             const option = selectOptions?.find(selectOption => selectOption.name === item.content);

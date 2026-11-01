@@ -1,4 +1,17 @@
 {
+	"status": "状态",
+	"statusGroup": "状态分组",
+	"statusGroupTodo": "待办",
+	"statusGroupInProgress": "进行中",
+	"statusGroupComplete": "已完成",
+	"filterOperatorIsComplete": "已完成",
+	"filterOperatorIsNotComplete": "未完成",
+	"calcOperatorCountComplete": "已完成",
+	"calcOperatorCountNotComplete": "未完成",
+	"calcOperatorPercentComplete": "已完成占比",
+	"calcResultCountComplete": "已完成",
+	"calcResultCountNotComplete": "未完成",
+	"calcResultPercentComplete": "已完成占比",
 	"databaseAttrLayout": "数据库面板字段布局",
 	"databaseAttrLayoutTip": "设置文档顶部数据库面板和独立条目面板中的字段布局，空间不足时自动使用单栏",
 	"databaseAttrLayoutSingle": "单栏",
@@ -3013,6 +3026,9 @@
 		"quit": "退出程序"
 	},
 	"_attrView": {
+		"statusNotStarted": "未开始",
+		"statusInProgress": "进行中",
+		"statusDone": "已完成",
 		"dateCalendar": "历法",
 		"solarCalendar": "公历",
 		"lunarCalendar": "农历",

@@ -1,4 +1,17 @@
 {
+	"status": "Статус",
+	"statusGroup": "Группа статуса",
+	"statusGroupTodo": "К выполнению",
+	"statusGroupInProgress": "В работе",
+	"statusGroupComplete": "Завершено",
+	"filterOperatorIsComplete": "Завершено",
+	"filterOperatorIsNotComplete": "Не завершено",
+	"calcOperatorCountComplete": "Количество завершённых",
+	"calcOperatorCountNotComplete": "Количество незавершённых",
+	"calcOperatorPercentComplete": "Процент завершённых",
+	"calcResultCountComplete": "Количество завершённых",
+	"calcResultCountNotComplete": "Количество незавершённых",
+	"calcResultPercentComplete": "Процент завершённых",
 	"databaseAttrLayout": "Расположение полей панели базы данных",
 	"databaseAttrLayoutTip": "Задаёт расположение полей панели базы данных вверху документа и отдельной панели записи; при недостатке места автоматически используется один столбец",
 	"databaseAttrLayoutSingle": "Один столбец",
@@ -3013,6 +3026,9 @@
 		"quit": "Выйти из приложения"
 	},
 	"_attrView": {
+		"statusNotStarted": "Не начато",
+		"statusInProgress": "В работе",
+		"statusDone": "Готово",
 		"dateCalendar": "Календарь",
 		"solarCalendar": "Григорианский",
 		"lunarCalendar": "Китайский лунный",

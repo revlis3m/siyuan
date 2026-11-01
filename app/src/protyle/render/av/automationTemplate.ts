@@ -1,7 +1,7 @@
 import type {AVAttributeViewData, AVAutomationRuleInput, AVAutomationValueInput, AVValue} from "../../../types/api";
 import {escapeAttr, escapeHtml} from "../../../util/escape";
 import {fetchSyncPost} from "../../../util/fetch";
-import {hasAVCapability} from "./capabilities";
+import {hasAVCapability, isAVSelectType} from "./capabilities";
 import {getSelectedOptionsHTML} from "./fieldValueEditor";
 import {getAVLocationDisplayText} from "./locationValue";
 
@@ -31,7 +31,8 @@ export const automationTemplateValueText = (value: AVValue, timeZone: string): s
             }
             return value.date.hasEndDate ? JSON.stringify(value.date) :
                 automationDateInput(value.date.content, timeZone, value.date.isNotTime);
-        case "select": return value.mSelect?.[0]?.content || "";
+        case "select":
+        case "status": return value.mSelect?.[0]?.content || "";
         case "mSelect": return JSON.stringify(value.mSelect?.map(item => item.content) || []);
         case "relation": return JSON.stringify(value.relation?.blockIDs || []);
         case "mAsset": return JSON.stringify(value.mAsset || []);
@@ -139,7 +140,7 @@ export const mountAutomationTemplate = (options: {
                 return;
             }
             const output = response.data;
-            if (field.type === "select" || field.type === "mSelect") {
+            if (isAVSelectType(field.type)) {
                 result.innerHTML = getSelectedOptionsHTML(field, output.mSelect?.map(option => option.content) || []) || escapeHtml(lang.empty);
                 return;
             }

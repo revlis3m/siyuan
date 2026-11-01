@@ -696,7 +696,7 @@ func automationValuePatch(value *av.Value) map[string]any {
 	ret := map[string]any{}
 	_ = json.Unmarshal(data, &ret)
 	field := string(value.Type)
-	if field == "select" {
+	if field == "select" || field == "status" {
 		field = "mSelect"
 	}
 	if _, ok := ret[field]; !ok {

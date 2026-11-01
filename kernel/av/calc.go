@@ -44,6 +44,9 @@ const (
 	CalcOperatorPercentChecked      CalcOperator = "Percent checked"
 	CalcOperatorPercentUnchecked    CalcOperator = "Percent unchecked"
 	CalcOperatorTemplate            CalcOperator = "Template"
+	CalcOperatorCountComplete       CalcOperator = "Count complete"     // 状态值属于已完成分组的数量
+	CalcOperatorCountNotComplete    CalcOperator = "Count not complete" // 状态值为空或未完成的数量
+	CalcOperatorPercentComplete     CalcOperator = "Percent complete"   // 状态值属于已完成分组的占比
 )
 
 func Calc(viewable Viewable, attrView *AttributeView) {
@@ -98,6 +101,8 @@ func calcField(collection Collection, field Field, fieldIndex int, attrView *Att
 		calcFieldByScalarContent(collection, field, fieldIndex, countPhoneValues, countPhoneUniqueValues)
 	case KeyTypeSelect:
 		calcFieldByScalarContent(collection, field, fieldIndex, countSelectValues, countSelectUniqueValues)
+	case KeyTypeStatus:
+		calcFieldStatus(collection, field, fieldIndex, attrView)
 	case KeyTypeNumber:
 		calcFieldNumber(collection, field, fieldIndex)
 	case KeyTypeDate:
@@ -1274,6 +1279,44 @@ func calcFieldUpdated(collection Collection, field Field, fieldIndex int, attrVi
 		}
 	case CalcOperatorTemplate:
 		calcFieldByTemplate(collection, field, fieldIndex)
+	}
+}
+
+// IsStatusCalcOperator 判断算子是否只适用于状态值。
+func IsStatusCalcOperator(operator CalcOperator) bool {
+	return CalcOperatorCountComplete == operator || CalcOperatorCountNotComplete == operator || CalcOperatorPercentComplete == operator
+}
+
+// calcFieldStatus 统计状态字段，完成相关算子按选项分组判断，其余算子与单选字段一致。
+func calcFieldStatus(collection Collection, field Field, fieldIndex int, attrView *AttributeView) {
+	calc := field.GetCalc()
+	if !IsStatusCalcOperator(calc.Operator) {
+		calcFieldByScalarContent(collection, field, fieldIndex, countSelectValues, countSelectUniqueValues)
+		return
+	}
+
+	var key *Key
+	if nil != attrView {
+		key, _ = attrView.GetKey(field.GetID())
+	}
+	items := collection.GetItems()
+	total := len(items)
+	countComplete := 0
+	for _, item := range items {
+		values := item.GetValues()
+		if fieldIndex < len(values) && values[fieldIndex].IsStatusComplete(key) {
+			countComplete++
+		}
+	}
+	switch calc.Operator {
+	case CalcOperatorCountComplete:
+		calc.Result = &Value{Number: NewFormattedValueNumber(float64(countComplete), NumberFormatNone)}
+	case CalcOperatorCountNotComplete:
+		calc.Result = &Value{Number: NewFormattedValueNumber(float64(total-countComplete), NumberFormatNone)}
+	case CalcOperatorPercentComplete:
+		if 0 < total {
+			calc.Result = &Value{Number: NewFormattedValueNumber(float64(countComplete)/float64(total), NumberFormatPercent)}
+		}
 	}
 }
 

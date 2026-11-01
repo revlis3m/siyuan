@@ -927,7 +927,7 @@ func sortGroupViews(attrView *av.AttributeView, view *av.View) {
 			return
 		}
 
-		if av.KeyTypeSelect != groupKey.Type && av.KeyTypeMSelect != groupKey.Type {
+		if !av.IsSelectKeyType(groupKey.Type) {
 			return
 		}
 
@@ -937,10 +937,8 @@ func sortGroupViews(attrView *av.AttributeView, view *av.View) {
 }
 
 func sortGroupsBySelectOption(view *av.View, groupKey *av.Key) {
-	optionSort := map[string]int{}
-	for i, op := range groupKey.Options {
-		optionSort[op.Name] = i
-	}
+	// 状态字段先按分组（待办、进行中、已完成）再按选项顺序排列。
+	optionSort := av.OptionSortMap(groupKey)
 
 	defaultGroup := view.GetGroupByGroupValue(groupValueDefault)
 	if nil != defaultGroup {

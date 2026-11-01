@@ -113,7 +113,8 @@ func TestKeyCapabilityBehavior(t *testing.T) {
 		if IsCalendarDateType(typ) != date || IsDateKeyType(typ) != date {
 			t.Fatalf("date behavior changed for %s", typ)
 		}
-		if IsSelectKeyType(typ) != (typ == KeyTypeSelect || typ == KeyTypeMSelect) {
+		if IsSelectKeyType(typ) != (typ == KeyTypeSelect || typ == KeyTypeMSelect || typ == KeyTypeStatus) ||
+			IsSingleSelectKeyType(typ) != (typ == KeyTypeSelect || typ == KeyTypeStatus) {
 			t.Fatalf("select behavior changed for %s", typ)
 		}
 		if capability.Filterable != (typ != KeyTypeLineNumber) || capability.Sortable != (typ != KeyTypeLineNumber) ||

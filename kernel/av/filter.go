@@ -88,6 +88,8 @@ const (
 	FilterOperatorIsBetween             FilterOperator = "Is between"
 	FilterOperatorIsTrue                FilterOperator = "Is true"
 	FilterOperatorIsFalse               FilterOperator = "Is false"
+	FilterOperatorIsComplete            FilterOperator = "Is complete"     // 状态值属于已完成分组
+	FilterOperatorIsNotComplete         FilterOperator = "Is not complete" // 状态值为空或不属于已完成分组
 )
 
 type FilterQuantifier string
@@ -334,6 +336,11 @@ func evalMissingLeaf(filter *ViewFilter) bool {
 		return true
 	case FilterOperatorIsNotEmpty:
 		return false
+	case FilterOperatorIsComplete:
+		return false
+	case FilterOperatorIsNotComplete:
+		// 未填写的状态视为未完成。
+		return true
 	case FilterOperatorContainsAnyItem, FilterOperatorDoesNotContainAnyItem:
 		comparison := filter
 		if nil != filter.Value && KeyTypeRollup == filter.Value.Type && nil != filter.Value.Rollup &&
@@ -423,8 +430,8 @@ func RemoveFiltersByColumn(filters []*ViewFilter, column string) (ret []*ViewFil
 	return
 }
 
-// RemoveSelectOptionFromFilters 递归从引用指定列的 select/mSelect 叶子中移除给定选项值。
-// 若叶子移除后选项为空（且非 Is empty/Is not empty 操作符），则整体移除该叶子；并裁剪变空的分组。
+// RemoveSelectOptionFromFilters 递归从引用指定列的 select/mSelect/status 叶子中移除给定选项值。
+// 若叶子移除后选项为空（且不是无需比较值的操作符），则整体移除该叶子；并裁剪变空的分组。
 // 返回处理后的节点列表。
 func RemoveSelectOptionFromFilters(filters []*ViewFilter, column, optionContent string) (ret []*ViewFilter) {
 	for _, f := range filters {
@@ -443,11 +450,11 @@ func RemoveSelectOptionFromFilters(filters []*ViewFilter, column, optionContent 
 			ret = append(ret, f)
 			continue
 		}
-		if nil == f.Value || (KeyTypeSelect != f.Value.Type && KeyTypeMSelect != f.Value.Type) {
+		if nil == f.Value || !IsSelectKeyType(f.Value.Type) {
 			ret = append(ret, f)
 			continue
 		}
-		if FilterOperatorIsEmpty == f.Operator || FilterOperatorIsNotEmpty == f.Operator {
+		if FilterOperatorIsEmpty == f.Operator || FilterOperatorIsNotEmpty == f.Operator || IsValuelessStatusFilterOperator(f.Operator) {
 			ret = append(ret, f)
 			continue
 		}
@@ -587,7 +594,7 @@ func (attrView *AttributeView) RemoveExactRelationFilters(column string) (change
 	return
 }
 
-// RenameSelectOptionInFilters 递归将引用指定列的 select/mSelect 叶子中的旧选项名改为新名与新颜色。
+// RenameSelectOptionInFilters 递归将引用指定列的 select/mSelect/status 叶子中的旧选项名改为新名与新颜色。
 func RenameSelectOptionInFilters(filters []*ViewFilter, column, oldContent, newContent, newColor string) {
 	for _, f := range filters {
 		if nil == f {
@@ -600,7 +607,7 @@ func RenameSelectOptionInFilters(filters []*ViewFilter, column, oldContent, newC
 		if f.Column != column || nil == f.Value {
 			continue
 		}
-		if KeyTypeSelect != f.Value.Type && KeyTypeMSelect != f.Value.Type {
+		if !IsSelectKeyType(f.Value.Type) {
 			continue
 		}
 		for _, opt := range f.Value.MSelect {
@@ -645,6 +652,18 @@ func PruneInvalidColumnFilters(filters []*ViewFilter, validColumns map[string]bo
 
 func (value *Value) Filter(filter *ViewFilter, attrView *AttributeView, itemID string,
 	rollupFurtherCollections map[string]*RollupRenderContext, cachedAttrViews map[string]*AttributeView) bool {
+	if nil != filter && IsValuelessStatusFilterOperator(filter.Operator) {
+		// 完成状态筛选不需要比较值，按字段选项分组判断；字段类型已改变时不过滤。
+		if KeyTypeStatus != value.Type || (nil != filter.Value && value.Type != filter.Value.Type) {
+			return true
+		}
+		var key *Key
+		if nil != attrView {
+			key, _ = attrView.GetKey(value.KeyID)
+		}
+		return value.IsStatusComplete(key) == (FilterOperatorIsComplete == filter.Operator)
+	}
+
 	if nil == filter || (nil == filter.Value && nil == filter.RelativeDate) {
 		return true
 	}
@@ -1177,7 +1196,7 @@ func (value *Value) filter(other *Value, relativeDate, relativeDate2 *RelativeDa
 
 			return filterTime(value.Updated.Content, value.Updated.IsNotEmpty, other.Updated.Content, other.Updated.Content2, operator)
 		}
-	case KeyTypeSelect, KeyTypeMSelect:
+	case KeyTypeSelect, KeyTypeMSelect, KeyTypeStatus:
 		if nil != value.MSelect {
 			if 1 > len(other.MSelect) {
 				return true
@@ -1619,7 +1638,8 @@ func (filter *ViewFilter) IsValid() bool {
 		return false
 	}
 
-	if FilterOperatorIsEmpty != filter.Operator && FilterOperatorIsNotEmpty != filter.Operator {
+	if FilterOperatorIsEmpty != filter.Operator && FilterOperatorIsNotEmpty != filter.Operator &&
+		!IsValuelessStatusFilterOperator(filter.Operator) {
 		if KeyTypeLocation == filter.Value.Type {
 			return nil != filter.Value.Text && "" != strings.TrimSpace(filter.Value.Text.Content)
 		}
@@ -1649,7 +1669,8 @@ func (filter *ViewFilter) GetAffectValue(key *Key, addingBlockID string) (ret *V
 		return nil, false
 	}
 
-	if FilterOperatorIsEmpty != filter.Operator && FilterOperatorIsNotEmpty != filter.Operator {
+	if FilterOperatorIsEmpty != filter.Operator && FilterOperatorIsNotEmpty != filter.Operator &&
+		!IsValuelessStatusFilterOperator(filter.Operator) {
 		if KeyTypeRelation != filter.Value.Type && filter.Value.IsEmpty() && nil == filter.RelativeDate {
 			// 在不是过滤空值和非空值的情况下，空值不设置默认值 https://github.com/siyuan-note/siyuan/issues/11297
 			return nil, false
@@ -1788,6 +1809,41 @@ func (filter *ViewFilter) GetAffectValue(key *Key, addingBlockID string) (ret *V
 			ret.Date = newDate(0, false)
 		case FilterOperatorIsNotEmpty:
 			ret.Date = newDate(util.CurrentTimeMillis(), true)
+		}
+	case KeyTypeStatus:
+		switch filter.Operator {
+		case FilterOperatorIsComplete, FilterOperatorIsNotComplete:
+			// 新增条目取第一个满足条件的状态选项：已完成取完成组，未完成取待办组。
+			group := StatusGroupTodo
+			if FilterOperatorIsComplete == filter.Operator {
+				group = StatusGroupComplete
+			}
+			for _, option := range key.StatusOrderedOptions() {
+				if option.Group.Normalize() == group {
+					ret.MSelect = []*ValueSelect{{Content: option.Name, Color: option.Color}}
+					return
+				}
+			}
+			if FilterOperatorIsNotComplete == filter.Operator {
+				ret.MSelect = []*ValueSelect{}
+				return
+			}
+			return nil, false
+		case FilterOperatorIsEqual:
+			if 1 > len(filter.Value.MSelect) {
+				return nil, false
+			}
+			ret.MSelect = []*ValueSelect{{Content: filter.Value.MSelect[0].Content, Color: filter.Value.MSelect[0].Color}}
+		case FilterOperatorIsNotEqual:
+			return nil, false
+		case FilterOperatorIsEmpty:
+			ret.MSelect = []*ValueSelect{}
+		case FilterOperatorIsNotEmpty:
+			if options := key.StatusOrderedOptions(); 0 < len(options) {
+				ret.MSelect = []*ValueSelect{{Content: options[0].Name, Color: options[0].Color}}
+			} else {
+				return nil, false
+			}
 		}
 	case KeyTypeSelect, KeyTypeMSelect:
 		switch filter.Operator {

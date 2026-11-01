@@ -3,7 +3,7 @@ import {readFileSync} from "node:fs";
 import {test} from "node:test";
 import {runInNewContext} from "node:vm";
 import {ModuleKind, ScriptTarget, transpileModule} from "typescript";
-import {isAVDateType, isAVReadonlyType, isAVTextType} from "./capabilities";
+import {isAVDateType, isAVReadonlyType, isAVSelectType, isAVSingleSelectType, isAVTextType} from "./capabilities";
 import {cloneAVCellValueSnapshot, createAVCellUpdateOperation, genEmptyAVCellValue} from "./cellValue";
 import {rebindAVCellValue} from "./dragFillValue";
 import {formatDateValue, parseDateValue} from "./dateFormat";
@@ -21,7 +21,7 @@ test("date paste preserves stored values on invalid text and supports explicit c
     const exports = {} as Pick<typeof import("./cell"), "updateCellsValue">;
     runInNewContext(transpileModule(fragment, {compilerOptions: {
         module: ModuleKind.CommonJS, target: ScriptTarget.ES2021,
-    }}).outputText, {exports, isAVDateType, isAVReadonlyType, isAVTextType, cloneAVCellValueSnapshot, createAVCellUpdateOperation,
+    }}).outputText, {exports, isAVDateType, isAVReadonlyType, isAVSelectType, isAVSingleSelectType, isAVTextType, cloneAVCellValueSnapshot, createAVCellUpdateOperation,
         genEmptyAVCellValue, rebindAVCellValue, formatDateValue, parseDateValue,
         getAVBatchEditMode: () => "replace", getCellValueText: () => "stored date",
         objEquals: (first: unknown, second: unknown) => JSON.stringify(first) === JSON.stringify(second)});

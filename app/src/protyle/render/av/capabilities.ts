@@ -45,6 +45,17 @@ export const isAVTimestampType = (type: string | undefined | null): boolean =>
 export const isAVSelectType = (type: string | undefined | null): boolean =>
     typeof type === "string" && optionTypes.has(type);
 
+// 状态字段与单选字段一样最多保存一个选项，共用单选的编辑和取值逻辑。
+export const isAVSingleSelectType = (type: string | undefined | null): boolean =>
+    type === "select" || type === "status";
+
+// 状态完成算子只依据选项分组判断，不需要筛选值，汇总筛选不提供这两个算子。
+export const isAVStatusCompletionOperator = (operator: string | undefined | null): boolean =>
+    operator === "Is complete" || operator === "Is not complete";
+
+export const isAVValuelessFilterOperator = (operator: string | undefined | null): boolean =>
+    operator === "Is empty" || operator === "Is not empty" || isAVStatusCompletionOperator(operator);
+
 export const isAVTextType = (type: string | undefined | null): boolean =>
     typeof type === "string" && textTypes.has(type);
 
@@ -76,7 +87,8 @@ export const isAVNewItemTemplateType = (type: string | undefined | null) =>
 export const getAVOfferedFilterOperators = (type: string, isRollup = false): readonly AVFilterOperator[] => {
     const profile = getAVKeyCapability(type)?.filterProfile;
     const capability = profile && AV_FILTER_CAPABILITIES[profile];
-    return capability ? (isRollup && capability.offeredRollup || capability.offered) : [];
+    const operators = capability ? (isRollup && capability.offeredRollup || capability.offered) : [];
+    return isRollup ? operators.filter(operator => !isAVStatusCompletionOperator(operator)) : operators;
 };
 
 export const isAVNumericFilterCalcOperator = (operator: string | undefined) =>

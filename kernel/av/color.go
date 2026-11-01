@@ -334,7 +334,7 @@ func (av *AttributeView) resolveDirectViewGroupColors(view *View, colors []*Attr
 	}
 	if nil != view.GroupKey {
 		if key, err := av.GetKey(view.GroupKey.ID); nil == err &&
-			(KeyTypeSelect == key.Type || KeyTypeMSelect == key.Type) {
+			IsSelectKeyType(key.Type) {
 			for _, option := range view.GroupKey.Options {
 				if nil != option {
 					option.ResolvedColor = resolveColor(option.Color, colors)
@@ -648,7 +648,7 @@ func collectFilterCustomColorIndexes(filters []*ViewFilter, attrView *AttributeV
 			continue
 		}
 		if key, err := attrView.GetKey(filter.Column); nil == err &&
-			(KeyTypeSelect == key.Type || KeyTypeMSelect == key.Type) {
+			IsSelectKeyType(key.Type) {
 			collectValueCustomColorIndexes(filter.Value, addColor)
 		}
 		collectFilterCustomColorIndexes(filter.Filters, attrView, addColor)

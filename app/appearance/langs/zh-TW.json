@@ -1,4 +1,17 @@
 {
+	"status": "狀態",
+	"statusGroup": "狀態分組",
+	"statusGroupTodo": "待辦",
+	"statusGroupInProgress": "進行中",
+	"statusGroupComplete": "已完成",
+	"filterOperatorIsComplete": "已完成",
+	"filterOperatorIsNotComplete": "未完成",
+	"calcOperatorCountComplete": "已完成",
+	"calcOperatorCountNotComplete": "未完成",
+	"calcOperatorPercentComplete": "已完成佔比",
+	"calcResultCountComplete": "已完成",
+	"calcResultCountNotComplete": "未完成",
+	"calcResultPercentComplete": "已完成佔比",
 	"databaseAttrLayout": "資料庫面板欄位佈局",
 	"databaseAttrLayoutTip": "設定文件頂部資料庫面板和獨立項目面板中的欄位佈局，空間不足時自動使用單欄",
 	"databaseAttrLayoutSingle": "單欄",
@@ -3013,6 +3026,9 @@
 		"quit": "退出程序"
 	},
 	"_attrView": {
+		"statusNotStarted": "未開始",
+		"statusInProgress": "進行中",
+		"statusDone": "已完成",
 		"dateCalendar": "曆法",
 		"solarCalendar": "西曆",
 		"lunarCalendar": "農曆",

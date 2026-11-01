@@ -1,4 +1,4 @@
-import {isAVSelectType} from "./capabilities";
+import {isAVSelectType, isAVSingleSelectType} from "./capabilities";
 import {Menu} from "../../../plugin/Menu";
 import {escapeAttr, escapeHtml} from "../../../util/escape";
 import {fetchPost} from "../../../util/fetch";
@@ -13,6 +13,7 @@ import {formatDateValue} from "./dateFormat";
 import {bindLunarDateEditor, getLunarDateHTML} from "./lunarDate";
 import {createAVLocationReplacement, getAVLocationDisplayText} from "./locationValue";
 import {openAVLocationEditor} from "./locationEditor";
+import {getAVStatusOrderedOptions} from "./status";
 
 export const getSelectedOptionNames = (element: HTMLElement) => {
     try {
@@ -29,7 +30,7 @@ export const getSelectedOptionsHTML = (column: IAVColumn, selected: string[]) =>
 const getFieldSelectMenuHTML = (column: IAVColumn, selected: string[], keyword = "") => {
     const selectedHTML = selected.map(name => (column.options || []).find(item => item.name === name)).filter(item => item).map(item => `<div class="b3-chip b3-chip--middle" data-name="${escapeAttr(item.name)}" style="white-space:nowrap;max-width:100%;${getAVColorStyle(item)}"><span class="fn__ellipsis">${escapeHtml(item.name)}</span><svg class="b3-chip__close" data-role="remove-field-option"><use xlink:href="#iconClose"></use></svg></div>`).join("");
     const normalizedKeyword = keyword.toLowerCase();
-    const options = (column.options || []).filter(item => !normalizedKeyword ||
+    const options = (column.type === "status" ? getAVStatusOrderedOptions(column.options) : column.options || []).filter(item => !normalizedKeyword ||
         item.name.toLowerCase().includes(normalizedKeyword) || normalizedKeyword.includes(item.name.toLowerCase()));
     const optionsHTML = options.map((option, index) => `<button class="b3-menu__item${index === 0 ? " b3-menu__item--current" : ""}" data-role="field-option" data-name="${escapeAttr(option.name)}">
     <div class="fn__flex-1">
@@ -61,6 +62,7 @@ const getFieldText = (value: IAVCellValue) => {
             return dayjs(value.date.content).format(value.date.isNotTime ? "YYYY-MM-DD" : "YYYY-MM-DDTHH:mm");
         case "select":
         case "mSelect":
+        case "status":
             return (value.mSelect || []).map(item => item.content).join(", ");
         case "mAsset":
             return (value.mAsset || []).map(item => item.content).join(", ");
@@ -92,7 +94,8 @@ export const genFieldValue = (column: IAVColumn, input: HTMLElement, previousVal
                 },
             };
         case "select":
-        case "mSelect": {
+        case "mSelect":
+        case "status": {
             const selectedNames = getSelectedOptionNames(input);
             const selected = (column.options || []).filter(option => selectedNames.includes(option.name)).map(option => ({
                 content: option.name,
@@ -242,13 +245,13 @@ export const openFieldSelectMenu = (target: HTMLElement, column: IAVColumn) => {
                     updateSelected(selected);
                     render((panelElement.querySelector("input") as HTMLInputElement)?.value || "");
                 } else if (optionElement) {
-                    if (column.type === "select") {
+                    if (isAVSingleSelectType(column.type)) {
                         selected.splice(0, selected.length, name);
                     } else {
                         selected.push(name);
                     }
                     updateSelected(selected);
-                    if (column.type === "select") {
+                    if (isAVSingleSelectType(column.type)) {
                         menu.close();
                     } else {
                         render((panelElement.querySelector("input") as HTMLInputElement)?.value || "");

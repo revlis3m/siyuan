@@ -1,4 +1,17 @@
 {
+	"status": "Durum",
+	"statusGroup": "Durum grubu",
+	"statusGroupTodo": "Yapılacak",
+	"statusGroupInProgress": "Devam ediyor",
+	"statusGroupComplete": "Tamamlandı",
+	"filterOperatorIsComplete": "Tamamlandı",
+	"filterOperatorIsNotComplete": "Tamamlanmadı",
+	"calcOperatorCountComplete": "Tamamlananları say",
+	"calcOperatorCountNotComplete": "Tamamlanmayanları say",
+	"calcOperatorPercentComplete": "Tamamlanma yüzdesi",
+	"calcResultCountComplete": "Tamamlananları say",
+	"calcResultCountNotComplete": "Tamamlanmayanları say",
+	"calcResultPercentComplete": "Tamamlanma yüzdesi",
 	"databaseAttrLayout": "Veritabanı paneli alan düzeni",
 	"databaseAttrLayoutTip": "Belgenin üstündeki veritabanı panelinde ve bağımsız öğe panelinde alan düzenini ayarlar; alan yetersiz olduğunda otomatik olarak tek sütun kullanılır",
 	"databaseAttrLayoutSingle": "Tek sütun",
@@ -3013,6 +3026,9 @@
 		"quit": "Uygulamadan çık"
 	},
 	"_attrView": {
+		"statusNotStarted": "Başlanmadı",
+		"statusInProgress": "Devam ediyor",
+		"statusDone": "Bitti",
 		"dateCalendar": "Takvim",
 		"solarCalendar": "Miladi",
 		"lunarCalendar": "Çin ay takvimi",

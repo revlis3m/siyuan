@@ -111,6 +111,11 @@ var keyCapabilities = map[KeyType]KeyCapability{
 		FilterProfile: FilterProfileNone,
 		order:         16, ValueKind: "lineNumber", Editable: false, Filterable: false,
 		Sortable: false, Groupable: false, DefaultOperator: ""},
+	KeyTypeStatus: {
+		Groups:        KeyGroupRollupCell | KeyGroupNewItemTemplate,
+		FilterProfile: FilterProfileStatus,
+		order:         18, ValueKind: "options", Editable: true, Filterable: true,
+		Sortable: true, Groupable: true, DefaultOperator: FilterOperatorIsEqual},
 }
 
 // GetKeyCapability 返回能力声明的副本，未知类型不具备任何基础能力。
@@ -134,6 +139,7 @@ var filterOperators = []FilterOperator{
 	FilterOperatorIsLess, FilterOperatorIsLessOrEqual, FilterOperatorContains, FilterOperatorDoesNotContain,
 	FilterOperatorContainsAnyItem, FilterOperatorDoesNotContainAnyItem, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty,
 	FilterOperatorStartsWith, FilterOperatorEndsWith, FilterOperatorIsBetween, FilterOperatorIsTrue, FilterOperatorIsFalse,
+	FilterOperatorIsComplete, FilterOperatorIsNotComplete,
 }
 
 func IsDateKeyType(typ KeyType) bool {

@@ -5,15 +5,17 @@ import {test} from "node:test";
 import * as ts from "typescript";
 import {AV_KEY_CAPABILITIES, AV_KEY_TYPES} from "./capabilities.generated";
 import {
-    AV_DATE_TYPES, getAVDefaultFilterOperator, getAVKeyCapability, hasAVAttributePlaceholder, hasAVCapability,
-    hasAVScalarContent, isAVDateType, isAVLinkType, isAVNewItemTemplateType, isAVReadonlyType, isAVRichTextType,
-    isAVSelectType, isAVTextType, isAVTimestampType, usesAVRollupCellRenderer,
+    AV_DATE_TYPES, getAVDefaultFilterOperator, getAVKeyCapability, getAVOfferedFilterOperators, hasAVAttributePlaceholder,
+    hasAVCapability, hasAVScalarContent, isAVDateType, isAVLinkType, isAVNewItemTemplateType, isAVReadonlyType,
+    isAVRichTextType, isAVSelectType, isAVSingleSelectType, isAVStatusCompletionOperator, isAVTextType,
+    isAVTimestampType, isAVValuelessFilterOperator, usesAVRollupCellRenderer,
 } from "./capabilities";
 
 test("field capability groups preserve supported field behavior", () => {
     const groups: Array<[string, (type: string) => boolean, string[]]> = [
         ["date", isAVDateType, ["date", "created", "updated"]],
-        ["select", isAVSelectType, ["select", "mSelect"]],
+        ["select", isAVSelectType, ["select", "mSelect", "status"]],
+        ["single select", isAVSingleSelectType, ["select", "status"]],
         ["text", isAVTextType, ["text", "block", "url", "email", "phone", "template"]],
         ["timestamp", isAVTimestampType, ["created", "updated"]],
         ["readonly", isAVReadonlyType, ["created", "updated", "template", "rollup", "lineNumber"]],
@@ -21,8 +23,8 @@ test("field capability groups preserve supported field behavior", () => {
         ["link", isAVLinkType, ["block", "url", "email", "phone"]],
         ["scalar content", hasAVScalarContent, ["number", "text", "block", "url", "phone", "email", "template", "mAsset"]],
         ["attribute placeholder", hasAVAttributePlaceholder, ["text", "number", "date", "url", "phone", "template", "email", "location"]],
-        ["rollup cell", usesAVRollupCellRenderer, ["template", "select", "mSelect", "mAsset", "relation", "location"]],
-        ["template fields", isAVNewItemTemplateType, ["text", "number", "date", "select", "mSelect", "url", "email", "phone", "mAsset", "checkbox", "relation", "location"]],
+        ["rollup cell", usesAVRollupCellRenderer, ["template", "select", "mSelect", "mAsset", "relation", "location", "status"]],
+        ["template fields", isAVNewItemTemplateType, ["text", "number", "date", "select", "mSelect", "url", "email", "phone", "mAsset", "checkbox", "relation", "location", "status"]],
     ];
     for (const [name, predicate, expected] of groups) {
         for (const type of [...AV_KEY_TYPES, "unknown", undefined, null]) {
@@ -37,13 +39,31 @@ test("field capability groups preserve supported field behavior", () => {
         assert.equal(hasAVCapability(type, "sortable"), type !== "lineNumber", type);
         assert.equal(hasAVCapability(type, "groupable"), type !== "lineNumber" && type !== "rollup" && type !== "location", type);
         const expected = type === "lineNumber" ? undefined : type === "relation" ? "Contains any item" :
-            ["select", "number", "date", "created", "updated", "checkbox"].includes(type) ? "=" : "Contains";
+            ["select", "number", "date", "created", "updated", "checkbox", "status"].includes(type) ? "=" : "Contains";
         assert.equal(getAVDefaultFilterOperator(type), expected, type);
     }
     assert.equal(getAVDefaultFilterOperator("relation", true), "Contains");
     assert.equal(getAVKeyCapability("unknown"), undefined);
     assert.equal(hasAVCapability(undefined, "editable"), false);
     assert.equal(AV_KEY_TYPES.length, Object.keys(AV_KEY_CAPABILITIES).length);
+});
+
+test("status fields offer completion filters only outside rollups", () => {
+    const completion = ["Is complete", "Is not complete"];
+    assert.deepEqual(getAVOfferedFilterOperators("status"), ["=", "!=", "Is empty", "Is not empty", ...completion]);
+    assert.deepEqual(getAVOfferedFilterOperators("status", true), ["=", "!=", "Is empty", "Is not empty"]);
+    for (const type of AV_KEY_TYPES.filter(item => item !== "status")) {
+        for (const isRollup of [false, true]) {
+            assert.ok(!getAVOfferedFilterOperators(type, isRollup).some(isAVStatusCompletionOperator), type);
+        }
+    }
+    for (const operator of [...completion, "Is empty", "Is not empty"]) {
+        assert.equal(isAVValuelessFilterOperator(operator), true, operator);
+    }
+    for (const operator of ["=", "!=", "Contains", "", undefined]) {
+        assert.equal(isAVValuelessFilterOperator(operator), false, String(operator));
+        assert.equal(isAVStatusCompletionOperator(operator), false, String(operator));
+    }
 });
 
 test("field membership decisions use declared capabilities", () => {

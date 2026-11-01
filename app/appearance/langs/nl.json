@@ -1,4 +1,17 @@
 {
+	"status": "Status",
+	"statusGroup": "Statusgroep",
+	"statusGroupTodo": "Te doen",
+	"statusGroupInProgress": "Bezig",
+	"statusGroupComplete": "Voltooid",
+	"filterOperatorIsComplete": "Is voltooid",
+	"filterOperatorIsNotComplete": "Is niet voltooid",
+	"calcOperatorCountComplete": "Aantal voltooid",
+	"calcOperatorCountNotComplete": "Aantal niet voltooid",
+	"calcOperatorPercentComplete": "Percentage voltooid",
+	"calcResultCountComplete": "Aantal voltooid",
+	"calcResultCountNotComplete": "Aantal niet voltooid",
+	"calcResultPercentComplete": "Percentage voltooid",
 	"databaseAttrLayout": "Veldindeling van het databasepaneel",
 	"databaseAttrLayoutTip": "Stelt de veldindeling in het databasepaneel bovenaan het document en het afzonderlijke itempaneel in; bij onvoldoende ruimte wordt automatisch één kolom gebruikt",
 	"databaseAttrLayoutSingle": "Eén kolom",
@@ -3013,6 +3026,9 @@
 		"quit": "Applicatie afsluiten"
 	},
 	"_attrView": {
+		"statusNotStarted": "Niet gestart",
+		"statusInProgress": "Bezig",
+		"statusDone": "Klaar",
 		"dateCalendar": "Kalender",
 		"solarCalendar": "Gregoriaans",
 		"lunarCalendar": "Chinese maankalender",

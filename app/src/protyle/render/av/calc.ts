@@ -292,6 +292,22 @@ export const openCalcMenu = async (protyle: IProtyle, calcElement: HTMLElement, 
             target: calcElement
         });
     }
+    if (type === "status") {
+        // 状态字段按选项分组统计完成情况，列底部统计和关联汇总共用这些算子。
+        ["Count complete", "Count not complete", "Percent complete"].forEach(operator => {
+            calcItem({
+                menu,
+                protyle,
+                colId,
+                avId,
+                oldOperator,
+                operator,
+                data: panelData?.data,
+                blockID,
+                target: calcElement
+            });
+        });
+    }
     let rollupIsNumber = false;
     if (type === "rollup") {
         // 行级汇总结果本身就是数字的操作（如计数、百分比、复选统计），即使目标字段不是数字类型，
@@ -300,6 +316,7 @@ export const openCalcMenu = async (protyle: IProtyle, calcElement: HTMLElement, 
             "Count all", "Count values", "Count unique values", "Count empty", "Count not empty",
             "Percent empty", "Percent not empty", "Percent unique values",
             "Checked", "Unchecked", "Percent checked", "Percent unchecked",
+            "Count complete", "Count not complete", "Percent complete",
         ];
         let relationKeyID: string;
         let keyID: string;
@@ -593,6 +610,15 @@ export const getCalcValue = (column: IAVColumn) => {
         case  "Percent unchecked":
             value = `<span>${resultCalc.formattedContent}</span><small>${window.siyuan.languages.percentUnchecked}</small>`;
             break;
+        case "Count complete":
+            value = `<span>${resultCalc.formattedContent}</span><small>${window.siyuan.languages.calcResultCountComplete}</small>`;
+            break;
+        case "Count not complete":
+            value = `<span>${resultCalc.formattedContent}</span><small>${window.siyuan.languages.calcResultCountNotComplete}</small>`;
+            break;
+        case "Percent complete":
+            value = `<span>${resultCalc.formattedContent}</span><small>${window.siyuan.languages.calcResultPercentComplete}</small>`;
+            break;
         case  "Template":
             value = `<span>${getAVTemplateHTML(resultCalc.formattedContent ?? resultCalc.content)}</span><small>${window.siyuan.languages.calcResultTemplate}</small>`;
             break;
@@ -631,6 +657,12 @@ export const getNameByOperator = (operator: string, isRollup: boolean) => {
             return window.siyuan.languages.percentChecked;
         case "Percent unchecked":
             return window.siyuan.languages.percentUnchecked;
+        case "Count complete":
+            return window.siyuan.languages.calcOperatorCountComplete;
+        case "Count not complete":
+            return window.siyuan.languages.calcOperatorCountNotComplete;
+        case "Percent complete":
+            return window.siyuan.languages.calcOperatorPercentComplete;
         case "Sum":
             return window.siyuan.languages.calcOperatorSum;
         case "Average":

@@ -17,6 +17,7 @@ const (
 	FilterProfileCheckbox FilterProfile = "checkbox"
 	FilterProfileSelect   FilterProfile = "select"
 	FilterProfileMSelect  FilterProfile = "mSelect"
+	FilterProfileStatus   FilterProfile = "status"
 	FilterProfileRelation FilterProfile = "relation"
 	FilterProfileRollup   FilterProfile = "rollup"
 )
@@ -65,6 +66,12 @@ var filterCapabilities = map[FilterProfile]FilterCapability{
 		Accepted: []FilterOperator{FilterOperatorIsEqual, FilterOperatorIsNotEqual, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty},
 		Offered:  []FilterOperator{FilterOperatorIsEqual, FilterOperatorIsNotEqual, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty},
 	},
+	FilterProfileStatus: {
+		Accepted: []FilterOperator{FilterOperatorIsEqual, FilterOperatorIsNotEqual, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty,
+			FilterOperatorIsComplete, FilterOperatorIsNotComplete},
+		Offered: []FilterOperator{FilterOperatorIsEqual, FilterOperatorIsNotEqual, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty,
+			FilterOperatorIsComplete, FilterOperatorIsNotComplete},
+	},
 	FilterProfileMSelect: {
 		Accepted: []FilterOperator{FilterOperatorContains, FilterOperatorDoesNotContain, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty},
 		Offered:  []FilterOperator{FilterOperatorContains, FilterOperatorDoesNotContain, FilterOperatorIsEmpty, FilterOperatorIsNotEmpty},
@@ -103,5 +110,6 @@ var calcFilterNumber = map[CalcOperator]bool{
 	CalcOperatorSum: true, CalcOperatorAverage: true, CalcOperatorMedian: true, CalcOperatorMin: true, CalcOperatorMax: true,
 	CalcOperatorRange: false, CalcOperatorEarliest: false, CalcOperatorLatest: false,
 	CalcOperatorChecked: true, CalcOperatorUnchecked: true, CalcOperatorPercentChecked: true, CalcOperatorPercentUnchecked: true,
+	CalcOperatorCountComplete: true, CalcOperatorCountNotComplete: true, CalcOperatorPercentComplete: true,
 	CalcOperatorTemplate: false,
 }

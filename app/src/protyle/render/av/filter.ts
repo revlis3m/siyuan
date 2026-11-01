@@ -1,4 +1,4 @@
-import {getAVDefaultFilterOperator, getAVOfferedFilterOperators, hasAVCapability, hasAVScalarContent, isAVDateType, isAVNumericFilterCalcOperator, isAVTextType} from "./capabilities";
+import {getAVDefaultFilterOperator, getAVOfferedFilterOperators, hasAVCapability, hasAVScalarContent, isAVDateType, isAVNumericFilterCalcOperator, isAVSelectType, isAVSingleSelectType, isAVTextType, isAVValuelessFilterOperator} from "./capabilities";
 import {Menu} from "../../../plugin/Menu";
 import {transaction} from "../../wysiwyg/transaction";
 import {escapeAttr, escapeHtml} from "../../../util/escape";
@@ -14,6 +14,7 @@ import {countFilterLeaves} from "./filterTree";
 import {getAVColorStyle} from "./color";
 import {setFilterSelectPosition} from "./selectPosition";
 import {closeInlineFilterDropdowns} from "./filterDropdown";
+import {getAVStatusOrderedOptions} from "./status";
 
 export interface FilterEditorOptions {
     action?: IAVFilterOperation["action"];
@@ -401,11 +402,13 @@ const getOperatorSelectByType = (type: TAVCol, currentOperator: string, isRollup
         "<": isAVDateType(type) ? languages.filterOperatorIsBefore : "&lt;",
         ">=": isAVDateType(type) ? languages.filterOperatorIsOnOrAfter : "&GreaterEqual;",
         "<=": isAVDateType(type) ? languages.filterOperatorIsOnOrBefore : "&le;",
+        "Is complete": languages.filterOperatorIsComplete,
+        "Is not complete": languages.filterOperatorIsNotComplete,
     };
     if (type === "number") {
         labels["="] = "=";
         labels["!="] = "!=";
-    } else if (type === "select" && !isRollup) {
+    } else if (isAVSingleSelectType(type) && !isRollup) {
         labels["="] = languages.filterOperatorContains;
         labels["!="] = languages.filterOperatorDoesNotContain;
     } else if (type === "relation" && !isRollup) {
@@ -573,7 +576,7 @@ export const genEmptyFilterValue = (column: IAVColumn, valueSource: "stored" | "
 const genInlineFilterHTML = (filter: IAVFilter, colData: IAVColumn, path: string): string => {
     const {type: valueType, colData: valueColumn, isRollup} = resolveFilterValueType(filter, colData);
     const operator = filter.operator;
-    const isEmptyOp = operator === "Is empty" || operator === "Is not empty";
+    const isEmptyOp = isAVValuelessFilterOperator(operator);
     const valueHidden = isEmptyOp ? " fn__none" : "";
 
     // 操作符 select
@@ -618,7 +621,7 @@ const genInlineFilterHTML = (filter: IAVFilter, colData: IAVColumn, path: string
 </select>`
             : "";
         return `<span class="av__filter-date-controls">${quantifierSelect}<span class="av__filter-date-config${valueHidden}">${endpointSelect}${dateHTML.modeHTML}</span>${operatorSelect}<span class="av__filter-value${valueHidden}" data-type="valueContainer" data-path="${path}">${valueHTML}</span></span>`;
-    } else if (valueType === "select" || valueType === "mSelect") {
+    } else if (isAVSelectType(valueType)) {
         const allowMultiple = valueType === "mSelect" || !isRollup;
         const {trigger, dropdown} = genInlineSelectHTML(filter, valueColumn, path, valueType, allowMultiple);
         valueHTML = trigger;
@@ -692,12 +695,20 @@ const genInlineDateHTML = (filter: IAVFilter, valueType: TAVCol, path: string): 
     };
 };
 
-// genInlineSelectHTML 生成 select/mSelect 的内联 chip 列表与搜索面板。
+const getSelectFilterPlaceholder = (valueType: string) => {
+    if (valueType === "status") {
+        return window.siyuan.languages.status;
+    }
+    return valueType === "select" ? window.siyuan.languages.select : window.siyuan.languages.multiSelect;
+};
+
+// genInlineSelectHTML 生成 select/mSelect/status 的内联 chip 列表与搜索面板。
 const genInlineSelectHTML = (filter: IAVFilter, colData: IAVColumn, path: string, valueType: TAVCol,
                              allowMultiple: boolean): { trigger: string, dropdown: string } => {
-    const options = colData.options || [];
+    // 状态选项按分组顺序列出。
+    const options = valueType === "status" ? getAVStatusOrderedOptions(colData.options) : colData.options || [];
     const selectedValues = (getFilterCellValue(filter)?.mSelect || []).filter((s: IAVCellSelectValue) => s.content);
-    const placeholder = valueType === "select" ? window.siyuan.languages.select : window.siyuan.languages.multiSelect;
+    const placeholder = getSelectFilterPlaceholder(valueType);
 
     // 触发器：显示已选值的 chip（与表格单元格样式一致），无选中时显示 placeholder + 下拉箭头
     const selectedChips = selectedValues.map((item: IAVCellSelectValue) => {
@@ -783,8 +794,8 @@ const readInlineValue = (rowElement: HTMLElement, valueType: TAVCol, operator: s
     let relativeDate: IAVRelativeDate = filter.relativeDate;
     let relativeDate2: IAVRelativeDate = filter.relativeDate2;
 
-    if (operator === "Is empty" || operator === "Is not empty") {
-        // 空操作符：值保留类型壳，无实际内容
+    if (isAVValuelessFilterOperator(operator)) {
+        // 空操作符与完成状态算子：值保留类型壳，无实际内容
         newValue = genEmptyCellValue(valueType);
         relativeDate = undefined;
         relativeDate2 = undefined;
@@ -851,7 +862,7 @@ const readInlineValue = (rowElement: HTMLElement, valueType: TAVCol, operator: s
             relativeDate = undefined;
             relativeDate2 = undefined;
         }
-    } else if (valueType === "select" || valueType === "mSelect") {
+    } else if (isAVSelectType(valueType)) {
         // 下拉位于行外，按路径在当前筛选编辑器内读取选中的选项。
         const path = rowElement.dataset.path;
         const mSelect: IAVCellSelectValue[] = [];
@@ -1121,7 +1132,7 @@ export const bindInlineFilterEvents = (panelElement: HTMLElement, data: IAV, pro
             const oldOp = filter.operator;
             const structureChange = (isAVDateType(valueType) &&
                 ((newOp === "Is between") !== (oldOp === "Is between"))) ||
-                ((newOp === "Is empty" || newOp === "Is not empty") !== (oldOp === "Is empty" || oldOp === "Is not empty")) ||
+                (isAVValuelessFilterOperator(newOp) !== isAVValuelessFilterOperator(oldOp)) ||
                 (valueType === "relation" && (!isRollup || isRelationRollupColumn(colData)) &&
                     (isExactRelationOperator(newOp) !== isExactRelationOperator(oldOp)));
             saveRow(row, path, structureChange);
@@ -1225,9 +1236,7 @@ export const bindInlineFilterEvents = (panelElement: HTMLElement, data: IAV, pro
         // 更新触发器显示（重建 chip 列表，与表格单元格样式一致）
         const triggerEl = menuElement.querySelector(`[data-type="selectTrigger"][data-path="${path}"]`) as HTMLElement;
         if (triggerEl && dropdown) {
-            const placeholderStr = dropdown.dataset.valueType === "select"
-                ? window.siyuan.languages.select
-                : window.siyuan.languages.multiSelect;
+            const placeholderStr = getSelectFilterPlaceholder(dropdown.dataset.valueType);
             const selectedChips: string[] = [];
             dropdown.querySelectorAll('[data-type="selectOption"]').forEach((item: HTMLElement) => {
                 const itemUseElement = item.querySelector(".av__select-option-check use");

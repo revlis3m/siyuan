@@ -24,7 +24,7 @@ var databaseActions = []string{
 
 var databaseKeyTypes = []string{
 	"text", "number", "date", "select", "mSelect", "url", "email", "phone", "location", "mAsset", "template", "created", "updated",
-	"checkbox", "relation", "rollup", "lineNumber",
+	"checkbox", "relation", "rollup", "lineNumber", "status",
 }
 
 type databaseToolOutput struct {
