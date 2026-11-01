@@ -1,0 +1,47 @@
+# revlis3m mods: publishes the built server + editor of branch "mods" as release "mods-preview"
+# (linux amd64), so changes can be tried without the Docker image.
+name: Mods preview bundle
+
+on:
+  workflow_run:
+    workflows: ["Mods image"]
+    types: [completed]
+    branches: [mods]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: mods
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: kernel/go.mod
+          cache-dependency-path: kernel/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build server
+        working-directory: kernel
+        run: CGO_ENABLED=1 go build -tags "fts5 sqlcipher" -ldflags "-s -w" -o ../bundle/kernel .
+      - name: Build editor
+        working-directory: app
+        run: |
+          corepack enable
+          pnpm install --frozen-lockfile --silent
+          pnpm run build
+          cp -r appearance stage guide ../bundle/
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tar czf mods-preview-linux-amd64.tar.gz -C bundle .
+          gh release view mods-preview >/dev/null 2>&1 || gh release create mods-preview --prerelease --target mods --title "mods preview" --notes "Server + editor built from branch mods (testing only)."
+          gh release upload mods-preview mods-preview-linux-amd64.tar.gz --clobber
