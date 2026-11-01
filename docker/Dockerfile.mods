@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1
+# revlis3m mods: rebuilds only SiYuan's editor (app/) and server (kernel/) from this branch and lays them
+# over the official image of the same release, which keeps its OCR runtime (slow to build) unchanged.
+# The editor and server build steps are those of the upstream Dockerfile.
+ARG BASE_IMAGE=b3log/siyuan:v3.8.9
+ARG GO_IMAGE=golang:1.26-alpine@sha256:9ce231b28998b32e116927c61aa5c406183061d4f3f2d61b292c88e7f6bdf7ca
+
+FROM --platform=$BUILDPLATFORM node:22@sha256:0e5f906573693feaa1e21057ebdcfdb5bd5021f050b2dc7c9deceb629c7da2a8 AS node-build
+WORKDIR /app
+ADD app/package.json app/pnpm* app/.npmrc .
+RUN <<EORUN
+#!/bin/bash -e
+corepack enable
+corepack install --global $(node -e 'console.log(require("./package.json").packageManager)')
+pnpm install --silent
+EORUN
+ADD app/ .
+COPY kernel/av/lunar_calendar_data.json /kernel/av/lunar_calendar_data.json
+ADD scripts/prepare-ocr.py scripts/ocr-assets.json /scripts/
+RUN <<EORUN
+#!/bin/bash -e
+apt-get update
+apt-get install -y --no-install-recommends python3
+python3 /scripts/prepare-ocr.py
+pnpm run build
+node scripts/trimChangelogs.js
+mkdir /artifacts
+mv appearance stage guide /artifacts/
+if [ -d changelogs ]; then mv changelogs /artifacts/; fi
+EORUN
+
+FROM ${GO_IMAGE} AS go-build
+RUN apk add --no-cache gcc musl-dev && go env -w GO111MODULE=on && go env -w CGO_ENABLED=1
+WORKDIR /kernel
+ADD kernel/go.* .
+RUN go mod download
+ADD kernel/ .
+RUN --mount=type=cache,target=/root/.cache/go-build go build -tags "fts5 sqlcipher" -ldflags "-s -w"
+
+FROM ${BASE_IMAGE}
+WORKDIR /opt/siyuan/
+COPY --from=go-build --chmod=755 /kernel/kernel /kernel/entrypoint.sh ./
+COPY --from=node-build /artifacts/ ./
+LABEL org.opencontainers.image.source="https://github.com/revlis3m/siyuan" \
+      org.opencontainers.image.description="SiYuan with revlis3m mods (branch mods)"
