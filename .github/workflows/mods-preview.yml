@@ -3,10 +3,9 @@
 name: Mods preview bundle
 
 on:
-  workflow_run:
-    workflows: ["Mods image"]
-    types: [completed]
+  push:
     branches: [mods]
+    paths: ['app/**', 'kernel/**', '.github/workflows/mods-preview.yml']
   workflow_dispatch:
 
 permissions:
@@ -14,7 +13,6 @@ permissions:
 
 jobs:
   bundle:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
