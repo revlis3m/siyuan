@@ -29,7 +29,7 @@ func assertStatusOptionGroups(t *testing.T, key *av.Key, expected map[string]av.
 func TestNewAttributeViewKeyStatusDefaults(t *testing.T) {
 	setupAttributeViewValidationTest(t)
 
-	key, err := newAttributeViewKey("20261101000000-status", "Status", string(av.KeyTypeStatus), "", av.DateDisplayFormatFull)
+	key, err := newAttributeViewKey("20261101000000-sstatus", "Status", string(av.KeyTypeStatus), "", av.DateDisplayFormatFull)
 	if nil != err {
 		t.Fatalf("create status key failed: %s", err)
 	}
@@ -41,7 +41,7 @@ func TestNewAttributeViewKeyStatusDefaults(t *testing.T) {
 		t.Fatalf("default status colors = %s/%s/%s", key.Options[0].Color, key.Options[1].Color, key.Options[2].Color)
 	}
 
-	selectKey, err := newAttributeViewKey("20261101000000-select", "Select", string(av.KeyTypeSelect), "", av.DateDisplayFormatFull)
+	selectKey, err := newAttributeViewKey("20261101000000-sselect", "Select", string(av.KeyTypeSelect), "", av.DateDisplayFormatFull)
 	if nil != err || 0 != len(selectKey.Options) {
 		t.Fatalf("select key must start without options: %v %v", selectKey, err)
 	}
@@ -50,7 +50,7 @@ func TestNewAttributeViewKeyStatusDefaults(t *testing.T) {
 func TestUpdateAttributeViewColumnConvertsBetweenSelectAndStatus(t *testing.T) {
 	setupAttributeViewValidationTest(t)
 
-	attrView := av.NewAttributeView("20261101000001-status")
+	attrView := av.NewAttributeView("20261101000001-sstatus")
 	selectKey := attrView.KeyValues[1].Key
 	selectKey.Options = []*av.SelectOption{
 		{Name: "Backlog", Color: "1"},
@@ -114,7 +114,7 @@ func TestUpdateAttributeViewColumnConvertsBetweenSelectAndStatus(t *testing.T) {
 func TestUpdateAttributeViewColumnConvertsTextToStatusWithDefaults(t *testing.T) {
 	setupAttributeViewValidationTest(t)
 
-	attrView := av.NewAttributeView("20261101000002-status")
+	attrView := av.NewAttributeView("20261101000002-sstatus")
 	key := attrView.KeyValues[1].Key
 	key.Type = av.KeyTypeText
 	if err := av.SaveAttributeView(attrView); nil != err {
@@ -136,7 +136,7 @@ func TestUpdateAttributeViewColumnConvertsTextToStatusWithDefaults(t *testing.T)
 func TestUpdateAttributeViewColumnOptionsStatusGroup(t *testing.T) {
 	setupAttributeViewValidationTest(t)
 
-	attrView := av.NewAttributeView("20261101000003-status")
+	attrView := av.NewAttributeView("20261101000003-sstatus")
 	statusKey := attrView.KeyValues[1].Key
 	statusKey.Type = av.KeyTypeStatus
 	statusKey.Options = av.NewDefaultStatusOptions()
@@ -198,7 +198,7 @@ func TestUpdateAttributeViewColumnOptionsStatusGroup(t *testing.T) {
 func TestUpdateAttributeViewKeyConfigRejectsGroupOnSelect(t *testing.T) {
 	setupAttributeViewValidationTest(t)
 
-	attrView := av.NewAttributeView("20261101000004-status")
+	attrView := av.NewAttributeView("20261101000004-sstatus")
 	selectKey := attrView.KeyValues[1].Key
 	selectKey.Options = []*av.SelectOption{{Name: "A", Color: "1"}}
 	if err := av.SaveAttributeView(attrView); nil != err {
