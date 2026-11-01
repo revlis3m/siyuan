@@ -49,9 +49,10 @@ type AttributeViewCustomColor struct {
 // UnmarshalJSON 忽略外部输入中的派生颜色，派生颜色只能由内核根据数据库调色板生成。
 func (option *SelectOption) UnmarshalJSON(data []byte) error {
 	decoded := struct {
-		Name  string `json:"name"`
-		Color string `json:"color"`
-		Desc  string `json:"desc"`
+		Name  string      `json:"name"`
+		Color string      `json:"color"`
+		Desc  string      `json:"desc"`
+		Group StatusGroup `json:"group"`
 	}{}
 	if err := json.Unmarshal(data, &decoded); nil != err {
 		return err
@@ -59,6 +60,7 @@ func (option *SelectOption) UnmarshalJSON(data []byte) error {
 	option.Name = decoded.Name
 	option.Color = decoded.Color
 	option.Desc = decoded.Desc
+	option.Group = decoded.Group
 	option.ResolvedColor = nil
 	return nil
 }
