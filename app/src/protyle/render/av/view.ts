@@ -303,7 +303,7 @@ export const getViewHTML = (data: IAV) => {
     <span class="b3-menu__accelerator">${countFilterLeaves(view.filters)}</span>
     <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
 </button>
-<button class="b3-menu__item" data-type="goConditionalColors">
+<button class="b3-menu__item${data.viewType === "chart" ? " fn__none" : ""}" data-type="goConditionalColors">
     <svg class="b3-menu__icon"><use xlink:href="#iconFont"></use></svg>
     <span class="b3-menu__label">${window.siyuan.languages.conditionalColors}</span>
     <span class="b3-menu__accelerator">${view.conditionalColors?.length || 0}</span>
@@ -314,13 +314,13 @@ export const getViewHTML = (data: IAV) => {
     <span class="b3-menu__label">${window.siyuan.languages.databaseAutomations}</span>
     <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
 </button>
-<button class="b3-menu__item" data-type="goSorts">
+<button class="b3-menu__item${data.viewType === "chart" ? " fn__none" : ""}" data-type="goSorts">
     <svg class="b3-menu__icon"><use xlink:href="#iconSort"></use></svg>
     <span class="b3-menu__label">${window.siyuan.languages.sort}</span>
     <span class="b3-menu__accelerator">${view.sorts.length}</span>
     <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
 </button>
-<button class="b3-menu__item${data.viewType === "calendar" || data.viewType === "timeline" ? " fn__none" : ""}" data-type="goGroups">
+<button class="b3-menu__item${data.viewType === "calendar" || data.viewType === "timeline" || data.viewType === "chart" ? " fn__none" : ""}" data-type="goGroups">
     <svg class="b3-menu__icon"><use xlink:href="#iconGroups"></use></svg>
     <span class="b3-menu__label">${window.siyuan.languages.group}</span>
     <span class="b3-menu__accelerator">${escapeHtml((data.view.group && data.view.group.field) ? fields.find((item: IAVColumn) => item.id === data.view.group.field)?.name || "" : "")}</span>
@@ -579,6 +579,15 @@ export const addView = (protyle: IProtyle, blockElement: Element) => {
             transaction(protyle, [{...context, action: "addAttrViewView"}], [{...context, action: "removeAttrViewView"}]);
         }
     });
+    addMenu.addItem({
+        icon: "iconAlignBottom",
+        label: window.siyuan.languages.chartView,
+        click() {
+            addVisibleView();
+            const context = {avID, id, blockID: blockElement.getAttribute("data-node-id"), layout: "chart"};
+            transaction(protyle, [{...context, action: "addAttrViewView"}], [{...context, action: "removeAttrViewView"}]);
+        }
+    });
     viewElement.classList.add("av__views--show");
     const addRect = viewElement.querySelector('.block__icon[data-type="av-add"]')?.getBoundingClientRect();
     addMenu.open({
@@ -594,6 +603,8 @@ export const getViewIcon = (type: string) => {
             return "iconCalendar";
         case "timeline":
             return "iconAlignSettings";
+        case "chart":
+            return "iconAlignBottom";
         case "table":
             return "iconTable";
         case "list":
@@ -611,6 +622,8 @@ export const getViewName = (type: string) => {
             return window.siyuan.languages.calendarView;
         case "timeline":
             return window.siyuan.languages.timelineView;
+        case "chart":
+            return window.siyuan.languages.chartView;
         case "table":
             return window.siyuan.languages.table;
         case "list":
@@ -623,7 +636,8 @@ export const getViewName = (type: string) => {
 };
 
 export const getFieldsByData = (data: IAV) => {
-    return isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ? (data.view as IAVTable).columns : (data.view as IAVGallery).fields;
+    return isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ||
+        data.viewType === "chart" ? (data.view as IAVTable).columns : (data.view as IAVGallery).fields;
 };
 
 export const dragoverTab = (event: DragEvent) => {

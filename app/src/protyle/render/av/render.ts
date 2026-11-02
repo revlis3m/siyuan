@@ -1,6 +1,7 @@
 import {isAVSelectType} from "./capabilities";
 import {renderCalendar} from "./calendar/render";
 import {renderTimeline} from "./timeline/render";
+import {disposeAVChart, renderChart} from "./chart/render";
 import {isFoldedRenderContent} from "../foldedContent";
 import {getCalendarRequestRange} from "./calendar/state";
 import {isTableLikeView} from "./viewType";
@@ -181,7 +182,7 @@ export const genTabHeaderHTML = (data: IAV, showSearch: boolean, editable: boole
                 <svg><use xlink:href="#iconFocus"></use></svg>
             </span>
             <div class="fn__space"></div>` : ""}
-            <span data-type="av-sort" aria-label="${blockElement.hasAttribute("data-readonly-sort") ? window.siyuan.languages.avTemporarySort : window.siyuan.languages.sort}" data-position="8south" class="ariaLabel block__icon${blockElement.hasAttribute("data-readonly-sort") ? " av__readonly-sort" : ""}${data.view.sorts.length > 0 ? " block__icon--active" : ""}">
+            <span data-type="av-sort" aria-label="${blockElement.hasAttribute("data-readonly-sort") ? window.siyuan.languages.avTemporarySort : window.siyuan.languages.sort}" data-position="8south" class="ariaLabel block__icon${blockElement.hasAttribute("data-readonly-sort") ? " av__readonly-sort" : ""}${data.view.sorts.length > 0 ? " block__icon--active" : ""}${data.viewType === "chart" ? " fn__none" : ""}">
                 <svg><use xlink:href="#iconSort"></use></svg>
             </span>
             <div class="fn__space"></div>
@@ -737,6 +738,12 @@ export const avRender = async (element: Element, protyle: IProtyle, cb?: (data: 
             setAVVisibleViewIDs(e, getAVVisibleViewIDs(e, data.views));
         }
         prepareAVLocate(e, data, resetData);
+        if (data.viewType === "chart") {
+            await renderChart(e, protyle, data, cb);
+            continue;
+        }
+        // 切换到其他布局时释放上一次渲染的图表实例。
+        disposeAVChart(e);
         if (data.viewType === "calendar") {
             await renderCalendar(e, protyle, data, cb);
             continue;
@@ -1128,7 +1135,7 @@ export const refreshAV = (protyle: IProtyle, operation: IOperation) => {
         getAVElements(protyle, avID).forEach((item) => {
             item.removeAttribute("data-render");
             if (["setAttrViewCardSize", "setAttrViewCardWidth", "setAttrViewCardAspectRatio",
-                "setAttrViewConditionalColors", "setAttrViewCalendar", "setAttrViewTimeline", "setAttrViewCardAspectRatioValue", "setAttrViewCardLayout", "setAttrViewColFullRow",
+                "setAttrViewConditionalColors", "setAttrViewCalendar", "setAttrViewTimeline", "setAttrViewChart", "setAttrViewCardAspectRatioValue", "setAttrViewCardLayout", "setAttrViewColFullRow",
                 "setAttrViewDisplayFieldName"].includes(operation.action) &&
                 (!operation.viewID || getViewIDByAVElement(item) === operation.viewID)) {
                 // 卡片尺寸或字段布局变化后原虚拟滚动占位高度已失效，重渲时从首项重新初始化。

@@ -117,7 +117,8 @@ export const renderGallery = async (options: {
     reconcileReadonlyAVSort(options.blockElement, data);
     applyAVRenderContext(options.blockElement, data);
     prepareAVLocate(options.blockElement, data, resetData);
-    if (isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline") {
+    if (isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ||
+        data.viewType === "chart") {
         avRender(options.blockElement, options.protyle, options.cb, options.renderAll, data);
         return;
     }

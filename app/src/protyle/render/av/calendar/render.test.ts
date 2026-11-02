@@ -426,6 +426,7 @@ test("calendar edit-mode changes refresh controls and stale actions cannot creat
             "../locate": {finishAVLocate() {}},
             "../render/av/calendar/render": calendar,
             "../render/av/timeline/render": {refreshTimelineReadonly() {}},
+            "../render/av/chart/render": {refreshChartReadonly() {}},
             "../../util/functions": {isMobile: () => mobile},
             "../ui/hideElements": {hideElements() {}},
             "./disabledWYSIWYG": {disabledWYSIWYG() {}},

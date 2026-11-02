@@ -21,6 +21,7 @@ import {avRender} from "../render/av/render";
 import {clearReadonlyAVState} from "../render/av/readonlyState";
 import {refreshCalendarReadonly} from "../render/av/calendar/render";
 import {refreshTimelineReadonly} from "../render/av/timeline/render";
+import {refreshChartReadonly} from "../render/av/chart/render";
 import {hideTooltip} from "../../dialog/tooltip";
 import {stickyRow} from "../render/av/row";
 import {getContenteditableElement} from "../wysiwyg/getBlock";
@@ -589,6 +590,7 @@ export const disabledProtyle = (protyle: IProtyle) => {
     if (!wasDisabled) {
         refreshCalendarReadonly(protyle);
         refreshTimelineReadonly(protyle);
+        refreshChartReadonly(protyle);
     }
     if (protyle.breadcrumb) {
         const readonlyButton = protyle.breadcrumb.element.parentElement.querySelector('[data-type="readonly"]');
@@ -665,6 +667,7 @@ export const enableProtyle = (protyle: IProtyle) => {
         });
         refreshCalendarReadonly(protyle);
         refreshTimelineReadonly(protyle);
+        refreshChartReadonly(protyle);
     }
     if (protyle.breadcrumb) {
         const readonlyButton = protyle.breadcrumb.element.parentElement.querySelector('[data-type="readonly"]');

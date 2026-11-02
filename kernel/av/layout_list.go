@@ -39,13 +39,16 @@ func (view *View) GetTableLayout() *LayoutTable {
 	if LayoutTypeTimeline == view.LayoutType {
 		return view.Timeline.LayoutTable
 	}
+	if LayoutTypeChart == view.LayoutType {
+		return view.Chart.LayoutTable
+	}
 	if LayoutTypeList == view.LayoutType {
 		return view.List
 	}
 	return view.Table
 }
 
-// TableFromViewable 获取表格、列表、日历或时间线实例的行列数据。
+// TableFromViewable 获取表格、列表、日历、时间线或图表实例的行列数据。
 func TableFromViewable(viewable Viewable) *Table {
 	switch instance := viewable.(type) {
 	case *Table:
@@ -55,6 +58,8 @@ func TableFromViewable(viewable Viewable) *Table {
 	case *Calendar:
 		return instance.Table
 	case *Timeline:
+		return instance.Table
+	case *Chart:
 		return instance.Table
 	}
 	return nil

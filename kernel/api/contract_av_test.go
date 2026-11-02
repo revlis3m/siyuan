@@ -272,6 +272,12 @@ func TestAVContractTransportMapping(t *testing.T) {
 		&av.Timeline{Table: &av.Table{BaseInstance: base, Timeline: &av.TimelineSettings{StartKeyID: "key", Zoom: av.TimelineZoomMonth, ColorBy: av.TimelineColorByConditional},
 			TimelineItems:       []*av.TimelineItem{{ID: "item", Start: 1, End: 2, IsNotTime: true, Title: "Item", Color: &av.ValueSelect{Content: "Done", Color: "3"}}, {ID: "plain", Invalid: true}},
 			TimelineUnscheduled: []*av.TableRow{{ID: "unscheduled", Cells: []*av.TableCell{}}}}},
+		&av.Chart{Table: &av.Table{BaseInstance: base, Rows: []*av.TableRow{}, RowCount: 2, Chart: &av.ChartSettings{ChartType: av.ChartTypeLine, XKeyID: "key", Measure: av.ChartMeasureAverage, ShowLegend: true, Height: 360},
+			ChartRows: []*av.TableRow{{ID: "hidden"}},
+			ChartData: &av.ChartData{Measure: av.ChartMeasureAverage, XType: av.KeyTypeDate, Total: new(1.5), ItemCount: 2,
+				Categories: []*av.ChartCategory{{Key: "2026-11", Label: "2026-11", Start: new(int64(1790006400000)), Value: new(1.5), Count: 2}, {Empty: true}},
+				Series: []*av.ChartSeries{{Key: "Done", Label: "Done", Color: "3", Values: []*float64{new(1.5), nil}, Counts: []int{2, 0},
+					Items: [][]*av.ChartItem{{{ID: "item", Title: "Item", ValueID: "value", IsDetached: true}}, {}}}}}}},
 	} {
 		assertAVContractJSONEqual(t, view, avContractView(view))
 	}

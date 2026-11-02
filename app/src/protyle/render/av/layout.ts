@@ -1,6 +1,7 @@
 import {isAVSelectType} from "./capabilities";
 import {bindCalendarSettings, getCalendarSettingsHTML} from "./calendar/settings";
 import {bindTimelineSettings, getTimelineSettingsHTML} from "./timeline/settings";
+import {bindChartSettings, getChartSettingsHTML} from "./chart/settings";
 import {isTableLikeView} from "./viewType";
 import {isAVRenderData} from "./renderData";
 import {transaction} from "../../wysiwyg/transaction";
@@ -152,6 +153,11 @@ export const getLayoutHTML = (data: IAV) => {
                 <div class="fn__hr"></div>
                 <div>${window.siyuan.languages.timelineView}</div>
             </div>
+            <div data-type="set-layout" data-view-type="chart" class="av__layout-item${data.viewType === "chart" ? " av__layout-item--select" : ""}">
+                <svg><use xlink:href="#iconAlignBottom"></use></svg>
+                <div class="fn__hr"></div>
+                <div>${window.siyuan.languages.chartView}</div>
+            </div>
         </div>
     </button>
     <label class="b3-menu__item">
@@ -160,7 +166,7 @@ export const getLayoutHTML = (data: IAV) => {
         <input data-type="toggle-view-title" type="checkbox" class="b3-switch b3-switch--menu" ${view.hideAttrViewName ? "" : "checked"}>
     </label>
     ${html}
-    <label class="b3-menu__item">
+    ${data.viewType === "chart" ? "" : `<label class="b3-menu__item">
         <span class="fn__flex-center">${window.siyuan.languages.showAllEntriesIcons}</span>
         <span class="fn__space fn__flex-1"></span>
         <input data-type="toggle-entries-icons" type="checkbox" class="b3-switch b3-switch--menu" ${view.showIcon ? "checked" : ""}>
@@ -169,7 +175,7 @@ export const getLayoutHTML = (data: IAV) => {
         <span class="fn__flex-center">${window.siyuan.languages.wrapAllFields}</span>
         <span class="fn__space fn__flex-1"></span>
         <input data-type="toggle-entries-wrap" type="checkbox" class="b3-switch b3-switch--menu" ${view.wrapField ? "checked" : ""}>
-    </label>`;
+    </label>`}`;
     if (data.viewType === "kanban" && isAVSelectType(data.view.groups?.[0]?.groupValue?.type)) {
         html += `<label class="b3-menu__item">
     <span class="fn__flex-center">${window.siyuan.languages.useBackground}</span>
@@ -183,6 +189,10 @@ export const getLayoutHTML = (data: IAV) => {
     <span class="fn__space fn__flex-1"></span>
     <input data-type="toggle-gallery-name" type="checkbox" class="b3-switch b3-switch--menu" ${(data.view as IAVTable).calendar.displayFieldName ? "checked" : ""}>
 </label>` + getCalendarSettingsHTML(data.view as IAVTable, true) + "</div>";
+    }
+    if (data.viewType === "chart") {
+        // 图表只显示汇总结果，不提供条目图标、换行和分页设置。
+        return html + getChartSettingsHTML(data.view as IAVTable, true) + "</div>";
     }
     if (data.viewType === "timeline") {
         const columns = (data.view as IAVTable).columns;
@@ -268,7 +278,7 @@ export const bindLayoutEvent = (options: {
         options.data.view.hideAttrViewName = !checked;
     });
     const toggleIconElement = options.menuElement.querySelector('.b3-switch[data-type="toggle-entries-icons"]') as HTMLInputElement;
-    toggleIconElement.addEventListener("change", () => {
+    toggleIconElement?.addEventListener("change", () => {
         const checked = toggleIconElement.checked;
         transaction(options.protyle, [{
             action: "setAttrViewShowIcon",
@@ -286,7 +296,7 @@ export const bindLayoutEvent = (options: {
         options.data.view.showIcon = checked;
     });
     const toggleWrapElement = options.menuElement.querySelector('.b3-switch[data-type="toggle-entries-wrap"]') as HTMLInputElement;
-    toggleWrapElement.addEventListener("change", () => {
+    toggleWrapElement?.addEventListener("change", () => {
         const checked = toggleWrapElement.checked;
         transaction(options.protyle, [{
             action: "setAttrViewWrapField",
@@ -334,6 +344,10 @@ export const bindLayoutEvent = (options: {
     }
     if (options.data.viewType === "timeline") {
         bindTimelineSettings({...options, onChange: rerender});
+        return;
+    }
+    if (options.data.viewType === "chart") {
+        bindChartSettings({...options, onChange: rerender});
         return;
     }
     if (isTableLikeView(options.data.viewType)) {

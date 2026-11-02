@@ -977,7 +977,7 @@ func syncAttrViewTableColWidth(operation *Operation) (err error) {
 
 	var width string
 	switch view.LayoutType {
-	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		return
 	case av.LayoutTypeTable:
 		for _, column := range view.Table.Columns {
@@ -1530,7 +1530,8 @@ func changeAttrViewLayout(attrView *av.AttributeView, view *av.View, newLayout a
 	}
 
 	switch newLayout {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeGallery, av.LayoutTypeKanban:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart,
+		av.LayoutTypeGallery, av.LayoutTypeKanban:
 	default:
 		return av.ErrWrongLayoutType
 	}
@@ -1538,7 +1539,8 @@ func changeAttrViewLayout(attrView *av.AttributeView, view *av.View, newLayout a
 	oldLayout := view.LayoutType
 	oldFields := attributeViewFieldIDs(view)
 	view.LayoutType = newLayout
-	if (oldLayout == av.LayoutTypeCalendar || oldLayout == av.LayoutTypeTimeline) && view.Name == av.GetAttributeViewI18n(string(oldLayout)) {
+	if (oldLayout == av.LayoutTypeCalendar || oldLayout == av.LayoutTypeTimeline || oldLayout == av.LayoutTypeChart) &&
+		view.Name == av.GetAttributeViewI18n(string(oldLayout)) {
 		view.Name = av.GetAttributeViewI18n(string(newLayout))
 	}
 
@@ -1556,6 +1558,13 @@ func changeAttrViewLayout(attrView *av.AttributeView, view *av.View, newLayout a
 		}
 		if nil == view.Timeline {
 			view.Timeline = newAttributeViewTimelineLayout(attrView, oldFields)
+		}
+	case av.LayoutTypeChart:
+		if view.Name == av.GetAttributeViewI18n(string(oldLayout)) {
+			view.Name = av.GetAttributeViewI18n("chart")
+		}
+		if nil == view.Chart {
+			view.Chart = newAttributeViewChartLayout(attrView, oldFields)
 		}
 	case av.LayoutTypeList:
 		if view.Name == av.GetAttributeViewI18n("table") || view.Name == av.GetAttributeViewI18n("gallery") || view.Name == av.GetAttributeViewI18n("kanban") {
@@ -1634,7 +1643,7 @@ func setAttrViewWrapField(operation *Operation) (err error) {
 
 	allFieldWrap := operation.Data.(bool)
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		view.GetTableLayout().WrapField = allFieldWrap
 		for _, col := range view.GetTableLayout().Columns {
 			col.Wrap = allFieldWrap
@@ -5064,6 +5073,8 @@ func (tx *Transaction) doDuplicateAttrViewView(operation *Operation) (ret *TxErr
 		view = av.NewCalendarView()
 	case av.LayoutTypeTimeline:
 		view = av.NewTimelineView()
+	case av.LayoutTypeChart:
+		view = av.NewChartView()
 	case av.LayoutTypeList:
 		view = av.NewListView()
 	case av.LayoutTypeTable:
@@ -5161,7 +5172,7 @@ func addAttrViewViewNamed(avID, viewID, blockID, name string, layout av.LayoutTy
 	// 表格类布局之间复制字段时保留列宽和对齐，其他来源只带字段顺序。
 	var tableColumns []*av.ViewTableColumn
 	switch firstView.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		if table := firstView.GetTableLayout(); nil != table {
 			tableColumns = table.Columns
 		}
@@ -5175,6 +5186,9 @@ func addAttrViewViewNamed(avID, viewID, blockID, name string, layout av.LayoutTy
 	case av.LayoutTypeTimeline:
 		view = av.NewTimelineView()
 		view.Timeline = newAttributeViewTimelineLayout(attrView, fieldIDs)
+	case av.LayoutTypeChart:
+		view = av.NewChartView()
+		view.Chart = newAttributeViewChartLayout(attrView, fieldIDs)
 	case av.LayoutTypeList:
 		view = av.NewListView()
 		view.List = newAttributeViewListLayout(attrView, fieldIDs)
@@ -6031,7 +6045,7 @@ func setAttributeViewColumnCalc(operation *Operation) (err error) {
 
 	calc := &av.FieldCalc{}
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		if err = gulu.JSON.UnmarshalJSON(data, calc); err != nil {
 			return
 		}
@@ -6769,7 +6783,8 @@ func duplicateAttributeViewKey(operation *Operation) (err error) {
 				cloned.ID = copyKey.ID
 				if layout == view.List && av.LayoutTypeList != view.LayoutType ||
 					view.Calendar != nil && layout == view.Calendar.LayoutTable && av.LayoutTypeCalendar != view.LayoutType ||
-					view.Timeline != nil && layout == view.Timeline.LayoutTable && av.LayoutTypeTimeline != view.LayoutType {
+					view.Timeline != nil && layout == view.Timeline.LayoutTable && av.LayoutTypeTimeline != view.LayoutType ||
+					view.Chart != nil && layout == view.Chart.LayoutTable && av.LayoutTypeChart != view.LayoutType {
 					cloned.Hidden = true
 				}
 				layout.Columns = slices.Insert(layout.Columns, i+1, cloned)
@@ -6947,7 +6962,7 @@ func setAttributeViewColWrap(operation *Operation) (err error) {
 	newWrap := operation.Data.(bool)
 	allFieldWrap := true
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		for _, column := range view.GetTableLayout().Columns {
 			if column.ID == operation.ID {
 				column.Wrap = newWrap
@@ -7053,7 +7068,7 @@ func setAttributeViewFieldsHidden(attrView *av.AttributeView, keyID string, view
 
 func getAttributeViewField(view *av.View, keyID string) (ret *av.BaseField) {
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		if nil == view.GetTableLayout() {
 			return
 		}
@@ -7332,7 +7347,7 @@ func SortAttributeViewViewKey(avID, blockID, keyID, previousKeyID string) (err e
 
 	var curIndex, previousIndex int
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		var col *av.ViewTableColumn
 		for i, column := range view.GetTableLayout().Columns {
 			if column.ID == keyID {
@@ -7571,6 +7586,18 @@ func addAttributeViewKey(attrView *av.AttributeView, currentView *av.View, key *
 				}
 			}
 			view.Timeline.Columns = slices.Insert(view.Timeline.Columns, index, column)
+		}
+		if nil != view.Chart {
+			hidden := nil == currentView || currentView.ID != view.ID || av.LayoutTypeChart != currentView.LayoutType
+			column := &av.ViewTableColumn{BaseField: &av.BaseField{ID: key.ID, Hidden: hidden, Wrap: view.Chart.WrapField}}
+			index := len(view.Chart.Columns)
+			for i, field := range view.Chart.Columns {
+				if field.ID == previousKeyID {
+					index = i + 1
+					break
+				}
+			}
+			view.Chart.Columns = slices.Insert(view.Chart.Columns, index, column)
 		}
 		if nil != view.List {
 			hidden := nil == currentView || currentView.ID != view.ID || av.LayoutTypeList != currentView.LayoutType

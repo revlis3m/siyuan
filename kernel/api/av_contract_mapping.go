@@ -38,6 +38,8 @@ func avContractView(value av.Viewable) apicontract.AVViewInstance {
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.Timeline:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
+	case *av.Chart:
+		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.List:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.Gallery:
@@ -64,6 +66,8 @@ func toContractAVTable(value *av.Table) *apicontract.AVTable {
 	ret.Timeline = toContractAVTimelineSettings(value.Timeline)
 	ret.TimelineItems = avContractSlice(value.TimelineItems, toContractAVTimelineItem)
 	ret.TimelineUnscheduled = avContractSlice(value.TimelineUnscheduled, toContractAVTableRow)
+	ret.Chart = toContractAVChartSettings(value.Chart)
+	ret.ChartData = toContractAVChartData(value.ChartData)
 	return ret
 }
 func toContractAVBaseInstance(value *av.BaseInstance) *apicontract.AVBaseInstance {
@@ -1044,6 +1048,7 @@ func toContractAVView(value *av.View) *apicontract.AVView {
 		List:              toContractAVLayoutTable(value.List),
 		Calendar:          toContractAVLayoutCalendar(value.Calendar),
 		Timeline:          toContractAVLayoutTimeline(value.Timeline),
+		Chart:             toContractAVLayoutChart(value.Chart),
 		Gallery:           toContractAVLayoutGallery(value.Gallery),
 		Kanban:            toContractAVLayoutKanban(value.Kanban),
 		ItemIDs:           value.ItemIDs,

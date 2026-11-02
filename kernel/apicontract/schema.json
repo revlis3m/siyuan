@@ -5991,7 +5991,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         },
         "views": {
@@ -6537,7 +6538,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         }
       },
@@ -7429,7 +7431,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         },
         "viewName": {
@@ -7948,6 +7951,418 @@
       },
       "required": [
         "keyID"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartCategory": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "empty": {
+          "type": "boolean"
+        },
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "resolvedColor": {
+          "$ref": "#/$defs/AVAttributeViewColor"
+        },
+        "start": {
+          "type": "integer"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "count",
+        "key",
+        "label",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartData": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVChartCategory"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "itemCount": {
+          "type": "integer"
+        },
+        "measure": {
+          "type": "string",
+          "enum": [
+            "count",
+            "sum",
+            "average",
+            "min",
+            "max"
+          ]
+        },
+        "series": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVChartSeries"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "stackType": {
+          "type": "string"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "xType": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "categories",
+        "itemCount",
+        "measure",
+        "series",
+        "stackType",
+        "total",
+        "xType"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartItem": {
+      "type": "object",
+      "properties": {
+        "blockID": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "isDetached": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "valueID": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockID",
+        "id",
+        "isDetached",
+        "title",
+        "valueID"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartSeries": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "counts": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "empty": {
+          "type": "boolean"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "$ref": "#/$defs/AVChartItem"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "resolvedColor": {
+          "$ref": "#/$defs/AVAttributeViewColor"
+        },
+        "values": {
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "counts",
+        "items",
+        "key",
+        "label",
+        "values"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartSettings": {
+      "type": "object",
+      "properties": {
+        "chartType": {
+          "type": "string",
+          "enum": [
+            "",
+            "bar",
+            "horizontalBar",
+            "line",
+            "donut",
+            "number"
+          ]
+        },
+        "dateBucket": {
+          "type": "string",
+          "enum": [
+            "",
+            "day",
+            "week",
+            "month",
+            "quarter",
+            "year"
+          ]
+        },
+        "height": {
+          "type": "integer"
+        },
+        "measure": {
+          "type": "string",
+          "enum": [
+            "",
+            "count",
+            "sum",
+            "average",
+            "min",
+            "max"
+          ]
+        },
+        "showDataLabels": {
+          "type": "boolean"
+        },
+        "showEmptyGroups": {
+          "type": "boolean"
+        },
+        "showLegend": {
+          "type": "boolean"
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "",
+            "default",
+            "valueDesc",
+            "valueAsc",
+            "labelAsc"
+          ]
+        },
+        "stackKeyID": {
+          "type": "string"
+        },
+        "valueKeyID": {
+          "type": "string"
+        },
+        "xKeyID": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chartType",
+        "dateBucket",
+        "height",
+        "measure",
+        "showDataLabels",
+        "showEmptyGroups",
+        "showLegend",
+        "sort",
+        "stackKeyID",
+        "valueKeyID",
+        "xKeyID"
+      ],
+      "additionalProperties": false
+    },
+    "AVChartSettingsInput": {
+      "type": "object",
+      "properties": {
+        "chartType": {
+          "type": "string",
+          "enum": [
+            "",
+            "bar",
+            "horizontalBar",
+            "line",
+            "donut",
+            "number"
+          ]
+        },
+        "dateBucket": {
+          "type": "string",
+          "enum": [
+            "",
+            "day",
+            "week",
+            "month",
+            "quarter",
+            "year"
+          ]
+        },
+        "height": {
+          "type": "integer"
+        },
+        "measure": {
+          "type": "string",
+          "enum": [
+            "",
+            "count",
+            "sum",
+            "average",
+            "min",
+            "max"
+          ]
+        },
+        "showDataLabels": {
+          "type": "boolean"
+        },
+        "showEmptyGroups": {
+          "type": "boolean"
+        },
+        "showLegend": {
+          "type": "boolean"
+        },
+        "sort": {
+          "type": "string",
+          "enum": [
+            "",
+            "default",
+            "valueDesc",
+            "valueAsc",
+            "labelAsc"
+          ]
+        },
+        "stackKeyID": {
+          "type": "string"
+        },
+        "valueKeyID": {
+          "type": "string"
+        },
+        "xKeyID": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "chartType",
+        "dateBucket",
+        "height",
+        "measure",
+        "showDataLabels",
+        "showEmptyGroups",
+        "showLegend",
+        "sort",
+        "stackKeyID",
+        "valueKeyID",
+        "xKeyID"
       ],
       "additionalProperties": false
     },
@@ -10083,6 +10498,104 @@
         }
       ]
     },
+    "AVLayoutChart": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/AVViewTableColumn"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "rowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "settings": {
+              "$ref": "#/$defs/AVChartSettings"
+            },
+            "showIcon": {
+              "type": "boolean"
+            },
+            "spec": {
+              "type": "integer"
+            },
+            "wrapField": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "columns",
+            "settings",
+            "spec",
+            "id",
+            "showIcon",
+            "wrapField"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/AVViewTableColumn"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "settings": {
+              "$ref": "#/$defs/AVChartSettings"
+            }
+          },
+          "required": [
+            "columns",
+            "settings"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
     "AVLayoutGallery": {
       "anyOf": [
         {
@@ -11393,7 +11906,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         },
         "views": {
@@ -12085,6 +12599,12 @@
             "calendarTargetDate": {
               "type": "integer"
             },
+            "chart": {
+              "$ref": "#/$defs/AVChartSettings"
+            },
+            "chartData": {
+              "$ref": "#/$defs/AVChartData"
+            },
             "columns": {
               "anyOf": [
                 {
@@ -12305,6 +12825,12 @@
             },
             "calendarTargetDate": {
               "type": "integer"
+            },
+            "chart": {
+              "$ref": "#/$defs/AVChartSettings"
+            },
+            "chartData": {
+              "$ref": "#/$defs/AVChartData"
             },
             "columns": {
               "anyOf": [
@@ -14293,6 +14819,9 @@
         "calendar": {
           "$ref": "#/$defs/AVLayoutCalendar"
         },
+        "chart": {
+          "$ref": "#/$defs/AVLayoutChart"
+        },
         "conditionalColors": {
           "anyOf": [
             {
@@ -14436,7 +14965,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         }
       },
@@ -14486,7 +15016,8 @@
             "gallery",
             "kanban",
             "calendar",
-            "timeline"
+            "timeline",
+            "chart"
           ]
         }
       },
@@ -75209,6 +75740,218 @@
             "action": {
               "type": "string",
               "enum": [
+                "setAttrViewChart"
+              ]
+            },
+            "avID": {
+              "type": "string"
+            },
+            "backRelationKeyID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "blockIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cellUpdates": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/TransactionCellUpdate"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "context": {
+              "$ref": "#/$defs/TransactionContext"
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AVChartSettingsInput"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "deckID": {
+              "type": "string"
+            },
+            "format": {
+              "type": "string"
+            },
+            "groupID": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ignoreDefaultFill": {
+              "type": "boolean"
+            },
+            "isDetached": {
+              "type": "boolean"
+            },
+            "isTwoWay": {
+              "type": "boolean"
+            },
+            "keyID": {
+              "type": "string"
+            },
+            "layout": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "nextID": {
+              "type": "string"
+            },
+            "parentID": {
+              "type": "string"
+            },
+            "previousID": {
+              "type": "string"
+            },
+            "removeDest": {
+              "type": "boolean"
+            },
+            "retData": {
+              "type": "null"
+            },
+            "rootID": {
+              "type": "string"
+            },
+            "rowID": {
+              "type": "string"
+            },
+            "srcIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionSourceFieldsInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetGroupID": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "",
+                "block",
+                "text",
+                "number",
+                "date",
+                "select",
+                "mSelect",
+                "url",
+                "email",
+                "phone",
+                "location",
+                "mAsset",
+                "template",
+                "created",
+                "updated",
+                "checkbox",
+                "relation",
+                "rollup",
+                "lineNumber",
+                "status"
+              ]
+            },
+            "viewID": {
+              "type": "string"
+            },
+            "viewIDs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "action",
+            "id",
+            "rootID",
+            "parentID",
+            "previousID",
+            "nextID",
+            "blockIDs",
+            "blockID",
+            "deckID",
+            "avID",
+            "srcIDs",
+            "srcs",
+            "isDetached",
+            "name",
+            "type",
+            "format",
+            "keyID",
+            "rowID",
+            "isTwoWay",
+            "backRelationKeyID",
+            "removeDest",
+            "layout",
+            "groupID",
+            "targetGroupID",
+            "viewID",
+            "ignoreDefaultFill",
+            "context",
+            "data",
+            "retData"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
                 "setAttrViewCardLayout"
               ]
             },
@@ -110403,6 +111146,365 @@
             "action": {
               "type": "string",
               "enum": [
+                "setAttrViewChart"
+              ]
+            },
+            "avID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "backRelationKeyID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blockID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blockIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cellUpdates": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionCellUpdateInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "context": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/TransactionContext"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AVChartSettingsInput"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "deckID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "format": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "groupID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ignoreDefaultFill": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "isDetached": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "isTwoWay": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "keyID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "layout": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "nextID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "parentID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "previousID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "removeDest": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "retData": {
+              "type": "null"
+            },
+            "rootID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rowID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionSourceFieldsInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetGroupID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": {
+              "enum": [
+                "",
+                "block",
+                "text",
+                "number",
+                "date",
+                "select",
+                "mSelect",
+                "url",
+                "email",
+                "phone",
+                "location",
+                "mAsset",
+                "template",
+                "created",
+                "updated",
+                "checkbox",
+                "relation",
+                "rollup",
+                "lineNumber",
+                "status"
+              ],
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "viewID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "viewIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
                 "setAttrViewCardLayout"
               ]
             },
@@ -118857,6 +119959,7 @@
           "setAttrViewCardWidth",
           "setAttrViewCalendar",
           "setAttrViewTimeline",
+          "setAttrViewChart",
           "setAttrViewCardLayout",
           "setAttrViewColFullRow",
           "setAttrViewFitImage",

@@ -569,6 +569,11 @@ func FilterViewByPublishAccess(c *gin.Context, publishAccess PublishAccess, view
 		av.RetainTimelineRows(av.TableFromViewable(ret), func(row *av.TableRow) bool {
 			return checkAttributeViewItemAccessableByPublishAccess(c, publishAccess, row)
 		})
+	case av.LayoutTypeChart:
+		// 图表只汇总可访问的条目，示例条目随重新汇总一并过滤。
+		av.RetainChartRows(av.TableFromViewable(ret), func(row *av.TableRow) bool {
+			return checkAttributeViewItemAccessableByPublishAccess(c, publishAccess, row)
+		})
 	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
 		table := av.TableFromViewable(ret)
 		filteredRows := []*av.TableRow{}
@@ -730,10 +735,10 @@ func (filter *attributeViewPublishAccessFilter) filterViewable(attrView *av.Attr
 	}
 
 	switch viewable.GetType() {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		table := av.TableFromViewable(viewable)
 		filter.filterGroupValue(attrView, table.BaseInstance)
-		for _, rows := range [][]*av.TableRow{table.Rows, table.TimelineUnscheduled} {
+		for _, rows := range [][]*av.TableRow{table.Rows, table.TimelineUnscheduled, table.ChartRows} {
 			for _, row := range rows {
 				if nil == row {
 					continue
@@ -748,6 +753,10 @@ func (filter *attributeViewPublishAccessFilter) filterViewable(attrView *av.Attr
 		}
 		if 0 < len(table.TimelineItems) {
 			av.RefreshTimelineItemTitles(table)
+		}
+		if nil != table.ChartData {
+			// 关联和汇总值按发布访问过滤后重新汇总，避免分组暴露不可访问的关联条目。
+			av.RefreshChartData(table)
 		}
 		for _, group := range table.Groups {
 			filter.filterViewable(attrView, group)

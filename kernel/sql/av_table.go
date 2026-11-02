@@ -19,7 +19,8 @@ func RenderAttributeViewTable(attrView *av.AttributeView, view *av.View, query s
 func renderAttributeViewTable(attrView *av.AttributeView, view *av.View, query string, depth *int,
 	cachedAttrViews map[string]*av.AttributeView, ignoreRows, deferTemplateValues bool,
 	renderContext *AttributeViewRenderContext) (ret *av.Table) {
-	if !ignoreRows && !deferTemplateValues && view.LayoutType != av.LayoutTypeCalendar && view.LayoutType != av.LayoutTypeTimeline {
+	if !ignoreRows && !deferTemplateValues && view.LayoutType != av.LayoutTypeCalendar &&
+		view.LayoutType != av.LayoutTypeTimeline && view.LayoutType != av.LayoutTypeChart {
 		viewable := attrView.RenderedViewables[view.ID]
 		if nil != viewable {
 			if ret = av.TableFromViewable(viewable); nil != ret {

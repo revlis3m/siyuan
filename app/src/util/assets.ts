@@ -31,6 +31,7 @@ import {
     loadInlineStyles
 } from "../protyle/toolbar/inlineStyle";
 import {refreshChartTheme} from "../protyle/render/chartRender";
+import {refreshAVChartTheme} from "../protyle/render/av/chart/render";
 import {getHostCapabilities} from "./hostCapabilities";
 import {initSelectionStyle} from "./selectionStyle";
 import {applyCompactMode} from "../config/tabs/compactMode";
@@ -168,6 +169,7 @@ export const loadAssets = async (appearance: Config.IAppearance) => {
     }
     if (previousThemeMode && previousThemeMode !== themeMode) {
         refreshChartTheme(document.body);
+        refreshAVChartTheme(document.body);
         refreshMermaidTheme(document.body);
     }
     const defaultStyleElement = document.getElementById("themeDefaultStyle");

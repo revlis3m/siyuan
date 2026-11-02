@@ -3,7 +3,7 @@
 export type AVKeyType = "block" | "text" | "number" | "date" | "select" | "mSelect" | "url" | "email" | "phone" | "mAsset" | "template" | "created" | "updated" | "checkbox" | "relation" | "rollup" | "lineNumber" | "location" | "status";
 export type AVFilterOperator = "=" | "!=" | ">" | ">=" | "<" | "<=" | "Contains" | "Does not contains" | "Contains any item" | "Does not contain any item" | "Is empty" | "Is not empty" | "Starts with" | "Ends with" | "Is between" | "Is true" | "Is false" | "Is complete" | "Is not complete";
 
-export type AVKeyGroup = "none" | "richText" | "link" | "scalarContent" | "attributePlaceholder" | "rollupCell" | "newItemTemplate" | "noFilterDefault" | "renderDependentFilter" | "skipRowCopy" | "renderAutoFill" | "rollupAlwaysRender" | "rollupForeignRender";
+export type AVKeyGroup = "none" | "richText" | "link" | "scalarContent" | "attributePlaceholder" | "rollupCell" | "newItemTemplate" | "noFilterDefault" | "renderDependentFilter" | "skipRowCopy" | "renderAutoFill" | "rollupAlwaysRender" | "rollupForeignRender" | "chartGroup" | "chartValue" | "chartStack";
 export type AVFilterProfile = "checkbox" | "date" | "mSelect" | "none" | "number" | "relation" | "rollup" | "select" | "status" | "template" | "text";
 export type AVCalcOperator = "" | "Average" | "Checked" | "Count all" | "Count complete" | "Count empty" | "Count not complete" | "Count not empty" | "Count unique values" | "Count values" | "Earliest" | "Latest" | "Max" | "Median" | "Min" | "Percent checked" | "Percent complete" | "Percent empty" | "Percent not empty" | "Percent unchecked" | "Percent unique values" | "Range" | "Sum" | "Template" | "Unchecked" | "Unique values";
 

@@ -252,6 +252,9 @@ func (view *View) TableLayouts() []*LayoutTable {
 	if nil != view.Timeline {
 		ret = append(ret, view.Timeline.LayoutTable)
 	}
+	if nil != view.Chart {
+		ret = append(ret, view.Chart.LayoutTable)
+	}
 	return ret
 }
 

@@ -355,6 +355,11 @@ export const getBuiltinSlashMenuItems = (protyle: IProtyle): IHintData[] => {
         value: '<div data-type="NodeAttributeView" data-av-type="timeline"></div>',
         icon: "iconAlignSettings",
     }, {
+        filter: [window.siyuan.languages.databaseChartView, "database chart view", "bar chart", "数据库图表视图", "tubiao", "tb"],
+        id: "databaseChartView",
+        value: '<div data-type="NodeAttributeView" data-av-type="chart"></div>',
+        icon: "iconAlignBottom",
+    }, {
         value: "",
         id: "separator_2",
         html: "separator",

@@ -69,6 +69,11 @@ type Table struct {
 	Timeline            *TimelineSettings `json:"timeline,omitempty"`
 	TimelineItems       []*TimelineItem   `json:"timelineItems,omitempty"`
 	TimelineUnscheduled []*TableRow       `json:"timelineUnscheduled,omitempty"`
+
+	// 以下仅图表返回：设置和汇总结果；汇总前的完整条目只在内核中保留，供发布过滤后重新汇总。
+	Chart     *ChartSettings `json:"chart,omitempty"`
+	ChartData *ChartData     `json:"chartData,omitempty"`
+	ChartRows []*TableRow    `json:"-"`
 }
 
 // TableColumn 描述了表格实例列的结构。

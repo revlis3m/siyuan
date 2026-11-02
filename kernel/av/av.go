@@ -324,6 +324,7 @@ type View struct {
 	LegacyMap         json.RawMessage         `json:"map,omitempty"`     // 仅保留旧地图配置，不参与渲染或修改
 	Calendar          *LayoutCalendar         `json:"calendar,omitempty"`
 	Timeline          *LayoutTimeline         `json:"timeline,omitempty"`
+	Chart             *LayoutChart            `json:"chart,omitempty"`
 	List              *LayoutList             `json:"list,omitempty"`    // 列表布局
 	Gallery           *LayoutGallery          `json:"gallery,omitempty"` // 卡片布局
 	Kanban            *LayoutKanban           `json:"kanban,omitempty"`  // 看板布局
@@ -355,8 +356,8 @@ type ViewData struct {
 }
 
 func (view *View) IsGroupView() bool {
-	return LayoutTypeCalendar != view.LayoutType && LayoutTypeTimeline != view.LayoutType && nil != view.Group &&
-		"" != view.Group.Field
+	return LayoutTypeCalendar != view.LayoutType && LayoutTypeTimeline != view.LayoutType &&
+		LayoutTypeChart != view.LayoutType && nil != view.Group && "" != view.Group.Field
 }
 
 // GetGroupValue 获取分组视图的分组值。
@@ -434,6 +435,7 @@ const (
 	LayoutTypeTable    LayoutType = "table" // 属性视图类型 - 表格
 	LayoutTypeCalendar LayoutType = "calendar"
 	LayoutTypeTimeline LayoutType = "timeline"
+	LayoutTypeChart    LayoutType = "chart"
 	LayoutTypeList     LayoutType = "list"    // 属性视图类型 - 列表
 	LayoutTypeGallery  LayoutType = "gallery" // 属性视图类型 - 卡片
 	LayoutTypeKanban   LayoutType = "kanban"  // 属性视图类型 - 看板
@@ -1472,6 +1474,9 @@ func (av *AttributeView) Clone() (ret *AttributeView) {
 		}
 		if nil != view.Timeline {
 			view.Timeline.Settings.remapKeyIDs(keyIDMap)
+		}
+		if nil != view.Chart {
+			view.Chart.Settings.remapKeyIDs(keyIDMap)
 		}
 		if nil != view.Gallery {
 			view.Gallery.ID = ast.NewNodeID()

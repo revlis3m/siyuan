@@ -892,6 +892,13 @@ func templateAttributeViewPreviewTable(node *ast.Node, plan *templateAttributeVi
 		timeline.LayoutTable = &table
 		view.Timeline = &timeline
 	}
+	if nil != plan.selectedView.Chart {
+		chart := *plan.selectedView.Chart
+		table := *chart.LayoutTable
+		table.Columns = append([]*av.ViewTableColumn(nil), table.Columns...)
+		chart.LayoutTable = &table
+		view.Chart = &chart
+	}
 	if nil != plan.selectedView.List {
 		list := *plan.selectedView.List
 		list.Columns = append([]*av.ViewTableColumn(nil), plan.selectedView.List.Columns...)

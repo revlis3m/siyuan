@@ -23,6 +23,9 @@ const (
 	KeyGroupRenderAutoFill
 	KeyGroupRollupAlwaysRender
 	KeyGroupRollupForeignRender
+	KeyGroupChartGroup // 可作为图表视图的分组字段
+	KeyGroupChartValue // 可作为图表视图求和、平均、最小或最大值的数值字段
+	KeyGroupChartStack // 可作为图表视图的子分组字段
 )
 
 var keyGroups = []struct {
@@ -42,6 +45,9 @@ var keyGroups = []struct {
 	{KeyGroupRenderAutoFill, "renderAutoFill"},
 	{KeyGroupRollupAlwaysRender, "rollupAlwaysRender"},
 	{KeyGroupRollupForeignRender, "rollupForeignRender"},
+	{KeyGroupChartGroup, "chartGroup"},
+	{KeyGroupChartValue, "chartValue"},
+	{KeyGroupChartStack, "chartStack"},
 }
 
 func (g KeyGroup) MarshalJSON() ([]byte, error) {

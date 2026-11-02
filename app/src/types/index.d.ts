@@ -25,7 +25,7 @@ type TEventBus = "ws-main" | "sync-start" | "sync-end" | "sync-fail" |
     "kernel-plugin-state-change" |
     "before-show-tooltip" | "before-hide-tooltip" |
     "common-menu-open" | "common-menu-closed"
-type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar" | "timeline";
+type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar" | "timeline" | "chart";
 type TAVAlign = "" | "left" | "center" | "right"
 type TAVDateFormat = "" | "full" | "month-day-year" | "day-month-year" | "year-month-day" | "lunar"
 type TAVCol = import("./av").AVKeyType;
@@ -1325,6 +1325,77 @@ interface IAVTimelineItem {
     color?: IAVCellSelectValue;
 }
 
+/**
+ * 图表的持久化设置，也是 setAttrViewChart 事务的完整 data。
+ * 图表在视图筛选之后汇总条目，不应用排序、分组和条目分页。
+ */
+interface IAVChartSettings {
+    chartType: "" | "bar" | "horizontalBar" | "line" | "donut" | "number";
+    /** 分组字段，空字符串表示未绑定。 */
+    xKeyID: string;
+    /** 分组字段为日期类字段时的时间粒度，空字符串按 month 处理。 */
+    dateBucket: "" | "day" | "week" | "month" | "quarter" | "year";
+    measure: "" | "count" | "sum" | "average" | "min" | "max";
+    /** 非计数汇总使用的数字、汇总或模板字段。 */
+    valueKeyID: string;
+    /** 可选的子分组字段：单选、状态或复选框。 */
+    stackKeyID: string;
+    sort: "" | "default" | "valueDesc" | "valueAsc" | "labelAsc";
+    showEmptyGroups: boolean;
+    showLegend: boolean;
+    showDataLabels: boolean;
+    /** 图表高度（像素），0 使用默认高度。 */
+    height: number;
+}
+
+/** 图表的一个分组；复选框和空值分组的 label 为空字符串，由客户端本地化。 */
+interface IAVChartCategory {
+    key: string;
+    label: string;
+    color?: string;
+    resolvedColor?: IAVColor;
+    empty?: boolean;
+    /** 日期分组区间的开始时间（毫秒）。 */
+    start?: number;
+    value: number | null;
+    count: number;
+}
+
+interface IAVChartItem {
+    id: string;
+    title: string;
+    blockID: string;
+    valueID: string;
+    isDetached: boolean;
+}
+
+/** 图表的一个系列，数组与 categories 一一对应。 */
+interface IAVChartSeries {
+    key: string;
+    label: string;
+    color?: string;
+    resolvedColor?: IAVColor;
+    empty?: boolean;
+    values: Array<number | null>;
+    counts: number[];
+    /** 各数据点的示例条目，数量有上限。 */
+    items: IAVChartItem[][];
+}
+
+/** 筛选后的条目在图表中的汇总结果。 */
+interface IAVChartData {
+    /** 实际使用的汇总方式。 */
+    measure: "count" | "sum" | "average" | "min" | "max";
+    /** 分组字段类型，未绑定或类型不支持时为空字符串。 */
+    xType: string;
+    /** 子分组字段类型，未使用子分组时为空字符串。 */
+    stackType: string;
+    categories: IAVChartCategory[];
+    series: IAVChartSeries[];
+    total: number | null;
+    itemCount: number;
+}
+
 interface IAVTable extends IAVView {
     /** 仅日历布局返回的持久化字段设置。 */
     calendar?: IAVCalendarSettings;
@@ -1341,6 +1412,10 @@ interface IAVTable extends IAVView {
     timelineItems?: IAVTimelineItem[];
     /** 仅时间线布局返回：没有开始日期的待安排条目。 */
     timelineUnscheduled?: IAVRow[];
+    /** 仅图表布局返回的持久化设置。 */
+    chart?: IAVChartSettings;
+    /** 仅图表布局返回：视图筛选后的汇总结果，此时 rows 为空列表，rowCount 为筛选后的条目数。 */
+    chartData?: IAVChartData;
     columns: IAVColumn[],
     rows: IAVRow[],
     rowCount: number,

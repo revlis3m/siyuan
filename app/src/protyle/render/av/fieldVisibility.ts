@@ -11,6 +11,8 @@ const getViewIcon = (type: TAVView) => {
             return "iconCalendar";
         case "timeline":
             return "iconAlignSettings";
+        case "chart":
+            return "iconAlignBottom";
         case "list":
             return "iconList";
         case "gallery":

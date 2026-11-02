@@ -257,6 +257,8 @@ func getAttributeViewBaseInstance(viewable av.Viewable) (ret *av.BaseInstance) {
 		ret = instance.BaseInstance
 	case *av.Timeline:
 		ret = instance.BaseInstance
+	case *av.Chart:
+		ret = instance.BaseInstance
 	case *av.List:
 		ret = instance.BaseInstance
 	case *av.Gallery:
@@ -495,7 +497,8 @@ func RenderAttributeViewWithTargetOptions(blockID, avID, viewID, query string, p
 func newAttributeViewWithLayout(avID string, initialLayout av.LayoutType) (ret *av.AttributeView) {
 	ret = av.NewAttributeView(avID)
 	switch initialLayout {
-	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeGallery, av.LayoutTypeKanban:
+	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart, av.LayoutTypeGallery,
+		av.LayoutTypeKanban:
 	default:
 		return
 	}
@@ -596,7 +599,8 @@ func renderAttributeView(attrView *av.AttributeView, nodeID, viewID, carrierView
 	}
 
 	// 渲染分组视图。当 ignoreRows 时若有已生成的分组则渲染元数据供面板使用，无分组则跳过（生成分组需要行数据）
-	if view.LayoutType != av.LayoutTypeCalendar && view.LayoutType != av.LayoutTypeTimeline && (!ignoreRows || len(view.Groups) > 0) {
+	if view.LayoutType != av.LayoutTypeCalendar && view.LayoutType != av.LayoutTypeTimeline &&
+		view.LayoutType != av.LayoutTypeChart && (!ignoreRows || len(view.Groups) > 0) {
 		err = renderAttributeViewGroups(viewable, attrView, view, query, page, pageSize, groupPaging, groupRenderSource,
 			ignoreRows, writable, target, targetGroupID, renderContext, filterContext)
 	}
@@ -750,7 +754,7 @@ func renderAttributeViewGroups(viewable av.Viewable, attrView *av.AttributeView,
 
 		// 将分组视图的分组字段清空，减少冗余（字段信息可以在总的视图 view 对象上获取到）
 		switch groupView.LayoutType {
-		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 			groupView.GetTableLayout().Columns = nil
 		case av.LayoutTypeGallery:
 			groupView.Gallery.CardFields = nil
@@ -797,7 +801,7 @@ func hideEmptyGroupViews(view *av.View, viewable av.Viewable) {
 
 	itemCount := 0
 	switch viewable.GetType() {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		itemCount = av.TableFromViewable(viewable).RowCount
 	case av.LayoutTypeGallery:
 		itemCount = viewable.(*av.Gallery).CardCount
@@ -1012,6 +1016,14 @@ func shouldDeferAttributeViewTemplateValues(attrView *av.AttributeView, view *av
 		(renderTemplateKeyIDs[view.Timeline.Settings.StartKeyID] || renderTemplateKeyIDs[view.Timeline.Settings.EndKeyID]) {
 		return false
 	}
+	// 图表在渲染阶段汇总条目，绑定的模板字段需要先完成计算；其余模板字段在汇总后不再有条目需要填充。
+	if view.LayoutType == av.LayoutTypeChart && view.Chart != nil {
+		for _, id := range []string{view.Chart.Settings.XKeyID, view.Chart.Settings.ValueKeyID, view.Chart.Settings.StackKeyID} {
+			if templateKeyIDs[id] || renderTemplateKeyIDs[id] {
+				return false
+			}
+		}
+	}
 
 	for _, rule := range view.EffectiveConditionalColors() {
 		if nil != rule && nil != rule.Filter && (templateKeyIDs[rule.Filter.Column] ||
@@ -1046,7 +1058,7 @@ func shouldDeferAttributeViewTemplateValues(attrView *av.AttributeView, view *av
 		return templateKeyIDs[fieldID] && nil != calc && av.CalcOperatorNone != calc.Operator
 	}
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
 		for _, column := range view.GetTableLayout().Columns {
 			if nil != column && nil != column.BaseField && checkField(column.ID, column.Calc) {
 				return false
@@ -1121,6 +1133,12 @@ func renderViewableInstanceWithOrder(viewable av.Viewable, view *av.View, attrVi
 		if collection, ok := viewable.(av.Collection); ok {
 			timing.Count("rows_filtered", int64(collection.CountItems()))
 		}
+	}
+	if chart, ok := viewable.(*av.Chart); ok {
+		// 图表只需要筛选后的条目，不应用排序、字段计算、分页和条件颜色。
+		timing.Stage("chart")
+		av.ResolveChart(chart)
+		return
 	}
 	timing.Stage("sort")
 	av.Sort(viewable, attrView)
