@@ -913,6 +913,16 @@ func (r *chartResolver) rowCategories(row *TableRow, indexes []int) []int {
 				}
 			}
 		}
+	case KeyTypeBlock:
+		// 按主键分组时每个条目自成一组（同名条目不合并），标签为条目名称。
+		label := ""
+		if nil != value && nil != value.Block {
+			label = strings.TrimSpace(value.Block.Content)
+		}
+		if "" == label {
+			label = "—"
+		}
+		indexes = append(indexes, r.registerGroup(row.ID, label, 0, true, nil))
 	case KeyTypeNumber:
 		if nil != value && nil != value.Number && value.Number.IsNotEmpty {
 			key := strconv.FormatFloat(value.Number.Content, 'f', -1, 64)

@@ -63,7 +63,7 @@ test("chart settings list only the options that apply to the chart type", () => 
     const bar = methods.getChartSettingItems(data({}).view as IAVTable);
     assert.deepEqual(keysOf(bar), ["chartType", "xKeyID", "measure", "stackKeyID", "sort", "height"]);
     assert.deepEqual(plain(bar.find(item => item.key === "xKeyID").choices.map(choice => choice.value)),
-        ["", "status", "type", "done", "tags", "points", "due"]);
+        ["", "name", "status", "type", "done", "tags", "points", "due"]);
     assert.deepEqual(plain(bar.find(item => item.key === "stackKeyID").choices.map(choice => choice.value)), ["", "type", "done"]);
     assert.deepEqual(plain(bar.find(item => item.key === "chartType").choices.map(choice => choice.label)),
         ["Vertical bar", "Horizontal bar", "Line", "Donut", "Number"]);

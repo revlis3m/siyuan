@@ -22,7 +22,7 @@ type KeyCapability struct {
 
 var keyCapabilities = map[KeyType]KeyCapability{
 	KeyTypeBlock: {
-		Groups:        KeyGroupRichText | KeyGroupLink | KeyGroupScalarContent,
+		Groups:        KeyGroupRichText | KeyGroupLink | KeyGroupScalarContent | KeyGroupChartGroup,
 		FilterProfile: FilterProfileText,
 		order:         0, ValueKind: "text", Editable: true, Filterable: true,
 		Sortable: true, Groupable: true, DefaultOperator: FilterOperatorContains},

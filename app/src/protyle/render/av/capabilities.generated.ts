@@ -5,7 +5,7 @@ import type {AVKeyType, AVKeyCapability, AVFilterProfile, AVFilterCapability, AV
 export const AV_KEY_TYPES: readonly AVKeyType[] = ["block","text","number","date","select","mSelect","url","email","phone","mAsset","template","created","updated","checkbox","relation","rollup","lineNumber","location","status"];
 
 export const AV_KEY_CAPABILITIES: Readonly<Record<AVKeyType, AVKeyCapability>> = {
-    "block": {"groups":["richText","link","scalarContent"],"filterProfile":"text","valueKind":"text","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"Contains"},
+    "block": {"groups":["richText","link","scalarContent","chartGroup"],"filterProfile":"text","valueKind":"text","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"Contains"},
     "text": {"groups":["richText","scalarContent","attributePlaceholder","newItemTemplate","chartGroup"],"filterProfile":"text","valueKind":"text","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"Contains"},
     "number": {"groups":["scalarContent","attributePlaceholder","newItemTemplate","chartGroup","chartValue"],"filterProfile":"number","valueKind":"number","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"="},
     "date": {"groups":["attributePlaceholder","newItemTemplate","chartGroup"],"filterProfile":"date","valueKind":"date","editable":true,"filterable":true,"sortable":true,"groupable":true,"defaultOperator":"="},

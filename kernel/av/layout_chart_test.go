@@ -468,7 +468,7 @@ func TestChartLayoutRegistration(t *testing.T) {
 
 func TestChartFieldTypes(t *testing.T) {
 	for _, typ := range KeyTypes() {
-		group := typ != KeyTypeBlock && typ != KeyTypeMAsset && typ != KeyTypeRollup && typ != KeyTypeLineNumber &&
+		group := typ != KeyTypeMAsset && typ != KeyTypeRollup && typ != KeyTypeLineNumber &&
 			typ != KeyTypeLocation
 		value := typ == KeyTypeNumber || typ == KeyTypeRollup || typ == KeyTypeTemplate
 		stack := typ == KeyTypeSelect || typ == KeyTypeStatus || typ == KeyTypeCheckbox
@@ -499,5 +499,32 @@ func TestChartDecimalSum(t *testing.T) {
 	}
 	if mantissa, scale, ok := chartDecimal(-12.375); !ok || mantissa != -12375 || scale != 3 {
 		t.Fatalf("decimal split: %d %d %t", mantissa, scale, ok)
+	}
+}
+
+func TestChartGroupByPrimaryKey(t *testing.T) {
+	rows := []*TableRow{chartTestRow(chartNumber(3)), chartTestRow(chartNumber(5)), chartTestRow()}
+	rows[1].Cells[0].Value.Block.Content = rows[0].Cells[0].Value.Block.Content // 同名条目仍分开显示
+	settings := DefaultChartSettings()
+	settings.XKeyID = chartTestBlockKey
+	settings.Measure = ChartMeasureSum
+	settings.ValueKeyID = chartTestNumberKey
+	data := BuildChartData(chartTestColumns(), rows, settings, time.UTC)
+	if 3 != len(data.Categories) {
+		t.Fatalf("expected one category per item, got %d", len(data.Categories))
+	}
+	for i, category := range data.Categories {
+		if "" == category.Label {
+			t.Fatalf("category %d has no label", i)
+		}
+	}
+	total := 0.0
+	for _, value := range data.Series[0].Values {
+		if nil != value {
+			total += *value
+		}
+	}
+	if 8 != total {
+		t.Fatalf("sum per item = %v, want 8", total)
 	}
 }

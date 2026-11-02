@@ -75,7 +75,7 @@ test("chart field predicates follow the kernel field types", () => {
     assert.equal(isChartGroupColumn({type: "created"}), true);
     assert.equal(isChartGroupColumn({type: "relation"}), true);
     assert.equal(isChartGroupColumn({type: "mAsset"}), false);
-    assert.equal(isChartGroupColumn({type: "block"}), false);
+    assert.equal(isChartGroupColumn({type: "block"}), true);
     assert.equal(isChartGroupColumn(undefined), false);
     assert.equal(isChartValueColumn({type: "rollup"}), true);
     assert.equal(isChartValueColumn({type: "text"}), false);
