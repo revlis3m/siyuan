@@ -1262,7 +1262,8 @@ const renderNextSearchMark = (options: {
             if (!currentRange.toString()) {
                 const itemElement = hasClosestByClassName(currentRange.startContainer, "av__row") ||
                     hasClosestByClassName(currentRange.startContainer, "av__gallery-item") ||
-                    hasClosestByClassName(currentRange.startContainer, "av__calendar-item");
+                    hasClosestByClassName(currentRange.startContainer, "av__calendar-item") ||
+                    hasClosestByClassName(currentRange.startContainer, "av__timeline-row");
                 if (itemElement) {
                     scrollCenter(options.edit.protyle, itemElement, "center");
                 } else {
@@ -1414,7 +1415,7 @@ export const getArticle = (options: {
                                 rootElement: preview?.rootElement,
                                 currentElement: preview?.currentElement,
                                 ranges: preview?.ranges,
-                                excludeSelector: ".av__views [data-type=\"av-search\"], .av__selection-toolbar, .av__calendar-toolbar, .av__row--footer",
+                                excludeSelector: ".av__views [data-type=\"av-search\"], .av__selection-toolbar, .av__calendar-toolbar, .av__timeline-toolbar, .av__row--footer",
                                 isValid: isCurrent,
                             });
                         } else {

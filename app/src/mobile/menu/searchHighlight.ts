@@ -65,7 +65,7 @@ export const highlightMobileSearchResult = (protyle: IProtyle, id: string, keywo
             }
             const ranges = getSearchMarkRanges(target, keywords,
                 '.protyle-action, .protyle-attr, .protyle-icons, .hljs > [contenteditable="false"], ' +
-                ".av__views, .av__selection-toolbar, .av__calendar-toolbar, .av__row--footer")
+                ".av__views, .av__selection-toolbar, .av__calendar-toolbar, .av__timeline-toolbar, .av__row--footer")
                 .sort((a, b) => a.startIndex - b.startIndex)
                 .map(match => match.range)
                 .filter(range => Array.from(range.getClientRects()).some(rect => rect.width > 0 && rect.height > 0));

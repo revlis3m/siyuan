@@ -1,4 +1,17 @@
 {
+	"timelineView": "時間軸",
+	"databaseTimelineView": "資料庫 時間軸視圖",
+	"timelineStartField": "開始日期欄位",
+	"timelineEndField": "結束日期欄位",
+	"timelineEndFromStart": "使用開始欄位的結束日期",
+	"timelineZoomDay": "日",
+	"timelineZoomWeek": "週",
+	"timelineZoomMonth": "月",
+	"timelineZoomQuarter": "季",
+	"timelineUnscheduled": "未排程",
+	"timelineUnscheduledHint": "將項目拖曳到時間軸上以安排日期",
+	"timelineSelectStartField": "選擇開始日期欄位以顯示時間軸",
+	"timelineCreateHint": "點擊或拖曳以新增項目",
 	"status": "狀態",
 	"statusGroup": "狀態分組",
 	"statusGroupTodo": "待辦",
@@ -3026,6 +3039,7 @@
 		"quit": "退出程序"
 	},
 	"_attrView": {
+		"timeline": "時間軸",
 		"statusNotStarted": "未開始",
 		"statusInProgress": "進行中",
 		"statusDone": "已完成",

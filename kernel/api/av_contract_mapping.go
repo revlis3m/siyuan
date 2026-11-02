@@ -36,6 +36,8 @@ func avContractView(value av.Viewable) apicontract.AVViewInstance {
 		return apicontract.NewAVTableInstance(toContractAVTable(view))
 	case *av.Calendar:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
+	case *av.Timeline:
+		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.List:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.Gallery:
@@ -50,7 +52,7 @@ func toContractAVTable(value *av.Table) *apicontract.AVTable {
 	if value == nil {
 		return nil
 	}
-	return &apicontract.AVTable{
+	ret := &apicontract.AVTable{
 		AVBaseInstance:     toContractAVBaseInstance(value.BaseInstance),
 		Calendar:           toContractAVCalendarSettings(value.Calendar),
 		CalendarRange:      toContractAVCalendarRange(value.CalendarRange),
@@ -59,6 +61,10 @@ func toContractAVTable(value *av.Table) *apicontract.AVTable {
 		Rows:               avContractSlice(value.Rows, func(value *av.TableRow) *apicontract.AVTableRow { return toContractAVTableRow(value) }),
 		RowCount:           value.RowCount,
 	}
+	ret.Timeline = toContractAVTimelineSettings(value.Timeline)
+	ret.TimelineItems = avContractSlice(value.TimelineItems, toContractAVTimelineItem)
+	ret.TimelineUnscheduled = avContractSlice(value.TimelineUnscheduled, toContractAVTableRow)
+	return ret
 }
 func toContractAVBaseInstance(value *av.BaseInstance) *apicontract.AVBaseInstance {
 	if value == nil {
@@ -1037,6 +1043,7 @@ func toContractAVView(value *av.View) *apicontract.AVView {
 		Table:             toContractAVLayoutTable(value.Table),
 		List:              toContractAVLayoutTable(value.List),
 		Calendar:          toContractAVLayoutCalendar(value.Calendar),
+		Timeline:          toContractAVLayoutTimeline(value.Timeline),
 		Gallery:           toContractAVLayoutGallery(value.Gallery),
 		Kanban:            toContractAVLayoutKanban(value.Kanban),
 		ItemIDs:           value.ItemIDs,

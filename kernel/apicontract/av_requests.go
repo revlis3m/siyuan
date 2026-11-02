@@ -218,14 +218,18 @@ type CreateAttributeViewItemRequest struct {
 	// 覆盖模板中该字段的值，与模板其他字段及条目创建共用一个可撤销事务。
 	// 绑定 created、updated 或带显示模板的 date 字段时拒绝指定日期；省略或传 null 时沿用常规创建流程。
 	CalendarDate *int64 `json:"calendarDate" api:"optional,nullable"`
-	AvID         string `json:"avID"`
-	BlockID      string `json:"blockID"`
-	ViewID       string `json:"viewID" api:"optional,nullable"`
-	TemplateID   string `json:"templateID" api:"optional,nullable"`
-	PreviousID   string `json:"previousID" api:"optional,nullable"`
-	GroupID      string `json:"groupID" api:"optional,nullable"`
-	App          string `json:"app" api:"optional,nullable"`
-	Session      string `json:"session" api:"optional,nullable"`
+	// 时间线新条目的全天结束日期，单位为毫秒，不早于 calendarDate；仅支持时间线视图且必须同时指定 calendarDate。
+	// 写入时间线的结束字段，未绑定结束字段时写入开始字段的结束日期；与 calendarDate 相同时按单日创建。
+	// 时间线的 calendarDate 写入开始字段，开始或结束字段为 created、updated 或带显示模板的 date 字段时拒绝指定日期。
+	CalendarEndDate *int64 `json:"calendarEndDate" api:"optional,nullable"`
+	AvID            string `json:"avID"`
+	BlockID         string `json:"blockID"`
+	ViewID          string `json:"viewID" api:"optional,nullable"`
+	TemplateID      string `json:"templateID" api:"optional,nullable"`
+	PreviousID      string `json:"previousID" api:"optional,nullable"`
+	GroupID         string `json:"groupID" api:"optional,nullable"`
+	App             string `json:"app" api:"optional,nullable"`
+	Session         string `json:"session" api:"optional,nullable"`
 }
 
 // 关联新建使用目标数据库的默认模板；未配置主键模板时以 keyword 作为名称。

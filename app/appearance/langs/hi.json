@@ -1,4 +1,17 @@
 {
+	"timelineView": "टाइमलाइन",
+	"databaseTimelineView": "डेटाबेस टाइमलाइन दृश्य",
+	"timelineStartField": "आरंभ तारीख फ़ील्ड",
+	"timelineEndField": "समाप्ति तारीख फ़ील्ड",
+	"timelineEndFromStart": "आरंभ फ़ील्ड की समाप्ति तारीख",
+	"timelineZoomDay": "दिन",
+	"timelineZoomWeek": "सप्ताह",
+	"timelineZoomMonth": "महीना",
+	"timelineZoomQuarter": "तिमाही",
+	"timelineUnscheduled": "अनिर्धारित",
+	"timelineUnscheduledHint": "किसी आइटम को शेड्यूल करने के लिए उसे टाइमलाइन पर खींचें",
+	"timelineSelectStartField": "टाइमलाइन दिखाने के लिए आरंभ तारीख फ़ील्ड चुनें",
+	"timelineCreateHint": "प्रविष्टि जोड़ने के लिए क्लिक करें या खींचें",
 	"status": "स्थिति",
 	"statusGroup": "स्थिति समूह",
 	"statusGroupTodo": "करना है",
@@ -3026,6 +3039,7 @@
 		"quit": "एप्लिकेशन से बाहर निकलें"
 	},
 	"_attrView": {
+		"timeline": "टाइमलाइन",
 		"statusNotStarted": "शुरू नहीं हुआ",
 		"statusInProgress": "प्रगति में",
 		"statusDone": "हो गया",

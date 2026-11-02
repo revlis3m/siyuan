@@ -1,5 +1,6 @@
 import {isAVSelectType} from "./capabilities";
 import {renderCalendar} from "./calendar/render";
+import {renderTimeline} from "./timeline/render";
 import {isFoldedRenderContent} from "../foldedContent";
 import {getCalendarRequestRange} from "./calendar/state";
 import {isTableLikeView} from "./viewType";
@@ -740,6 +741,10 @@ export const avRender = async (element: Element, protyle: IProtyle, cb?: (data: 
             await renderCalendar(e, protyle, data, cb);
             continue;
         }
+        if (data.viewType === "timeline") {
+            await renderTimeline(e, protyle, data, cb);
+            continue;
+        }
         if (data.viewType === "gallery") {
             await renderGallery({blockElement: e, protyle, cb, renderAll, data});
             continue;
@@ -1123,7 +1128,7 @@ export const refreshAV = (protyle: IProtyle, operation: IOperation) => {
         getAVElements(protyle, avID).forEach((item) => {
             item.removeAttribute("data-render");
             if (["setAttrViewCardSize", "setAttrViewCardWidth", "setAttrViewCardAspectRatio",
-                "setAttrViewConditionalColors", "setAttrViewCalendar", "setAttrViewCardAspectRatioValue", "setAttrViewCardLayout", "setAttrViewColFullRow",
+                "setAttrViewConditionalColors", "setAttrViewCalendar", "setAttrViewTimeline", "setAttrViewCardAspectRatioValue", "setAttrViewCardLayout", "setAttrViewColFullRow",
                 "setAttrViewDisplayFieldName"].includes(operation.action) &&
                 (!operation.viewID || getViewIDByAVElement(item) === operation.viewID)) {
                 // 卡片尺寸或字段布局变化后原虚拟滚动占位高度已失效，重渲时从首项重新初始化。

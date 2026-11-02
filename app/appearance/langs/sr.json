@@ -1,4 +1,17 @@
 {
+	"timelineView": "Временска линија",
+	"databaseTimelineView": "Приказ временске линије базе података",
+	"timelineStartField": "Поље датума почетка",
+	"timelineEndField": "Поље датума завршетка",
+	"timelineEndFromStart": "Датум завршетка из поља почетка",
+	"timelineZoomDay": "Дан",
+	"timelineZoomWeek": "Недеља",
+	"timelineZoomMonth": "Месец",
+	"timelineZoomQuarter": "Квартал",
+	"timelineUnscheduled": "Непланирано",
+	"timelineUnscheduledHint": "Превуците ставку на временску линију да бисте је заказали",
+	"timelineSelectStartField": "Изаберите поље датума почетка за приказ временске линије",
+	"timelineCreateHint": "Кликните или превуците да бисте додали унос",
 	"status": "Status",
 	"statusGroup": "Grupa statusa",
 	"statusGroupTodo": "Za uraditi",
@@ -3026,6 +3039,7 @@
 		"quit": "Ugasi aplikaciju"
 	},
 	"_attrView": {
+		"timeline": "Временска линија",
 		"statusNotStarted": "Nije započeto",
 		"statusInProgress": "U toku",
 		"statusDone": "Gotovo",

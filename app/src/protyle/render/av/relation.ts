@@ -588,11 +588,11 @@ export const bindRelationEvent = (options: {
     };
     let anchorElement = options.cellElements[options.cellElements.length - 1];
     let anchorRect = anchorElement.getBoundingClientRect();
-    const anchorRow = anchorElement.closest<HTMLElement>(".av__row, .av__gallery-item, .av__calendar-item");
+    const anchorRow = anchorElement.closest<HTMLElement>(".av__row, .av__gallery-item, .av__calendar-item, .av__timeline-row");
     const anchorColumnAttribute = anchorElement.dataset.colId ? "data-col-id" : "data-field-id";
     const anchorColumnID = anchorElement.getAttribute(anchorColumnAttribute);
     const anchorRowID = anchorRow?.dataset.id || anchorElement.dataset.rowId;
-    const anchorRowClass = ["av__row", "av__gallery-item", "av__calendar-item"].find(name => anchorRow?.classList.contains(name));
+    const anchorRowClass = ["av__row", "av__gallery-item", "av__calendar-item", "av__timeline-row"].find(name => anchorRow?.classList.contains(name));
     const anchorSelector = anchorRow ?
         `.${anchorRowClass}[data-id="${CSS.escape(anchorRowID)}"] [${anchorColumnAttribute}="${CSS.escape(anchorColumnID)}"]` :
         anchorRowID ? `[data-row-id="${CSS.escape(anchorRowID)}"][${anchorColumnAttribute}="${CSS.escape(anchorColumnID)}"]` :

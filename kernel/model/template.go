@@ -885,6 +885,13 @@ func templateAttributeViewPreviewTable(node *ast.Node, plan *templateAttributeVi
 		calendar.LayoutTable = &table
 		view.Calendar = &calendar
 	}
+	if nil != plan.selectedView.Timeline {
+		timeline := *plan.selectedView.Timeline
+		table := *timeline.LayoutTable
+		table.Columns = append([]*av.ViewTableColumn(nil), table.Columns...)
+		timeline.LayoutTable = &table
+		view.Timeline = &timeline
+	}
 	if nil != plan.selectedView.List {
 		list := *plan.selectedView.List
 		list.Columns = append([]*av.ViewTableColumn(nil), plan.selectedView.List.Columns...)

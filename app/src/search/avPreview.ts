@@ -49,7 +49,7 @@ export const getSearchAVMatchesFromHTML = (html: string) => {
 };
 
 const getMatchItem = (blockElement: HTMLElement, itemID: string) => blockElement.querySelector<HTMLElement>(
-    `.av__row[data-id="${itemID}"], .av__gallery-item[data-id="${itemID}"], .av__calendar-item[data-id="${itemID}"]`);
+    `.av__row[data-id="${itemID}"], .av__gallery-item[data-id="${itemID}"], .av__calendar-item[data-id="${itemID}"], .av__timeline-row[data-id="${itemID}"]`);
 
 const getMatchField = (item: HTMLElement, keyID: string) => item?.querySelector<HTMLElement>(
     `[data-col-id="${keyID}"], [data-field-id="${keyID}"]`);

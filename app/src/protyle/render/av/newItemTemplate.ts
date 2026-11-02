@@ -26,6 +26,8 @@ import {bindBottomSheetDialog} from "../../../mobile/util/bindBottomSheetDialog"
 
 interface ICreatePosition {
     calendarDate?: number;
+    /** 时间线新条目的全天结束日期，需同时指定 calendarDate。 */
+    calendarEndDate?: number;
     previousID?: string;
     groupID?: string;
 }
@@ -384,7 +386,7 @@ export const openNewItemTemplateDialog = (options: {
     const render = () => {
         listElement.innerHTML = `<li class="b3-list-item" data-role="add-template"><svg class="b3-list-item__graphic"><use xlink:href="#iconAdd"></use></svg><span class="b3-list-item__text">${window.siyuan.languages.newTemplate}</span></li><li class="b3-menu__separator"></li>` +
             templates.map((item, index) => `<li class="b3-list-item b3-list-item--hide-action${index === selectedIndex ? " b3-list-item--focus" : ""}" data-index="${index}" draggable="true"><svg class="b3-list-item__graphic fn__grab"><use xlink:href="#iconDrag"></use></svg><span class="b3-list-item__text">${escapeHtml(item.name)}</span>${item.id === defaultTemplateID ? `<span class="b3-list-item__meta">${window.siyuan.languages.default}</span>` : ""}<span class="b3-list-item__action ariaLabel" data-menu="true" data-position="4west" data-role="template-action" aria-label="${window.siyuan.languages.more}"><svg><use xlink:href="#iconMore"></use></svg></span></li>`).join("");
-        hostElement.innerHTML = selectedIndex < 0 ? "" : getEditorHTML(templates[selectedIndex], primaryKey, fields, options.protyle.notebookId, options.blockElement.dataset.avType === "calendar");
+        hostElement.innerHTML = selectedIndex < 0 ? "" : getEditorHTML(templates[selectedIndex], primaryKey, fields, options.protyle.notebookId, ["calendar", "timeline"].includes(options.blockElement.dataset.avType));
         hostElement.querySelector<HTMLInputElement>('[data-role="open-after-create"]')?.addEventListener("change", event => {
             (event.currentTarget as HTMLElement).dataset.changed = "true";
         });
@@ -659,9 +661,11 @@ export const createAttributeViewItem = (options: {
     templateID?: string;
     position?: ICreatePosition;
 }) => {
-    const isCalendar = options.blockElement.dataset.avType === "calendar";
+    // 日历和时间线按日期排布条目，新建后默认打开条目以便补充内容。
+    const isCalendar = ["calendar", "timeline"].includes(options.blockElement.dataset.avType);
     fetchPost("/api/av/createAttributeViewItem", {
         calendarDate: options.position?.calendarDate ?? getCalendarCreationDate(options.blockElement),
+        calendarEndDate: options.position?.calendarEndDate,
         viewID: options.blockElement.getAttribute(Constants.CUSTOM_SY_AV_VIEW) || "",
         avID: options.blockElement.dataset.avId,
         blockID: options.blockElement.dataset.nodeId,

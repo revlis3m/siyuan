@@ -25,7 +25,7 @@ type TEventBus = "ws-main" | "sync-start" | "sync-end" | "sync-fail" |
     "kernel-plugin-state-change" |
     "before-show-tooltip" | "before-hide-tooltip" |
     "common-menu-open" | "common-menu-closed"
-type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar";
+type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar" | "timeline";
 type TAVAlign = "" | "left" | "center" | "right"
 type TAVDateFormat = "" | "full" | "month-day-year" | "day-month-year" | "year-month-day" | "lunar"
 type TAVCol = import("./av").AVKeyType;
@@ -1295,6 +1295,36 @@ interface IAVCalendarRange {
 }
 
 // 表格、列表和日历共用行列结构，布局由 viewType 区分。
+/**
+ * 时间线的持久化设置，也是 setAttrViewTimeline 事务的完整 data。
+ * 左侧列显示的属性复用视图字段的显隐设置，主键始终显示；时间线渲染不应用分组和条目分页。
+ */
+interface IAVTimelineSettings {
+    /** 开始日期字段（date、created 或 updated）；空字符串表示未绑定，此时全部条目作为待安排条目返回。 */
+    startKeyID: string;
+    /** 可选结束日期字段；空字符串时使用开始日期字段自带的结束日期。 */
+    endKeyID: string;
+    /** 时间刻度，空字符串按 week 显示。 */
+    zoom: "" | "day" | "week" | "month" | "quarter";
+    /** 空字符串不着色；选项类字段 ID 使用第一个已选选项的颜色；conditional 使用视图条件颜色。 */
+    colorBy: string;
+}
+
+/** 有开始日期的条目在时间线上的区间，与 rows 顺序一致；时间为毫秒时间戳，按本地时区换算日期。 */
+interface IAVTimelineItem {
+    id: string;
+    start: number;
+    /** 不早于 start；单日条目与 start 相同。 */
+    end: number;
+    isNotTime: boolean;
+    /** 结束日期早于开始日期，按开始日期单日显示。 */
+    invalid: boolean;
+    title: string;
+    /** 绑定块 ID，游离条目为空字符串。 */
+    blockID: string;
+    color?: IAVCellSelectValue;
+}
+
 interface IAVTable extends IAVView {
     /** 仅日历布局返回的持久化字段设置。 */
     calendar?: IAVCalendarSettings;
@@ -1305,6 +1335,12 @@ interface IAVTable extends IAVView {
      * 发布读取先过滤不可访问条目，再重新计算此日期、定位行索引及 rowCount。
      */
     calendarTargetDate?: number;
+    /** 仅时间线布局返回的持久化设置。 */
+    timeline?: IAVTimelineSettings;
+    /** 仅时间线布局返回：有开始日期的条目区间，与 rows 一一对应，不分页。 */
+    timelineItems?: IAVTimelineItem[];
+    /** 仅时间线布局返回：没有开始日期的待安排条目。 */
+    timelineUnscheduled?: IAVRow[];
     columns: IAVColumn[],
     rows: IAVRow[],
     rowCount: number,

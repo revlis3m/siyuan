@@ -1,5 +1,6 @@
 import {isAVSelectType} from "./capabilities";
 import {bindCalendarSettings, getCalendarSettingsHTML} from "./calendar/settings";
+import {bindTimelineSettings, getTimelineSettingsHTML} from "./timeline/settings";
 import {isTableLikeView} from "./viewType";
 import {isAVRenderData} from "./renderData";
 import {transaction} from "../../wysiwyg/transaction";
@@ -146,6 +147,11 @@ export const getLayoutHTML = (data: IAV) => {
                 <div class="fn__hr"></div>
                 <div>${window.siyuan.languages.calendarView}</div>
             </div>
+            <div data-type="set-layout" data-view-type="timeline" class="av__layout-item${data.viewType === "timeline" ? " av__layout-item--select" : ""}">
+                <svg><use xlink:href="#iconAlignSettings"></use></svg>
+                <div class="fn__hr"></div>
+                <div>${window.siyuan.languages.timelineView}</div>
+            </div>
         </div>
     </button>
     <label class="b3-menu__item">
@@ -177,6 +183,16 @@ export const getLayoutHTML = (data: IAV) => {
     <span class="fn__space fn__flex-1"></span>
     <input data-type="toggle-gallery-name" type="checkbox" class="b3-switch b3-switch--menu" ${(data.view as IAVTable).calendar.displayFieldName ? "checked" : ""}>
 </label>` + getCalendarSettingsHTML(data.view as IAVTable, true) + "</div>";
+    }
+    if (data.viewType === "timeline") {
+        const columns = (data.view as IAVTable).columns;
+        // 左侧列显示的属性复用字段面板的显隐设置。
+        return html + getTimelineSettingsHTML(data.view as IAVTable, true) + `<button class="b3-menu__item" data-type="go-properties">
+    <span class="fn__flex-center">${window.siyuan.languages.fields}</span>
+    <span class="fn__flex-1"></span>
+    <span class="b3-menu__accelerator">${columns.filter(column => !column.hidden).length}/${columns.length}</span>
+    <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
+</button></div>`;
     }
     return html + `<button class="b3-menu__item" data-type="set-page-size" data-size="${view.pageSize}">
         <span class="fn__flex-center">${window.siyuan.languages.entryNum}</span>
@@ -314,6 +330,10 @@ export const bindLayoutEvent = (options: {
     });
     if (options.data.viewType === "calendar") {
         bindCalendarSettings({...options, onChange: rerender});
+        return;
+    }
+    if (options.data.viewType === "timeline") {
+        bindTimelineSettings({...options, onChange: rerender});
         return;
     }
     if (isTableLikeView(options.data.viewType)) {

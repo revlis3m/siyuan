@@ -320,7 +320,7 @@ export const getViewHTML = (data: IAV) => {
     <span class="b3-menu__accelerator">${view.sorts.length}</span>
     <svg class="b3-menu__icon b3-menu__icon--small"><use xlink:href="#iconRight"></use></svg>
 </button>
-<button class="b3-menu__item${data.viewType === "calendar" ? " fn__none" : ""}" data-type="goGroups">
+<button class="b3-menu__item${data.viewType === "calendar" || data.viewType === "timeline" ? " fn__none" : ""}" data-type="goGroups">
     <svg class="b3-menu__icon"><use xlink:href="#iconGroups"></use></svg>
     <span class="b3-menu__label">${window.siyuan.languages.group}</span>
     <span class="b3-menu__accelerator">${escapeHtml((data.view.group && data.view.group.field) ? fields.find((item: IAVColumn) => item.id === data.view.group.field)?.name || "" : "")}</span>
@@ -570,6 +570,15 @@ export const addView = (protyle: IProtyle, blockElement: Element) => {
             transaction(protyle, [{...context, action: "addAttrViewView"}], [{...context, action: "removeAttrViewView"}]);
         }
     });
+    addMenu.addItem({
+        icon: "iconAlignSettings",
+        label: window.siyuan.languages.timelineView,
+        click() {
+            addVisibleView();
+            const context = {avID, id, blockID: blockElement.getAttribute("data-node-id"), layout: "timeline"};
+            transaction(protyle, [{...context, action: "addAttrViewView"}], [{...context, action: "removeAttrViewView"}]);
+        }
+    });
     viewElement.classList.add("av__views--show");
     const addRect = viewElement.querySelector('.block__icon[data-type="av-add"]')?.getBoundingClientRect();
     addMenu.open({
@@ -583,6 +592,8 @@ export const getViewIcon = (type: string) => {
     switch (type) {
         case "calendar":
             return "iconCalendar";
+        case "timeline":
+            return "iconAlignSettings";
         case "table":
             return "iconTable";
         case "list":
@@ -598,6 +609,8 @@ export const getViewName = (type: string) => {
     switch (type) {
         case "calendar":
             return window.siyuan.languages.calendarView;
+        case "timeline":
+            return window.siyuan.languages.timelineView;
         case "table":
             return window.siyuan.languages.table;
         case "list":
@@ -610,7 +623,7 @@ export const getViewName = (type: string) => {
 };
 
 export const getFieldsByData = (data: IAV) => {
-    return isTableLikeView(data.viewType) || data.viewType === "calendar" ? (data.view as IAVTable).columns : (data.view as IAVGallery).fields;
+    return isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ? (data.view as IAVTable).columns : (data.view as IAVGallery).fields;
 };
 
 export const dragoverTab = (event: DragEvent) => {

@@ -1,4 +1,17 @@
 {
+	"timelineView": "Часова шкала",
+	"databaseTimelineView": "Подання бази даних «Часова шкала»",
+	"timelineStartField": "Поле дати початку",
+	"timelineEndField": "Поле дати завершення",
+	"timelineEndFromStart": "Дата завершення з поля початку",
+	"timelineZoomDay": "День",
+	"timelineZoomWeek": "Тиждень",
+	"timelineZoomMonth": "Місяць",
+	"timelineZoomQuarter": "Квартал",
+	"timelineUnscheduled": "Без розкладу",
+	"timelineUnscheduledHint": "Перетягніть елемент на часову шкалу, щоб запланувати його",
+	"timelineSelectStartField": "Виберіть поле дати початку для відображення часової шкали",
+	"timelineCreateHint": "Клацніть або перетягніть, щоб додати запис",
 	"status": "Статус",
 	"statusGroup": "Група статусу",
 	"statusGroupTodo": "До виконання",
@@ -3026,6 +3039,7 @@
 		"quit": "Вийти із застосунку"
 	},
 	"_attrView": {
+		"timeline": "Часова шкала",
 		"statusNotStarted": "Не розпочато",
 		"statusInProgress": "У роботі",
 		"statusDone": "Готово",

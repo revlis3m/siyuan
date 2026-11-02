@@ -583,6 +583,7 @@ const slashMenuBuiltinChildren = [
     node("databaseGalleryView", lang("databaseGalleryView")),
     node("databaseKanbanView", lang("databaseKanbanView")),
     node("databaseCalendarView", lang("databaseCalendarView")),
+    node("databaseTimelineView", lang("databaseTimelineView")),
     separator("separator_2"),
     node("emoji", lang("emoji")),
     node("link", lang("link")),

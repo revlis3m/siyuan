@@ -1,4 +1,17 @@
 {
+	"timelineView": "Zeitleiste",
+	"databaseTimelineView": "Datenbank-Zeitleistenansicht",
+	"timelineStartField": "Startdatumsfeld",
+	"timelineEndField": "Enddatumsfeld",
+	"timelineEndFromStart": "Enddatum des Startfelds",
+	"timelineZoomDay": "Tag",
+	"timelineZoomWeek": "Woche",
+	"timelineZoomMonth": "Monat",
+	"timelineZoomQuarter": "Quartal",
+	"timelineUnscheduled": "Nicht geplant",
+	"timelineUnscheduledHint": "Einen Eintrag auf die Zeitleiste ziehen, um ihn zu planen",
+	"timelineSelectStartField": "Startdatumsfeld für die Zeitleiste auswählen",
+	"timelineCreateHint": "Klicken oder ziehen, um einen Eintrag hinzuzufügen",
 	"status": "Status",
 	"statusGroup": "Statusgruppe",
 	"statusGroupTodo": "Zu erledigen",
@@ -3026,6 +3039,7 @@
 		"quit": "Anwendung beenden"
 	},
 	"_attrView": {
+		"timeline": "Zeitleiste",
 		"statusNotStarted": "Nicht begonnen",
 		"statusInProgress": "In Bearbeitung",
 		"statusDone": "Erledigt",

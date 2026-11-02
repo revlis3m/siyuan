@@ -1,4 +1,17 @@
 {
+	"timelineView": "ציר זמן",
+	"databaseTimelineView": "תצוגת ציר זמן של מסד הנתונים",
+	"timelineStartField": "שדה תאריך התחלה",
+	"timelineEndField": "שדה תאריך סיום",
+	"timelineEndFromStart": "תאריך הסיום של שדה ההתחלה",
+	"timelineZoomDay": "יום",
+	"timelineZoomWeek": "שבוע",
+	"timelineZoomMonth": "חודש",
+	"timelineZoomQuarter": "רבעון",
+	"timelineUnscheduled": "לא מתוזמן",
+	"timelineUnscheduledHint": "גררו פריט אל ציר הזמן כדי לתזמן אותו",
+	"timelineSelectStartField": "בחרו שדה תאריך התחלה להצגת ציר הזמן",
+	"timelineCreateHint": "לחצו או גררו כדי להוסיף כניסה",
 	"status": "סטטוס",
 	"statusGroup": "קבוצת סטטוס",
 	"statusGroupTodo": "לביצוע",
@@ -3026,6 +3039,7 @@
 		"quit": "צא מהאפליקציה"
 	},
 	"_attrView": {
+		"timeline": "ציר זמן",
 		"statusNotStarted": "לא התחיל",
 		"statusInProgress": "בתהליך",
 		"statusDone": "בוצע",

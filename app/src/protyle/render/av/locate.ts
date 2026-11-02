@@ -44,7 +44,8 @@ const highlightLocatedItem = (blockElement: HTMLElement, protyle: IProtyle, view
     const token = Symbol();
     highlightTokens.set(blockElement, token);
     const className = "protyle-wysiwyg--hl";
-    const targetQuery = viewType === "calendar" ? `.av__calendar-item[data-id="${itemID}"]` : isTableLikeView(viewType) ? `.av__row[data-id="${itemID}"]` : `.av__gallery-item[data-id="${itemID}"]`;
+    const targetQuery = viewType === "calendar" ? `.av__calendar-item[data-id="${itemID}"]` : viewType === "timeline" ? `.av__timeline-row[data-id="${itemID}"]` :
+        isTableLikeView(viewType) ? `.av__row[data-id="${itemID}"]` : `.av__gallery-item[data-id="${itemID}"]`;
     requestAnimationFrame(() => {
         if (!blockElement.isConnected || highlightTokens.get(blockElement) !== token) {
             return;
@@ -89,7 +90,7 @@ const getLocalAVLocateData = (data: IAV | undefined, request: IAVLocateRequest) 
         return;
     }
     const findTarget = (view: IAVTable | IAVGallery | IAVKanban, groupID = "") => {
-        const items = isTableLikeView(data.viewType) || data.viewType === "calendar" ? (view as IAVTable).rows : (view as IAVGallery | IAVKanban).cards;
+        const items = isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ? (view as IAVTable).rows : (view as IAVGallery | IAVKanban).cards;
         const localIndex = items?.findIndex(item => item.id === request.itemID) ?? -1;
         if (localIndex < 0) {
             return;
@@ -320,7 +321,7 @@ export const prepareAVLocate = (blockElement: HTMLElement, data: IAV, resetData:
     if (request.viewID && request.previousViewID !== undefined && request.viewID !== request.previousViewID) {
         clearSelect(["row", "galleryItem"], blockElement);
     }
-    if (data.viewType === "calendar") {
+    if (data.viewType === "calendar" || data.viewType === "timeline") {
         return;
     }
     const key = data.target.groupID || "all";
@@ -389,6 +390,8 @@ export const finishAVLocate = (blockElement: HTMLElement, protyle: IProtyle, dat
     let targetElement: HTMLElement;
     if (data.viewType === "calendar") {
         targetElement = bodyElement?.querySelector(`.av__calendar-item[data-id="${request.itemID}"]`);
+    } else if (data.viewType === "timeline") {
+        targetElement = bodyElement?.querySelector(`.av__timeline-row[data-id="${request.itemID}"]`);
     } else if (isTableLikeView(data.viewType)) {
         const rowElement = bodyElement?.querySelector(`.av__row[data-id="${request.itemID}"]`) as HTMLElement;
         targetElement = rowElement?.querySelector(".av__cell[data-dtype=\"block\"]") as HTMLElement;
@@ -413,7 +416,7 @@ export const finishAVLocate = (blockElement: HTMLElement, protyle: IProtyle, dat
         return;
     }
     if (request.keyID) {
-        const item = bodyElement?.querySelector<HTMLElement>(`.av__row[data-id="${request.itemID}"], .av__gallery-item[data-id="${request.itemID}"], .av__calendar-item[data-id="${request.itemID}"]`);
+        const item = bodyElement?.querySelector<HTMLElement>(`.av__row[data-id="${request.itemID}"], .av__gallery-item[data-id="${request.itemID}"], .av__calendar-item[data-id="${request.itemID}"], .av__timeline-row[data-id="${request.itemID}"]`);
         const cell = item?.querySelector<HTMLElement>(`[data-col-id="${request.keyID}"], [data-field-id="${request.keyID}"]`);
         if (cell) {
             targetElement = cell;
@@ -440,6 +443,14 @@ export const finishAVLocate = (blockElement: HTMLElement, protyle: IProtyle, dat
         const targetRect = targetElement.getBoundingClientRect();
         if (kanbanElement && (targetRect.left < kanbanRect.left || targetRect.right > kanbanRect.right)) {
             kanbanElement.scrollLeft += targetRect.left + targetRect.width / 2 - (kanbanRect.left + kanbanRect.width / 2);
+        }
+    }
+    if (data.viewType === "timeline") {
+        const scroller = blockElement.querySelector<HTMLElement>(".av__timeline-scroll");
+        const bar = targetElement.closest(".av__timeline-row")?.querySelector<HTMLElement>(".av__timeline-bar");
+        if (scroller && bar) {
+            const side = targetElement.closest(".av__timeline-row")?.querySelector<HTMLElement>(".av__timeline-side")?.offsetWidth || 0;
+            scroller.scrollLeft = Math.max(0, bar.offsetLeft - Math.max(0, scroller.clientWidth - side) / 3);
         }
     }
     if (data.viewType === "calendar") {

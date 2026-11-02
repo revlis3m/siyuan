@@ -1,4 +1,17 @@
 {
+	"timelineView": "Oś czasu",
+	"databaseTimelineView": "Widok osi czasu bazy danych",
+	"timelineStartField": "Pole daty rozpoczęcia",
+	"timelineEndField": "Pole daty zakończenia",
+	"timelineEndFromStart": "Data zakończenia z pola rozpoczęcia",
+	"timelineZoomDay": "Dzień",
+	"timelineZoomWeek": "Tydzień",
+	"timelineZoomMonth": "Miesiąc",
+	"timelineZoomQuarter": "Kwartał",
+	"timelineUnscheduled": "Niezaplanowane",
+	"timelineUnscheduledHint": "Przeciągnij element na oś czasu, aby go zaplanować",
+	"timelineSelectStartField": "Wybierz pole daty rozpoczęcia, aby wyświetlić oś czasu",
+	"timelineCreateHint": "Kliknij lub przeciągnij, aby dodać wpis",
 	"status": "Status",
 	"statusGroup": "Grupa statusu",
 	"statusGroupTodo": "Do zrobienia",
@@ -3026,6 +3039,7 @@
 		"quit": "Zamknij aplikację"
 	},
 	"_attrView": {
+		"timeline": "Oś czasu",
 		"statusNotStarted": "Nie rozpoczęto",
 		"statusInProgress": "W toku",
 		"statusDone": "Gotowe",

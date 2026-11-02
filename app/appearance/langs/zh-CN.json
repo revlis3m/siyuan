@@ -1,4 +1,17 @@
 {
+	"timelineView": "时间线",
+	"databaseTimelineView": "数据库 时间线视图",
+	"timelineStartField": "开始日期字段",
+	"timelineEndField": "结束日期字段",
+	"timelineEndFromStart": "使用开始字段的结束日期",
+	"timelineZoomDay": "日",
+	"timelineZoomWeek": "周",
+	"timelineZoomMonth": "月",
+	"timelineZoomQuarter": "季度",
+	"timelineUnscheduled": "未排期",
+	"timelineUnscheduledHint": "将条目拖到时间线上以安排日期",
+	"timelineSelectStartField": "选择开始日期字段以显示时间线",
+	"timelineCreateHint": "单击或拖动以添加条目",
 	"status": "状态",
 	"statusGroup": "状态分组",
 	"statusGroupTodo": "待办",
@@ -3026,6 +3039,7 @@
 		"quit": "退出程序"
 	},
 	"_attrView": {
+		"timeline": "时间线",
 		"statusNotStarted": "未开始",
 		"statusInProgress": "进行中",
 		"statusDone": "已完成",

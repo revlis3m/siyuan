@@ -945,13 +945,13 @@ export const deleteRow = (blockElement: HTMLElement, protyle: IProtyle,
         data: newUpdated,
     }], undoOperations);
     const selectedIDs = new Set(selectedItems.map(item => item.itemID));
-    blockElement.querySelectorAll<HTMLElement>(".av__row[data-id], .av__gallery-item[data-id], .av__calendar-item[data-id]").forEach(item => {
+    blockElement.querySelectorAll<HTMLElement>(".av__row[data-id], .av__gallery-item[data-id], .av__calendar-item[data-id], .av__timeline-row[data-id]").forEach(item => {
         if (selectedIDs.has(item.dataset.id)) {
             item.remove();
         }
     });
     clearSelect(["row", "galleryItem"], blockElement);
-    if (blockElement.dataset.avType !== "calendar") {
+    if (blockElement.dataset.avType !== "calendar" && blockElement.dataset.avType !== "timeline") {
         stickyRow(blockElement, protyle.contentElement, "all");
         updateHeader(blockElement.querySelector(".av__row"));
     }

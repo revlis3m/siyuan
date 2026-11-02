@@ -1,4 +1,17 @@
 {
+	"timelineView": "Linimasa",
+	"databaseTimelineView": "Tampilan linimasa basis data",
+	"timelineStartField": "Kolom tanggal mulai",
+	"timelineEndField": "Kolom tanggal selesai",
+	"timelineEndFromStart": "Tanggal selesai dari kolom mulai",
+	"timelineZoomDay": "Hari",
+	"timelineZoomWeek": "Minggu",
+	"timelineZoomMonth": "Bulan",
+	"timelineZoomQuarter": "Kuartal",
+	"timelineUnscheduled": "Belum dijadwalkan",
+	"timelineUnscheduledHint": "Seret item ke linimasa untuk menjadwalkannya",
+	"timelineSelectStartField": "Pilih kolom tanggal mulai untuk menampilkan linimasa",
+	"timelineCreateHint": "Klik atau seret untuk menambah entri",
 	"status": "Status",
 	"statusGroup": "Grup status",
 	"statusGroupTodo": "Akan dikerjakan",
@@ -3026,6 +3039,7 @@
 		"quit": "Keluar aplikasi"
 	},
 	"_attrView": {
+		"timeline": "Linimasa",
 		"statusNotStarted": "Belum dimulai",
 		"statusInProgress": "Sedang berjalan",
 		"statusDone": "Selesai",

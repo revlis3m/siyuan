@@ -1,4 +1,17 @@
 {
+	"timelineView": "Časová os",
+	"databaseTimelineView": "Zobrazenie časovej osi databázy",
+	"timelineStartField": "Pole dátumu začiatku",
+	"timelineEndField": "Pole dátumu konca",
+	"timelineEndFromStart": "Dátum konca z poľa začiatku",
+	"timelineZoomDay": "Deň",
+	"timelineZoomWeek": "Týždeň",
+	"timelineZoomMonth": "Mesiac",
+	"timelineZoomQuarter": "Štvrťrok",
+	"timelineUnscheduled": "Nenaplánované",
+	"timelineUnscheduledHint": "Presuňte položku na časovú os a naplánujte ju",
+	"timelineSelectStartField": "Vyberte pole dátumu začiatku na zobrazenie časovej osi",
+	"timelineCreateHint": "Kliknite alebo potiahnite a pridajte záznam",
 	"status": "Stav",
 	"statusGroup": "Skupina stavu",
 	"statusGroupTodo": "Na vykonanie",
@@ -3026,6 +3039,7 @@
 		"quit": "Ukončiť aplikáciu"
 	},
 	"_attrView": {
+		"timeline": "Časová os",
 		"statusNotStarted": "Nezačaté",
 		"statusInProgress": "Prebieha",
 		"statusDone": "Hotovo",

@@ -10,6 +10,9 @@ func (attrView *AttributeView) ValidateLayouts() error {
 	if err := attrView.ValidateCalendarLayouts(); err != nil {
 		return err
 	}
+	if err := attrView.ValidateTimelineLayouts(); err != nil {
+		return err
+	}
 	return attrView.ValidateListLayouts()
 }
 
@@ -69,10 +72,10 @@ type BaseInstance struct {
 }
 
 // GetBaseLayout 返回当前布局的基础设置，布局缺失时返回 nil。
-// 表格、列表和日历共用表格布局的基础设置。
+// 表格、列表、日历和时间线共用表格布局的基础设置。
 func (view *View) GetBaseLayout() *BaseLayout {
 	switch view.LayoutType {
-	case LayoutTypeTable, LayoutTypeList, LayoutTypeCalendar:
+	case LayoutTypeTable, LayoutTypeList, LayoutTypeCalendar, LayoutTypeTimeline:
 		if table := view.GetTableLayout(); nil != table {
 			return table.BaseLayout
 		}
@@ -86,6 +89,11 @@ func (view *View) GetBaseLayout() *BaseLayout {
 		}
 	}
 	return nil
+}
+
+// KeepsPrimaryKeyVisible 判断布局是否始终显示主键字段，列表、日历和时间线以主键标识条目。
+func KeepsPrimaryKeyVisible(layout LayoutType) bool {
+	return LayoutTypeList == layout || LayoutTypeCalendar == layout || LayoutTypeTimeline == layout
 }
 
 // GetCardSettings 返回卡片类布局共有的卡片设置，其他布局返回 nil。

@@ -249,6 +249,9 @@ func (view *View) TableLayouts() []*LayoutTable {
 	if nil != view.Calendar {
 		ret = append(ret, view.Calendar.LayoutTable)
 	}
+	if nil != view.Timeline {
+		ret = append(ret, view.Timeline.LayoutTable)
+	}
 	return ret
 }
 

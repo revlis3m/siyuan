@@ -1,4 +1,17 @@
 {
+	"timelineView": "Sequenza temporale",
+	"databaseTimelineView": "Vista sequenza temporale del database",
+	"timelineStartField": "Campo data di inizio",
+	"timelineEndField": "Campo data di fine",
+	"timelineEndFromStart": "Data di fine del campo di inizio",
+	"timelineZoomDay": "Giorno",
+	"timelineZoomWeek": "Settimana",
+	"timelineZoomMonth": "Mese",
+	"timelineZoomQuarter": "Trimestre",
+	"timelineUnscheduled": "Non pianificato",
+	"timelineUnscheduledHint": "Trascina una voce sulla sequenza temporale per pianificarla",
+	"timelineSelectStartField": "Scegli un campo data di inizio per visualizzare la sequenza temporale",
+	"timelineCreateHint": "Fai clic o trascina per aggiungere una voce",
 	"status": "Stato",
 	"statusGroup": "Gruppo di stato",
 	"statusGroupTodo": "Da fare",
@@ -3026,6 +3039,7 @@
 		"quit": "Esci dall'applicazione"
 	},
 	"_attrView": {
+		"timeline": "Sequenza temporale",
 		"statusNotStarted": "Non iniziato",
 		"statusInProgress": "In corso",
 		"statusDone": "Fatto",

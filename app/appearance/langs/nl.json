@@ -1,4 +1,17 @@
 {
+	"timelineView": "Tijdlijn",
+	"databaseTimelineView": "Tijdlijnweergave van database",
+	"timelineStartField": "Startdatumveld",
+	"timelineEndField": "Einddatumveld",
+	"timelineEndFromStart": "Einddatum van het startveld",
+	"timelineZoomDay": "Dag",
+	"timelineZoomWeek": "Week",
+	"timelineZoomMonth": "Maand",
+	"timelineZoomQuarter": "Kwartaal",
+	"timelineUnscheduled": "Niet gepland",
+	"timelineUnscheduledHint": "Sleep een item naar de tijdlijn om het te plannen",
+	"timelineSelectStartField": "Kies een startdatumveld om de tijdlijn weer te geven",
+	"timelineCreateHint": "Klik of sleep om een invoer toe te voegen",
 	"status": "Status",
 	"statusGroup": "Statusgroep",
 	"statusGroupTodo": "Te doen",
@@ -3026,6 +3039,7 @@
 		"quit": "Applicatie afsluiten"
 	},
 	"_attrView": {
+		"timeline": "Tijdlijn",
 		"statusNotStarted": "Niet gestart",
 		"statusInProgress": "Bezig",
 		"statusDone": "Klaar",

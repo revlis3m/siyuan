@@ -9,6 +9,8 @@ const getViewIcon = (type: TAVView) => {
     switch (type) {
         case "calendar":
             return "iconCalendar";
+        case "timeline":
+            return "iconAlignSettings";
         case "list":
             return "iconList";
         case "gallery":

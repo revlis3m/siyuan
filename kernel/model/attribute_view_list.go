@@ -34,6 +34,13 @@ func cloneAttributeViewLayouts(target, source *av.View) (err error) {
 		}
 		target.Calendar.ID = ast.NewNodeID()
 	}
+	if nil != source.Timeline {
+		target.Timeline = &av.LayoutTimeline{}
+		if err = copier.CopyWithOption(target.Timeline, source.Timeline, copier.Option{DeepCopy: true}); nil != err {
+			return
+		}
+		target.Timeline.ID = ast.NewNodeID()
+	}
 	if nil != source.Gallery {
 		target.Gallery = &av.LayoutGallery{}
 		if err = copier.CopyWithOption(target.Gallery, source.Gallery, copier.Option{DeepCopy: true}); nil != err {
@@ -54,7 +61,7 @@ func cloneAttributeViewLayouts(target, source *av.View) (err error) {
 // attributeViewFieldIDs 按当前布局的字段顺序返回字段 ID，布局数据缺失时返回空列表。
 func attributeViewFieldIDs(view *av.View) (ret []string) {
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
 		if layout := view.GetTableLayout(); nil != layout {
 			for _, column := range layout.Columns {
 				ret = append(ret, column.ID)

@@ -1,4 +1,17 @@
 {
+	"timelineView": "الخط الزمني",
+	"databaseTimelineView": "عرض الخط الزمني لقاعدة البيانات",
+	"timelineStartField": "حقل تاريخ البداية",
+	"timelineEndField": "حقل تاريخ النهاية",
+	"timelineEndFromStart": "تاريخ النهاية في حقل البداية",
+	"timelineZoomDay": "يوم",
+	"timelineZoomWeek": "أسبوع",
+	"timelineZoomMonth": "شهر",
+	"timelineZoomQuarter": "ربع سنة",
+	"timelineUnscheduled": "غير مجدول",
+	"timelineUnscheduledHint": "اسحب مدخلًا إلى الخط الزمني لجدولته",
+	"timelineSelectStartField": "اختر حقل تاريخ البداية لعرض الخط الزمني",
+	"timelineCreateHint": "انقر أو اسحب لإضافة مدخل",
 	"status": "الحالة",
 	"statusGroup": "مجموعة الحالة",
 	"statusGroupTodo": "للتنفيذ",
@@ -3026,6 +3039,7 @@
 		"quit": "خروج من التطبيق"
 	},
 	"_attrView": {
+		"timeline": "الخط الزمني",
 		"statusNotStarted": "لم يبدأ",
 		"statusInProgress": "قيد التنفيذ",
 		"statusDone": "تم",

@@ -1,4 +1,17 @@
 {
+	"timelineView": "Linha do tempo",
+	"databaseTimelineView": "Visualização de linha do tempo do banco de dados",
+	"timelineStartField": "Campo de data de início",
+	"timelineEndField": "Campo de data de término",
+	"timelineEndFromStart": "Data de término do campo de início",
+	"timelineZoomDay": "Dia",
+	"timelineZoomWeek": "Semana",
+	"timelineZoomMonth": "Mês",
+	"timelineZoomQuarter": "Trimestre",
+	"timelineUnscheduled": "Não agendado",
+	"timelineUnscheduledHint": "Arraste um item para a linha do tempo para agendá-lo",
+	"timelineSelectStartField": "Escolha um campo de data de início para exibir a linha do tempo",
+	"timelineCreateHint": "Clique ou arraste para adicionar uma entrada",
 	"status": "Status",
 	"statusGroup": "Grupo de status",
 	"statusGroupTodo": "A fazer",
@@ -3026,6 +3039,7 @@
 		"quit": "Sair do aplicativo"
 	},
 	"_attrView": {
+		"timeline": "Linha do tempo",
 		"statusNotStarted": "Não iniciado",
 		"statusInProgress": "Em andamento",
 		"statusDone": "Concluído",

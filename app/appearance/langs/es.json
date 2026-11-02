@@ -1,4 +1,17 @@
 {
+	"timelineView": "Cronograma",
+	"databaseTimelineView": "Vista de cronograma de la base de datos",
+	"timelineStartField": "Campo de fecha de inicio",
+	"timelineEndField": "Campo de fecha de fin",
+	"timelineEndFromStart": "Fecha de fin del campo de inicio",
+	"timelineZoomDay": "Día",
+	"timelineZoomWeek": "Semana",
+	"timelineZoomMonth": "Mes",
+	"timelineZoomQuarter": "Trimestre",
+	"timelineUnscheduled": "Sin programar",
+	"timelineUnscheduledHint": "Arrastra un elemento al cronograma para programarlo",
+	"timelineSelectStartField": "Elige un campo de fecha de inicio para mostrar el cronograma",
+	"timelineCreateHint": "Haz clic o arrastra para agregar una entrada",
 	"status": "Estado",
 	"statusGroup": "Grupo de estado",
 	"statusGroupTodo": "Por hacer",
@@ -3026,6 +3039,7 @@
 		"quit": "Salir de la aplicación"
 	},
 	"_attrView": {
+		"timeline": "Cronograma",
 		"statusNotStarted": "Sin empezar",
 		"statusInProgress": "En curso",
 		"statusDone": "Hecho",

@@ -1,4 +1,17 @@
 {
+	"timelineView": "타임라인",
+	"databaseTimelineView": "데이터베이스 타임라인 보기",
+	"timelineStartField": "시작 날짜 필드",
+	"timelineEndField": "종료 날짜 필드",
+	"timelineEndFromStart": "시작 필드의 종료 날짜",
+	"timelineZoomDay": "일",
+	"timelineZoomWeek": "주",
+	"timelineZoomMonth": "월",
+	"timelineZoomQuarter": "분기",
+	"timelineUnscheduled": "일정 없음",
+	"timelineUnscheduledHint": "항목을 타임라인으로 끌어 일정을 지정하세요",
+	"timelineSelectStartField": "타임라인을 표시할 시작 날짜 필드를 선택하세요",
+	"timelineCreateHint": "클릭하거나 끌어서 항목 추가",
 	"status": "상태",
 	"statusGroup": "상태 그룹",
 	"statusGroupTodo": "할 일",
@@ -3026,6 +3039,7 @@
 		"quit": "애플리케이션 종료"
 	},
 	"_attrView": {
+		"timeline": "타임라인",
 		"statusNotStarted": "시작 전",
 		"statusInProgress": "진행 중",
 		"statusDone": "완료",

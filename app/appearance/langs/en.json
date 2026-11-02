@@ -1,4 +1,17 @@
 {
+	"timelineView": "Timeline",
+	"databaseTimelineView": "Database timeline view",
+	"timelineStartField": "Start date field",
+	"timelineEndField": "End date field",
+	"timelineEndFromStart": "End date of the start field",
+	"timelineZoomDay": "Day",
+	"timelineZoomWeek": "Week",
+	"timelineZoomMonth": "Month",
+	"timelineZoomQuarter": "Quarter",
+	"timelineUnscheduled": "Unscheduled",
+	"timelineUnscheduledHint": "Drag an item onto the timeline to schedule it",
+	"timelineSelectStartField": "Choose a start date field to display the timeline",
+	"timelineCreateHint": "Click or drag to add an entry",
 	"status": "Status",
 	"statusGroup": "Status group",
 	"statusGroupTodo": "To-do",
@@ -3026,6 +3039,7 @@
 		"quit": "Quit application"
 	},
 	"_attrView": {
+		"timeline": "Timeline",
 		"statusNotStarted": "Not started",
 		"statusInProgress": "In progress",
 		"statusDone": "Done",

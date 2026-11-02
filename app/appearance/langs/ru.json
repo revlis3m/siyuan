@@ -1,4 +1,17 @@
 {
+	"timelineView": "Временная шкала",
+	"databaseTimelineView": "Представление базы данных «Временная шкала»",
+	"timelineStartField": "Поле даты начала",
+	"timelineEndField": "Поле даты окончания",
+	"timelineEndFromStart": "Дата окончания из поля начала",
+	"timelineZoomDay": "День",
+	"timelineZoomWeek": "Неделя",
+	"timelineZoomMonth": "Месяц",
+	"timelineZoomQuarter": "Квартал",
+	"timelineUnscheduled": "Без расписания",
+	"timelineUnscheduledHint": "Перетащите элемент на временную шкалу, чтобы запланировать его",
+	"timelineSelectStartField": "Выберите поле даты начала для отображения временной шкалы",
+	"timelineCreateHint": "Щёлкните или перетащите, чтобы добавить запись",
 	"status": "Статус",
 	"statusGroup": "Группа статуса",
 	"statusGroupTodo": "К выполнению",
@@ -3026,6 +3039,7 @@
 		"quit": "Выйти из приложения"
 	},
 	"_attrView": {
+		"timeline": "Временная шкала",
 		"statusNotStarted": "Не начато",
 		"statusInProgress": "В работе",
 		"statusDone": "Готово",

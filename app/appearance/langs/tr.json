@@ -1,4 +1,17 @@
 {
+	"timelineView": "Zaman çizelgesi",
+	"databaseTimelineView": "Veritabanı zaman çizelgesi görünümü",
+	"timelineStartField": "Başlangıç tarihi alanı",
+	"timelineEndField": "Bitiş tarihi alanı",
+	"timelineEndFromStart": "Başlangıç alanının bitiş tarihi",
+	"timelineZoomDay": "Gün",
+	"timelineZoomWeek": "Hafta",
+	"timelineZoomMonth": "Ay",
+	"timelineZoomQuarter": "Çeyrek",
+	"timelineUnscheduled": "Planlanmamış",
+	"timelineUnscheduledHint": "Planlamak için bir öğeyi zaman çizelgesine sürükleyin",
+	"timelineSelectStartField": "Zaman çizelgesini görüntülemek için bir başlangıç tarihi alanı seçin",
+	"timelineCreateHint": "Kayıt eklemek için tıklayın veya sürükleyin",
 	"status": "Durum",
 	"statusGroup": "Durum grubu",
 	"statusGroupTodo": "Yapılacak",
@@ -3026,6 +3039,7 @@
 		"quit": "Uygulamadan çık"
 	},
 	"_attrView": {
+		"timeline": "Zaman çizelgesi",
 		"statusNotStarted": "Başlanmadı",
 		"statusInProgress": "Devam ediyor",
 		"statusDone": "Bitti",

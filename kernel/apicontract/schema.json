@@ -5990,7 +5990,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         },
         "views": {
@@ -6535,7 +6536,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         }
       },
@@ -7426,7 +7428,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         },
         "viewName": {
@@ -10478,6 +10481,104 @@
         }
       ]
     },
+    "AVLayoutTimeline": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/AVViewTableColumn"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "type": "string"
+            },
+            "rowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "settings": {
+              "$ref": "#/$defs/AVTimelineSettings"
+            },
+            "showIcon": {
+              "type": "boolean"
+            },
+            "spec": {
+              "type": "integer"
+            },
+            "wrapField": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "columns",
+            "settings",
+            "spec",
+            "id",
+            "showIcon",
+            "wrapField"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/AVViewTableColumn"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "settings": {
+              "$ref": "#/$defs/AVTimelineSettings"
+            }
+          },
+          "required": [
+            "columns",
+            "settings"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
     "AVNewItemFieldValue": {
       "type": "object",
       "properties": {
@@ -11291,7 +11392,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         },
         "views": {
@@ -12138,6 +12240,35 @@
                 }
               ]
             },
+            "timeline": {
+              "$ref": "#/$defs/AVTimelineSettings"
+            },
+            "timelineItems": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVTimelineItem"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "timelineUnscheduled": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVTableRow"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
             "wrapField": {
               "type": "boolean"
             }
@@ -12217,6 +12348,35 @@
                   "type": "null"
                 }
               ]
+            },
+            "timeline": {
+              "$ref": "#/$defs/AVTimelineSettings"
+            },
+            "timelineItems": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVTimelineItem"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "timelineUnscheduled": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/AVTableRow"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
             }
           },
           "required": [
@@ -12503,6 +12663,107 @@
       "required": [
         "cells",
         "id"
+      ],
+      "additionalProperties": false
+    },
+    "AVTimelineItem": {
+      "type": "object",
+      "properties": {
+        "blockID": {
+          "type": "string"
+        },
+        "color": {
+          "$ref": "#/$defs/AVValueSelect"
+        },
+        "end": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "invalid": {
+          "type": "boolean"
+        },
+        "isNotTime": {
+          "type": "boolean"
+        },
+        "start": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "blockID",
+        "end",
+        "id",
+        "invalid",
+        "isNotTime",
+        "start",
+        "title"
+      ],
+      "additionalProperties": false
+    },
+    "AVTimelineSettings": {
+      "type": "object",
+      "properties": {
+        "colorBy": {
+          "type": "string"
+        },
+        "endKeyID": {
+          "type": "string"
+        },
+        "startKeyID": {
+          "type": "string"
+        },
+        "zoom": {
+          "type": "string",
+          "enum": [
+            "",
+            "day",
+            "week",
+            "month",
+            "quarter"
+          ]
+        }
+      },
+      "required": [
+        "colorBy",
+        "endKeyID",
+        "startKeyID",
+        "zoom"
+      ],
+      "additionalProperties": false
+    },
+    "AVTimelineSettingsInput": {
+      "type": "object",
+      "properties": {
+        "colorBy": {
+          "type": "string"
+        },
+        "endKeyID": {
+          "type": "string"
+        },
+        "startKeyID": {
+          "type": "string"
+        },
+        "zoom": {
+          "type": "string",
+          "enum": [
+            "",
+            "day",
+            "week",
+            "month",
+            "quarter"
+          ]
+        }
+      },
+      "required": [
+        "colorBy",
+        "endKeyID",
+        "startKeyID",
+        "zoom"
       ],
       "additionalProperties": false
     },
@@ -14164,6 +14425,9 @@
         "table": {
           "$ref": "#/$defs/AVLayoutTable"
         },
+        "timeline": {
+          "$ref": "#/$defs/AVLayoutTimeline"
+        },
         "type": {
           "type": "string",
           "enum": [
@@ -14171,7 +14435,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         }
       },
@@ -14220,7 +14485,8 @@
             "list",
             "gallery",
             "kanban",
-            "calendar"
+            "calendar",
+            "timeline"
           ]
         }
       },
@@ -21900,6 +22166,16 @@
           "type": "string"
         },
         "calendarDate": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "calendarEndDate": {
           "anyOf": [
             {
               "type": "integer"
@@ -74721,6 +74997,218 @@
             "action": {
               "type": "string",
               "enum": [
+                "setAttrViewTimeline"
+              ]
+            },
+            "avID": {
+              "type": "string"
+            },
+            "backRelationKeyID": {
+              "type": "string"
+            },
+            "blockID": {
+              "type": "string"
+            },
+            "blockIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cellUpdates": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/TransactionCellUpdate"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "context": {
+              "$ref": "#/$defs/TransactionContext"
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AVTimelineSettingsInput"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "deckID": {
+              "type": "string"
+            },
+            "format": {
+              "type": "string"
+            },
+            "groupID": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "ignoreDefaultFill": {
+              "type": "boolean"
+            },
+            "isDetached": {
+              "type": "boolean"
+            },
+            "isTwoWay": {
+              "type": "boolean"
+            },
+            "keyID": {
+              "type": "string"
+            },
+            "layout": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "nextID": {
+              "type": "string"
+            },
+            "parentID": {
+              "type": "string"
+            },
+            "previousID": {
+              "type": "string"
+            },
+            "removeDest": {
+              "type": "boolean"
+            },
+            "retData": {
+              "type": "null"
+            },
+            "rootID": {
+              "type": "string"
+            },
+            "rowID": {
+              "type": "string"
+            },
+            "srcIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionSourceFieldsInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetGroupID": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "",
+                "block",
+                "text",
+                "number",
+                "date",
+                "select",
+                "mSelect",
+                "url",
+                "email",
+                "phone",
+                "location",
+                "mAsset",
+                "template",
+                "created",
+                "updated",
+                "checkbox",
+                "relation",
+                "rollup",
+                "lineNumber",
+                "status"
+              ]
+            },
+            "viewID": {
+              "type": "string"
+            },
+            "viewIDs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "action",
+            "id",
+            "rootID",
+            "parentID",
+            "previousID",
+            "nextID",
+            "blockIDs",
+            "blockID",
+            "deckID",
+            "avID",
+            "srcIDs",
+            "srcs",
+            "isDetached",
+            "name",
+            "type",
+            "format",
+            "keyID",
+            "rowID",
+            "isTwoWay",
+            "backRelationKeyID",
+            "removeDest",
+            "layout",
+            "groupID",
+            "targetGroupID",
+            "viewID",
+            "ignoreDefaultFill",
+            "context",
+            "data",
+            "retData"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
                 "setAttrViewCardLayout"
               ]
             },
@@ -109556,6 +110044,365 @@
             "action": {
               "type": "string",
               "enum": [
+                "setAttrViewTimeline"
+              ]
+            },
+            "avID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "backRelationKeyID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blockID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "blockIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "cellUpdates": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionCellUpdateInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "context": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/TransactionContext"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "data": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AVTimelineSettingsInput"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "deckID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "format": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "groupID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "ignoreDefaultFill": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "isDetached": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "isTwoWay": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "keyID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "layout": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "name": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "nextID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "parentID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "previousID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "removeDest": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "retData": {
+              "type": "null"
+            },
+            "rootID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rowID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "srcs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/TransactionSourceFieldsInput"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "targetGroupID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": {
+              "enum": [
+                "",
+                "block",
+                "text",
+                "number",
+                "date",
+                "select",
+                "mSelect",
+                "url",
+                "email",
+                "phone",
+                "location",
+                "mAsset",
+                "template",
+                "created",
+                "updated",
+                "checkbox",
+                "relation",
+                "rollup",
+                "lineNumber",
+                "status"
+              ],
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "viewID": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "viewIDs": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "action"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
                 "setAttrViewCardLayout"
               ]
             },
@@ -118009,6 +118856,7 @@
           "setAttrViewCardSize",
           "setAttrViewCardWidth",
           "setAttrViewCalendar",
+          "setAttrViewTimeline",
           "setAttrViewCardLayout",
           "setAttrViewColFullRow",
           "setAttrViewFitImage",

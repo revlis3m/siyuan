@@ -51,7 +51,7 @@ func CreateAttributeViewDatabase(parentID, previousID, nextID, name, primaryKeyN
 		layout = av.LayoutTypeTable
 	}
 	switch layout {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeGallery, av.LayoutTypeKanban:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeGallery, av.LayoutTypeKanban:
 	default:
 		return nil, av.ErrWrongLayoutType
 	}
@@ -174,6 +174,9 @@ func configureCreatedAttributeView(attrView *av.AttributeView, name, primaryKeyN
 	}
 	if av.LayoutTypeCalendar == currentView.LayoutType {
 		currentView.Calendar = newAttributeViewCalendarLayout(attrView, attributeViewFieldIDs(currentView))
+	}
+	if av.LayoutTypeTimeline == currentView.LayoutType {
+		currentView.Timeline = newAttributeViewTimelineLayout(attrView, attributeViewFieldIDs(currentView))
 	}
 	if av.LayoutTypeKanban == currentView.LayoutType && nil != kanbanGroupKey {
 		currentView.Group = &av.ViewGroup{Field: kanbanGroupKey.ID}

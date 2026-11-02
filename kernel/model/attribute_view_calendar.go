@@ -79,10 +79,21 @@ func setAttrViewCalendar(operation *Operation) error {
 }
 
 // setNewCalendarItemDate 将选中的日期合入模板字段，与创建条目共用一个事务。
-func setNewCalendarItemDate(attrView *av.AttributeView, blockID, viewID string, date int64, values map[string]*av.Value) error {
+// 时间线视图按开始日期和可选的结束日期写入，日历视图不接受结束日期。
+func setNewCalendarItemDate(attrView *av.AttributeView, blockID, viewID string, date int64, values map[string]*av.Value, endDates ...*int64) error {
 	view, err := getAttrViewOperationView(attrView, &Operation{BlockID: blockID, ViewID: viewID})
 	if nil != err {
 		return err
+	}
+	var endDate *int64
+	if len(endDates) > 0 {
+		endDate = endDates[0]
+	}
+	if view.LayoutType == av.LayoutTypeTimeline {
+		return setNewTimelineItemDates(attrView, view, date, endDate, values)
+	}
+	if nil != endDate {
+		return fmt.Errorf("calendar items do not accept an end date")
 	}
 	if view.LayoutType != av.LayoutTypeCalendar || nil == view.Calendar || date < -62135596800000-14*3600000 || date > 253402300799999+14*3600000 {
 		return fmt.Errorf("invalid calendar item date")

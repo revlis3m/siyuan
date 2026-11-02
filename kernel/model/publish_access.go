@@ -565,6 +565,10 @@ func FilterViewByPublishAccess(c *gin.Context, publishAccess PublishAccess, view
 	ret = viewable
 
 	switch ret.GetType() {
+	case av.LayoutTypeTimeline:
+		av.RetainTimelineRows(av.TableFromViewable(ret), func(row *av.TableRow) bool {
+			return checkAttributeViewItemAccessableByPublishAccess(c, publishAccess, row)
+		})
 	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
 		table := av.TableFromViewable(ret)
 		filteredRows := []*av.TableRow{}
@@ -726,19 +730,24 @@ func (filter *attributeViewPublishAccessFilter) filterViewable(attrView *av.Attr
 	}
 
 	switch viewable.GetType() {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
 		table := av.TableFromViewable(viewable)
 		filter.filterGroupValue(attrView, table.BaseInstance)
-		for _, row := range table.Rows {
-			if nil == row {
-				continue
-			}
-			for _, cell := range row.Cells {
-				if nil == cell {
+		for _, rows := range [][]*av.TableRow{table.Rows, table.TimelineUnscheduled} {
+			for _, row := range rows {
+				if nil == row {
 					continue
 				}
-				filter.filterBaseValue(attrView, row.ID, cell.BaseValue)
+				for _, cell := range row.Cells {
+					if nil == cell {
+						continue
+					}
+					filter.filterBaseValue(attrView, row.ID, cell.BaseValue)
+				}
 			}
+		}
+		if 0 < len(table.TimelineItems) {
+			av.RefreshTimelineItemTitles(table)
 		}
 		for _, group := range table.Groups {
 			filter.filterViewable(attrView, group)

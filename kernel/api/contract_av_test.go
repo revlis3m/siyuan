@@ -269,6 +269,9 @@ func TestAVContractTransportMapping(t *testing.T) {
 		&av.Kanban{BaseInstance: base},
 		&av.Table{},
 		&av.List{Table: &av.Table{BaseInstance: base, Columns: []*av.TableColumn{{BaseInstanceField: &av.BaseInstanceField{ID: "key", Type: av.KeyTypeText, Hidden: true}}}}},
+		&av.Timeline{Table: &av.Table{BaseInstance: base, Timeline: &av.TimelineSettings{StartKeyID: "key", Zoom: av.TimelineZoomMonth, ColorBy: av.TimelineColorByConditional},
+			TimelineItems:       []*av.TimelineItem{{ID: "item", Start: 1, End: 2, IsNotTime: true, Title: "Item", Color: &av.ValueSelect{Content: "Done", Color: "3"}}, {ID: "plain", Invalid: true}},
+			TimelineUnscheduled: []*av.TableRow{{ID: "unscheduled", Cells: []*av.TableCell{}}}}},
 	} {
 		assertAVContractJSONEqual(t, view, avContractView(view))
 	}

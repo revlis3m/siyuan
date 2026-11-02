@@ -255,6 +255,8 @@ func getAttributeViewBaseInstance(viewable av.Viewable) (ret *av.BaseInstance) {
 		ret = instance.BaseInstance
 	case *av.Calendar:
 		ret = instance.BaseInstance
+	case *av.Timeline:
+		ret = instance.BaseInstance
 	case *av.List:
 		ret = instance.BaseInstance
 	case *av.Gallery:
@@ -493,7 +495,7 @@ func RenderAttributeViewWithTargetOptions(blockID, avID, viewID, query string, p
 func newAttributeViewWithLayout(avID string, initialLayout av.LayoutType) (ret *av.AttributeView) {
 	ret = av.NewAttributeView(avID)
 	switch initialLayout {
-	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeGallery, av.LayoutTypeKanban:
+	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeGallery, av.LayoutTypeKanban:
 	default:
 		return
 	}
@@ -594,7 +596,7 @@ func renderAttributeView(attrView *av.AttributeView, nodeID, viewID, carrierView
 	}
 
 	// 渲染分组视图。当 ignoreRows 时若有已生成的分组则渲染元数据供面板使用，无分组则跳过（生成分组需要行数据）
-	if view.LayoutType != av.LayoutTypeCalendar && (!ignoreRows || len(view.Groups) > 0) {
+	if view.LayoutType != av.LayoutTypeCalendar && view.LayoutType != av.LayoutTypeTimeline && (!ignoreRows || len(view.Groups) > 0) {
 		err = renderAttributeViewGroups(viewable, attrView, view, query, page, pageSize, groupPaging, groupRenderSource,
 			ignoreRows, writable, target, targetGroupID, renderContext, filterContext)
 	}
@@ -748,7 +750,7 @@ func renderAttributeViewGroups(viewable av.Viewable, attrView *av.AttributeView,
 
 		// 将分组视图的分组字段清空，减少冗余（字段信息可以在总的视图 view 对象上获取到）
 		switch groupView.LayoutType {
-		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
+		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
 			groupView.GetTableLayout().Columns = nil
 		case av.LayoutTypeGallery:
 			groupView.Gallery.CardFields = nil
@@ -795,7 +797,7 @@ func hideEmptyGroupViews(view *av.View, viewable av.Viewable) {
 
 	itemCount := 0
 	switch viewable.GetType() {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
 		itemCount = av.TableFromViewable(viewable).RowCount
 	case av.LayoutTypeGallery:
 		itemCount = viewable.(*av.Gallery).CardCount
@@ -1005,6 +1007,11 @@ func shouldDeferAttributeViewTemplateValues(attrView *av.AttributeView, view *av
 		renderTemplateKeyIDs[view.Calendar.Settings.DateKeyID] {
 		return false
 	}
+	// 时间线按日期模板结果解析区间，同样需要在渲染条目之前完成计算。
+	if view.LayoutType == av.LayoutTypeTimeline && view.Timeline != nil &&
+		(renderTemplateKeyIDs[view.Timeline.Settings.StartKeyID] || renderTemplateKeyIDs[view.Timeline.Settings.EndKeyID]) {
+		return false
+	}
 
 	for _, rule := range view.EffectiveConditionalColors() {
 		if nil != rule && nil != rule.Filter && (templateKeyIDs[rule.Filter.Column] ||
@@ -1039,7 +1046,7 @@ func shouldDeferAttributeViewTemplateValues(attrView *av.AttributeView, view *av
 		return templateKeyIDs[fieldID] && nil != calc && av.CalcOperatorNone != calc.Operator
 	}
 	switch view.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline:
 		for _, column := range view.GetTableLayout().Columns {
 			if nil != column && nil != column.BaseField && checkField(column.ID, column.Calc) {
 				return false
@@ -1124,7 +1131,7 @@ func renderViewableInstanceWithOrder(viewable av.Viewable, view *av.View, attrVi
 	}
 	timing.Stage("paginate")
 
-	// 日历按可见范围读取，不使用普通条目分页。
+	// 日历按可见范围读取，时间线读取全部条目，均不使用普通条目分页。
 	switch viewable.GetType() {
 	case av.LayoutTypeCalendar:
 		calendar := viewable.(*av.Calendar)
@@ -1132,6 +1139,10 @@ func renderViewableInstanceWithOrder(viewable av.Viewable, view *av.View, attrVi
 			return
 		}
 		targetIndex = findAttributeViewTargetIndex(targetItemID, len(calendar.Rows), func(index int) string { return calendar.Rows[index].ID })
+	case av.LayoutTypeTimeline:
+		timeline := viewable.(*av.Timeline)
+		timeline.RowCount = len(timeline.Rows)
+		timeline.PageSize = view.PageSize
 	case av.LayoutTypeTable, av.LayoutTypeList:
 		table := av.TableFromViewable(viewable)
 		targetIndex = findAttributeViewTargetIndex(targetItemID, len(table.Rows), func(index int) string { return table.Rows[index].ID })
@@ -1179,6 +1190,11 @@ func renderViewableInstanceWithOrder(viewable av.Viewable, view *av.View, attrVi
 		}
 	}
 	av.RenderConditionalColors(viewable, view, attrView, rollupFurtherCollections, cachedAttrViews)
+	if timeline, ok := viewable.(*av.Timeline); ok {
+		// 条件颜色需要先计算，时间线才能按条目颜色着色。
+		av.ResolveTimelineRows(timeline)
+		targetIndex = findAttributeViewTargetIndex(targetItemID, len(timeline.Rows), func(index int) string { return timeline.Rows[index].ID })
+	}
 	return
 }
 

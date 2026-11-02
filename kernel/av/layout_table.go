@@ -64,6 +64,11 @@ type Table struct {
 	Columns            []*TableColumn    `json:"columns"`  // 表格列
 	Rows               []*TableRow       `json:"rows"`     // 表格行
 	RowCount           int               `json:"rowCount"` // 表格总行数
+
+	// 以下仅时间线返回：设置、有开始日期条目的区间（与 Rows 顺序一致）和没有开始日期的待安排条目。
+	Timeline            *TimelineSettings `json:"timeline,omitempty"`
+	TimelineItems       []*TimelineItem   `json:"timelineItems,omitempty"`
+	TimelineUnscheduled []*TableRow       `json:"timelineUnscheduled,omitempty"`
 }
 
 // TableColumn 描述了表格实例列的结构。

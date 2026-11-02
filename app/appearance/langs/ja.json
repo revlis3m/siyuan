@@ -1,4 +1,17 @@
 {
+	"timelineView": "タイムライン",
+	"databaseTimelineView": "データベースのタイムラインビュー",
+	"timelineStartField": "開始日フィールド",
+	"timelineEndField": "終了日フィールド",
+	"timelineEndFromStart": "開始フィールドの終了日",
+	"timelineZoomDay": "日",
+	"timelineZoomWeek": "週",
+	"timelineZoomMonth": "月",
+	"timelineZoomQuarter": "四半期",
+	"timelineUnscheduled": "未スケジュール",
+	"timelineUnscheduledHint": "項目をタイムラインにドラッグして日程を設定",
+	"timelineSelectStartField": "タイムラインに表示する開始日フィールドを選択",
+	"timelineCreateHint": "クリックまたはドラッグしてエントリを追加",
 	"status": "ステータス",
 	"statusGroup": "ステータスグループ",
 	"statusGroupTodo": "ToDo",
@@ -3026,6 +3039,7 @@
 		"quit": "アプリケーションを終了"
 	},
 	"_attrView": {
+		"timeline": "タイムライン",
 		"statusNotStarted": "未着手",
 		"statusInProgress": "進行中",
 		"statusDone": "完了",

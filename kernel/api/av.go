@@ -372,7 +372,7 @@ var getAttributeViewFieldViews = contractHandler(apicontract.GetAttributeViewFie
 })
 
 var createAttributeViewItem = contractHandler(apicontract.CreateAttributeViewItem, func(c *gin.Context, request apicontract.CreateAttributeViewItemRequest) apicontract.Response[apicontract.AVCreateItemResult] {
-	value, err := model.CreateAttributeViewItem(request.AvID, request.BlockID, request.ViewID, request.TemplateID, request.PreviousID, request.GroupID, request.CalendarDate)
+	value, err := model.CreateAttributeViewItem(request.AvID, request.BlockID, request.ViewID, request.TemplateID, request.PreviousID, request.GroupID, request.CalendarDate, request.CalendarEndDate)
 	return createAVItemResponse(value, err, request.App, request.Session)
 })
 

@@ -1,4 +1,17 @@
 {
+	"timelineView": "Chronologie",
+	"databaseTimelineView": "Vue chronologie de la base de données",
+	"timelineStartField": "Champ de date de début",
+	"timelineEndField": "Champ de date de fin",
+	"timelineEndFromStart": "Date de fin du champ de début",
+	"timelineZoomDay": "Jour",
+	"timelineZoomWeek": "Semaine",
+	"timelineZoomMonth": "Mois",
+	"timelineZoomQuarter": "Trimestre",
+	"timelineUnscheduled": "Non planifié",
+	"timelineUnscheduledHint": "Faites glisser un élément sur la chronologie pour le planifier",
+	"timelineSelectStartField": "Choisissez un champ de date de début pour afficher la chronologie",
+	"timelineCreateHint": "Cliquez ou faites glisser pour ajouter une entrée",
 	"status": "Statut",
 	"statusGroup": "Groupe de statut",
 	"statusGroupTodo": "À faire",
@@ -3026,6 +3039,7 @@
 		"quit": "Quitter le programme"
 	},
 	"_attrView": {
+		"timeline": "Chronologie",
 		"statusNotStarted": "Pas commencé",
 		"statusInProgress": "En cours",
 		"statusDone": "Terminé",

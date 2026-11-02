@@ -1,4 +1,17 @@
 {
+	"timelineView": "ไทม์ไลน์",
+	"databaseTimelineView": "มุมมองไทม์ไลน์ฐานข้อมูล",
+	"timelineStartField": "ฟิลด์วันที่เริ่มต้น",
+	"timelineEndField": "ฟิลด์วันที่สิ้นสุด",
+	"timelineEndFromStart": "วันที่สิ้นสุดของฟิลด์เริ่มต้น",
+	"timelineZoomDay": "วัน",
+	"timelineZoomWeek": "สัปดาห์",
+	"timelineZoomMonth": "เดือน",
+	"timelineZoomQuarter": "ไตรมาส",
+	"timelineUnscheduled": "ยังไม่ได้กำหนดเวลา",
+	"timelineUnscheduledHint": "ลากรายการไปยังไทม์ไลน์เพื่อกำหนดเวลา",
+	"timelineSelectStartField": "เลือกฟิลด์วันที่เริ่มต้นเพื่อแสดงไทม์ไลน์",
+	"timelineCreateHint": "คลิกหรือลากเพื่อเพิ่มรายการ",
 	"status": "สถานะ",
 	"statusGroup": "กลุ่มสถานะ",
 	"statusGroupTodo": "สิ่งที่ต้องทำ",
@@ -3026,6 +3039,7 @@
 		"quit": "ออก"
 	},
 	"_attrView": {
+		"timeline": "ไทม์ไลน์",
 		"statusNotStarted": "ยังไม่เริ่ม",
 		"statusInProgress": "กำลังดำเนินการ",
 		"statusDone": "เสร็จแล้ว",

@@ -165,9 +165,15 @@ func createAttributeViewItem(avID, blockID, viewID, templateID, previousID, grou
 		return nil, err
 	}
 	if len(calendarDates) > 0 && nil != calendarDates[0] {
-		if err = setNewCalendarItemDate(attrView, blockID, viewID, *calendarDates[0], fieldValues); nil != err {
+		var endDate *int64
+		if len(calendarDates) > 1 {
+			endDate = calendarDates[1]
+		}
+		if err = setNewCalendarItemDate(attrView, blockID, viewID, *calendarDates[0], fieldValues, endDate); nil != err {
 			return nil, err
 		}
+	} else if len(calendarDates) > 1 && nil != calendarDates[1] {
+		return nil, fmt.Errorf("an end date requires a start date")
 	}
 	filterContext, err := resolveAttributeViewFilterContext(attrView, nil, blockID)
 	if nil != err {
