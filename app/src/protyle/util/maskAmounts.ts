@@ -63,7 +63,11 @@ const paint = () => {
             return;
         }
         protyleElement.querySelectorAll(".protyle-title__input, .protyle-wysiwyg").forEach(root => {
-            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+            // Database toolbars (view tabs, "1/3" counters) are interface, not amounts.
+            const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+                acceptNode: (node) => node.parentElement?.closest(".av__header") ?
+                    NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
+            });
             let node = walker.nextNode() as Text;
             while (node) {
                 const text = node.data;
