@@ -115,6 +115,16 @@ type Form struct {
 
 func (*Form) GetType() LayoutType { return LayoutTypeForm }
 
+// IsFormInputKeyType reports whether a field can be answered in a form (computed and file fields cannot).
+func IsFormInputKeyType(keyType KeyType) bool {
+	switch keyType {
+	case KeyTypeBlock, KeyTypeText, KeyTypeURL, KeyTypeEmail, KeyTypePhone, KeyTypeNumber, KeyTypeDate, KeyTypeSelect,
+		KeyTypeStatus, KeyTypeMSelect, KeyTypeCheckbox, KeyTypeRelation:
+		return true
+	}
+	return false
+}
+
 func NewFormView() *View {
 	view := NewTableView()
 	view.Name = GetAttributeViewI18n("form")

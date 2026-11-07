@@ -71,3 +71,16 @@ func TestFormViewLayoutRegistration(t *testing.T) {
 		t.Fatal("missing form layout is rejected")
 	}
 }
+
+func TestFormInputKeyTypes(t *testing.T) {
+	for _, keyType := range []KeyType{KeyTypeBlock, KeyTypeNumber, KeyTypeDate, KeyTypeSelect, KeyTypeRelation, KeyTypeCheckbox} {
+		if !IsFormInputKeyType(keyType) {
+			t.Fatalf("%s can be answered", keyType)
+		}
+	}
+	for _, keyType := range []KeyType{KeyTypeTemplate, KeyTypeRollup, KeyTypeCreated, KeyTypeUpdated, KeyTypeMAsset} {
+		if IsFormInputKeyType(keyType) {
+			t.Fatalf("%s is not asked in a form", keyType)
+		}
+	}
+}

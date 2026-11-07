@@ -13,11 +13,15 @@ import (
 	"github.com/siyuan-note/siyuan/kernel/av"
 )
 
+// newAttributeViewFormLayout shows every field that can be answered in a form; computed fields start hidden.
 func newAttributeViewFormLayout(attrView *av.AttributeView, fieldIDs []string) *av.LayoutForm {
-	return &av.LayoutForm{
-		LayoutTable: newAttributeViewListLayout(attrView, fieldIDs),
-		Settings:    av.DefaultFormSettings(),
+	layout := newAttributeViewListLayout(attrView, fieldIDs)
+	for _, column := range layout.Columns {
+		if key, err := attrView.GetKey(column.ID); nil == err {
+			column.Hidden = !av.IsFormInputKeyType(key.Type)
+		}
 	}
+	return &av.LayoutForm{LayoutTable: layout, Settings: av.DefaultFormSettings()}
 }
 
 func (tx *Transaction) doSetAttrViewForm(operation *Operation) *TxErr {
