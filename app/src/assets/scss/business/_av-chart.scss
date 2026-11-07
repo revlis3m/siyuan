@@ -79,3 +79,11 @@
     font-size: 12px;
   }
 }
+
+// revlis3m mods: amounts masked in marked notebooks (see protyle/util/maskAmounts.ts)
+::highlight(sy-mask-amounts) {
+  color: transparent;
+  background-color: var(--b3-theme-on-surface-light);
+  text-decoration: none;
+  text-shadow: none;
+}

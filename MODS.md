@@ -24,3 +24,8 @@ Changes on top of the release:
   Sorting, grouping, conditional colours and paging do not apply to charts.
   Running total (`cumulative`): bar, horizontal bar and line charts of a count or sum show each group's value as the
   total up to that group (per series when stacked; the empty group keeps its own value), e.g. a balance-over-time line.
+- Mask amounts: notebook menu → "Mask amounts in this notebook". Editors of a marked notebook paint numbers over
+  (CSS custom highlight; documents are not modified), dates and times excepted, and charts show "•••" for values.
+  Every marked notebook starts masked when the app loads; the eye button in the editor toolbar reveals it until the
+  next load. The block being edited stays visible. Marked notebooks are kept in local storage `local-mask-notebooks`.
+  Code: app/src/protyle/util/maskAmounts.ts, maskAmountsText.ts.

@@ -1,3 +1,4 @@
+import {isElementMasked, onMaskChange} from "../../../util/maskAmounts";
 import {Constants} from "../../../../constants";
 import {escapeHtml} from "../../../../util/escape";
 import {loadECharts} from "../../../util/echarts";
@@ -76,6 +77,9 @@ const getChartTheme = (probe: HTMLElement): IChartTheme => {
         },
     };
 };
+
+// revlis3m mods: redraw charts when amounts are masked or revealed.
+onMaskChange(element => element.querySelectorAll('.av[data-av-type="chart"]').forEach(block => instances.get(block)?.refresh()));
 
 /** 外观切换后按新主题的颜色重新绘制图表，等待主题样式表加载完成后再解析颜色。 */
 export const refreshAVChartTheme = (element: Element) => {
@@ -169,7 +173,7 @@ const mountChart = async (blockElement: HTMLElement, protyle: IProtyle, data: IA
     const view = data.view as IAVTable;
     const build = () => getChartOption({
         data: view.chartData, settings: getChartSettings(view), columns: view.columns,
-        theme: getChartTheme(probe), labels: getChartLabels(),
+        theme: getChartTheme(probe), labels: getChartLabels(), masked: isElementMasked(blockElement),
     });
     const option = build();
     if (!option) {

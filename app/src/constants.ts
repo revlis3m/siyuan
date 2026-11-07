@@ -225,6 +225,7 @@ export abstract class Constants {
     public static readonly LOCAL_RECENT_DOCS = "local-recent-docs";
     public static readonly LOCAL_CLOSED_TABS = "local-closed-tabs";
     public static readonly LOCAL_AV_CALENDAR_MODES = "local-av-calendar-modes";
+    public static readonly LOCAL_MASK_NOTEBOOKS = "local-mask-notebooks"; // revlis3m mods: {ids: string[]}
     public static readonly LOCAL_TABS_READING = "local-tabs-reading";
     public static readonly LOCAL_MINDMAP_VIEWPORTS = "local-mindmap-viewports";
 

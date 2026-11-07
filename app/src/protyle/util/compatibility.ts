@@ -856,6 +856,7 @@ export const getLocalStorage = (cb: () => void, onError?: (error: unknown) => vo
         defaultStorage[Constants.LOCAL_ZOOM] = 1;
         defaultStorage[Constants.LOCAL_MOVE_PATH] = {keys: [], k: ""};
         defaultStorage[Constants.LOCAL_AV_CALENDAR_MODES] = {};
+        defaultStorage[Constants.LOCAL_MASK_NOTEBOOKS] = {ids: []};
         defaultStorage[Constants.LOCAL_TABS_READING] = {};
         defaultStorage[Constants.LOCAL_MINDMAP_VIEWPORTS] = {};
 

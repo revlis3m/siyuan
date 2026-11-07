@@ -27,6 +27,7 @@ import {stickyRow} from "../render/av/row";
 import {getContenteditableElement} from "../wysiwyg/getBlock";
 import {activeBlur} from "../../mobile/util/keyboardToolbar";
 import {isEncryptedBox} from "../../util/pathName";
+import {syncAmountMask} from "./maskAmounts";
 import {
     invalidateHeadingNumberRefresh,
     queueHeadingNumberRefresh,
@@ -106,6 +107,7 @@ export const onGet = (options: {
     }
     options.protyle.notebookId = options.data.data.box;
     options.protyle.path = options.data.data.path;
+    syncAmountMask(options.protyle);
 
     if (options.data.data.eof && !options.scrollAttr) {
         if (options.action.includes(Constants.CB_GET_BEFORE)) {

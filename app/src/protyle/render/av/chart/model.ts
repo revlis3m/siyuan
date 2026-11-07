@@ -174,6 +174,8 @@ export interface IChartOptionInput {
     columns: IAVColumn[];
     theme: IChartTheme;
     labels: IChartLabels;
+    /** revlis3m mods: hide every value (amount masking). */
+    masked?: boolean;
 }
 
 const getGroupColor = (group: {color?: string, resolvedColor?: IAVColor}, theme: IChartTheme, index: number) =>
@@ -197,7 +199,10 @@ export const getChartOption = (input: IChartOptionInput): Record<string, any> | 
     const stacked = !!data.stackType && type !== "donut";
     const seriesLabels = data.series.map(series => stacked ?
         formatChartGroupLabel(series, data.stackType, bucket, labels) : measureLabel);
-    const valueFormatter = (value: number | null) => formatChartValue(value, labels.lang);
+    const valueFormatter = (value: number | null) => {
+        const text = formatChartValue(value, labels.lang);
+        return input.masked && text !== "-" ? "•••" : text;
+    };
     const textStyle = {color: theme.text};
     const tooltip = {
         backgroundColor: theme.tooltipBackground,

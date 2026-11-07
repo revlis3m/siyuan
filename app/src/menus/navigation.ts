@@ -1,3 +1,4 @@
+import {isMaskNotebook, setMaskNotebook} from "../protyle/util/maskAmounts";
 import {saveNotebookConf, saveNotebookConfSync} from "../config/util/resourceConfig";
 import type {BlockQueryRequestInput} from "../types/api";
 import {copySubMenu, exportMd, movePathToMenu, openFileAttr, renameMenu,} from "./commonMenuItem";
@@ -514,6 +515,15 @@ export const initNavigationMenu = (app: App, liElement: HTMLElement) => {
                 }, (data) => {
                     onGetnotebookconf(data.data);
                 });
+            }
+        }).element);
+        window.siyuan.menus.menu.append(new MenuItem({
+            id: "maskAmounts",
+            label: window.siyuan.languages.maskAmountsInNotebook,
+            icon: "iconEyeoff",
+            checked: isMaskNotebook(notebookId),
+            click: () => {
+                setMaskNotebook(notebookId, !isMaskNotebook(notebookId));
             }
         }).element);
         if (window.siyuan.config.fileTree.boxDocEnabled && liElement.getAttribute("data-node-id") &&
