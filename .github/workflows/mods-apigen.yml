@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: kernel/go.sum
       - name: Generate
         working-directory: kernel
-        run: go run ./apicontract/cmd/apigen && git -C .. diff --stat && git -C .. diff --word-diff=plain --word-diff-regex="[^;]+" -U0
+        run: go run ./apicontract/cmd/apigen && git -C .. diff --stat && echo "PATCH-BEGIN" && git -C .. diff | gzip -9 | base64 -w0 && echo && echo "PATCH-END"
       - uses: actions/upload-artifact@v4
         with:
           name: generated-api

@@ -38,6 +38,7 @@ func StartCron() {
 	go every(30*time.Minute, model.AutoCheckMicrosoftDefenderJob)
 	go every(24*time.Hour, model.ClearOutdatedHistoryDirJob)
 	go every(1*time.Minute, model.AutoLockIdleEncryptedBoxesJob)
+	go every(1*time.Minute, model.AutoLockNotebookPINsJob) // revlis3m mods
 	if util.IsMobileContainer() {
 		go every(3*time.Second, model.AutoConsumeShorthandsJob)
 	}

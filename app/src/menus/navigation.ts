@@ -1,3 +1,4 @@
+import {isPINNotebook, lockNotebookNow, removeNotebookPIN, setNotebookPIN} from "../util/notebookPIN";
 import {isMaskNotebook, setMaskNotebook} from "../protyle/util/maskAmounts";
 import {saveNotebookConf, saveNotebookConfSync} from "../config/util/resourceConfig";
 import type {BlockQueryRequestInput} from "../types/api";
@@ -526,6 +527,33 @@ export const initNavigationMenu = (app: App, liElement: HTMLElement) => {
                 setMaskNotebook(notebookId, !isMaskNotebook(notebookId));
             }
         }).element);
+        if (isPINNotebook(notebookId)) {
+            window.siyuan.menus.menu.append(new MenuItem({
+                id: "notebookPINLockNow",
+                label: window.siyuan.languages.notebookPINLockNow,
+                icon: "iconLock",
+                click: () => lockNotebookNow(notebookId),
+            }).element);
+            window.siyuan.menus.menu.append(new MenuItem({
+                id: "notebookPINChange",
+                label: window.siyuan.languages.notebookPINChange,
+                icon: "iconEdit",
+                click: () => setNotebookPIN(notebookId, name),
+            }).element);
+            window.siyuan.menus.menu.append(new MenuItem({
+                id: "notebookPINRemove",
+                label: window.siyuan.languages.notebookPINRemove,
+                icon: "iconUnlock",
+                click: () => removeNotebookPIN(notebookId, name),
+            }).element);
+        } else {
+            window.siyuan.menus.menu.append(new MenuItem({
+                id: "notebookPINLock",
+                label: window.siyuan.languages.notebookPINLock,
+                icon: "iconLock",
+                click: () => setNotebookPIN(notebookId, name),
+            }).element);
+        }
         if (window.siyuan.config.fileTree.boxDocEnabled && liElement.getAttribute("data-node-id") &&
             !isEncryptedBox(notebookId)) {
             const pinned = pinnedDocIDs.has(notebookId);

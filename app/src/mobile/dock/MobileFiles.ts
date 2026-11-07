@@ -1,3 +1,4 @@
+import {isPINNotebook, openPINNotebook} from "../../util/notebookPIN";
 import {config as configApi} from "../../config/util/configApi";
 import {hasClosestByClassName, hasTopClosestByTag} from "../../protyle/util/hasClosest";
 import {escapeHtml, escapeHtmlTextAndAttr} from "../../util/escape";
@@ -282,6 +283,8 @@ export class MobileFiles extends Model {
                     // 加密笔记本关闭（锁定）时点"打开"先弹解锁框，解锁成功后再挂载
                     if (liElement && liElement.getAttribute("data-encrypted") === "true") {
                         openEncryptedNotebook(this.app, notebookId, liElement.querySelector(".b3-list-item__text").textContent);
+                    } else if (isPINNotebook(notebookId)) {
+                        openPINNotebook(notebookId, liElement.querySelector(".b3-list-item__text").textContent);
                     } else {
                         fetchPost("/api/notebook/openNotebook", {
                             notebook: notebookId

@@ -1,3 +1,4 @@
+import {decorateNotebookPINs, isPINNotebook, notebookPINsLoaded, openPINNotebook} from "../../util/notebookPIN";
 import {config as configApi} from "../../config/util/configApi";
 import {escapeHtml, escapeHtmlTextAndAttr} from "../../util/escape";
 import {genFileTreeDocAriaLabel} from "../../util/fileTreeTooltip";
@@ -137,6 +138,9 @@ export class Files extends Model {
         this.pinnedDocs = new PinnedDocs(options.app, this.element, (id) => {
             openFileById({app: options.app, id, action: [Constants.CB_GET_FOCUS, Constants.CB_GET_SCROLL]});
         }, false, this.parentDocClick);
+        // revlis3m mods: lock icons on closed notebooks that have a PIN, whenever the closed list changes
+        new MutationObserver(() => decorateNotebookPINs()).observe(this.closeElement, {childList: true, subtree: true});
+        void notebookPINsLoaded();
         this.closeElement.addEventListener("click", (event) => {
             setPanelFocus(this.element.parentElement);
             let target = event.target as HTMLElement;
@@ -148,6 +152,11 @@ export class Files extends Model {
                     const notebookElement = target.closest("li[data-encrypted=true]");
                     if (notebookElement) {
                         openEncryptedNotebook(this.app, notebookElement.getAttribute("data-url"), notebookElement.querySelector(".b3-list-item__text").textContent);
+                        break;
+                    }
+                    const pinElement = target.closest("li[data-pin]");
+                    if (pinElement) {
+                        openPINNotebook(pinElement.getAttribute("data-url"), pinElement.querySelector(".b3-list-item__text").textContent);
                         break;
                     }
                     const rect = target.getBoundingClientRect();
@@ -179,6 +188,8 @@ export class Files extends Model {
                     // 加密笔记本关闭（锁定）时点"打开"先弹解锁框，解锁成功后再挂载
                     if (liElement && liElement.getAttribute("data-encrypted") === "true") {
                         openEncryptedNotebook(this.app, notebookId, liElement.querySelector(".b3-list-item__text").textContent);
+                    } else if (isPINNotebook(notebookId)) {
+                        openPINNotebook(notebookId, liElement.querySelector(".b3-list-item__text").textContent);
                     } else {
                         fetchPost("/api/notebook/openNotebook", {
                             notebook: notebookId

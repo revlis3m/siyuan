@@ -1672,6 +1672,14 @@ export type NotebookInfo = { "ctime": number; "docCount": number; "hCtime": stri
 
 export type NotebookInfoData = { "boxInfo": NotebookInfo | null; };
 
+export type NotebookPINMinutesRequestInput = { "minutes": number; };
+
+export type NotebookPINRequestInput = { "notebook": string; "pin": string; };
+
+export type NotebookPINState = { "locked": boolean; "notebook": string; };
+
+export type NotebookPINStatusData = { "minutes": number; "notebooks": Array<NotebookPINState | null> | null; };
+
 export type NotebookPasswordRequestInput = { "password": string; };
 
 export type NotificationData = { "id": string; };
@@ -2051,6 +2059,8 @@ export type SetInlineStylesRequestInput = { "app"?: string | null; "av"?: Inline
 export type SetNotebookConfRequestInput = { "conf"?: NotebookConfPatchInput | null; "notebook": string; };
 
 export type SetNotebookIconRequestInput = { "icon": string; "notebook": string; };
+
+export type SetNotebookPINRequestInput = { "currentPIN"?: string; "notebook": string; "pin": string; };
 
 export type SetPetalEnabledRequestInput = { "app"?: string | null; "enabled": boolean; "packageName": string; };
 
@@ -6451,6 +6461,16 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated"];
     };
     /**
+     * revlis3m mods: 返回设置了 PIN 的笔记本及其锁定状态和自动锁定分钟数。PIN 锁只是隐私锁，不加密数据。
+     */
+    "/api/notebook/getNotebookPINStatus": {
+        request: EmptyRequestInput;
+        response: { "code": 0; "data": NotebookPINStatusData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "none";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin"];
+    };
+    /**
      * 接收 multipart 的 file、旧 password 和可选密钥备份 key，要求管理员权限并禁止只读模式。
      * 恢复目标必须关闭同步，且没有加密密钥配置或加密数据；密文全部通过认证后才发布，恢复后保持锁定。
      * 认证后、安装任何数据或密钥前检查全部源身份的寻址能力；不能通过旧归档降低本机已确认的要求。
@@ -6483,6 +6503,16 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
+    /**
+     * revlis3m mods: 立即锁定笔记本：关闭笔记本，再次打开需要 PIN。
+     */
+    "/api/notebook/lockNotebookPIN": {
+        request: NotebookIDRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin"];
+    };
     "/api/notebook/lsNotebooks": {
         request: ListNotebooksRequestInput;
         response: { "code": 0; "data": ListNotebooksData | null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -6511,6 +6541,16 @@ export interface APIPOSTRoutes {
     };
     "/api/notebook/removeNotebook": {
         request: NotebookIDRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin","writable"];
+    };
+    /**
+     * revlis3m mods: 校验 PIN 后移除笔记本 PIN。
+     */
+    "/api/notebook/removeNotebookPIN": {
+        request: NotebookPINRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
@@ -6564,6 +6604,26 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
+    /**
+     * revlis3m mods: 设置或修改笔记本 PIN；已有 PIN 时需要 currentPIN。PIN 保存在工作空间配置目录，不同步。
+     */
+    "/api/notebook/setNotebookPIN": {
+        request: SetNotebookPINRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin","writable"];
+    };
+    /**
+     * revlis3m mods: 设置 PIN 笔记本闲置多少分钟后重新锁定，0 表示不自动锁定。
+     */
+    "/api/notebook/setNotebookPINMinutes": {
+        request: NotebookPINMinutesRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin","writable"];
+    };
     "/api/notebook/touchEncryptedNotebooks": {
         request: EmptyRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -6586,6 +6646,16 @@ export interface APIPOSTRoutes {
      */
     "/api/notebook/unlockNotebook": {
         request: UnlockNotebookRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin"];
+    };
+    /**
+     * revlis3m mods: 校验 PIN 后允许打开笔记本，闲置超过自动锁定分钟数后重新锁定；连续输错会逐步延迟。
+     */
+    "/api/notebook/unlockNotebookPIN": {
+        request: NotebookPINRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */

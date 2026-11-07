@@ -284,6 +284,13 @@ func registerNotebookRoutes(ginServer *gin.Engine) {
 	ginServer.Handle("POST", "/api/notebook/setEncryptedNotebookFollowSystemLock", contractRouteHandlers(apicontract.SetEncryptedNotebookFollowSystemLock, setEncryptedNotebookFollowSystemLock)...)
 	ginServer.Handle("POST", "/api/notebook/lockEncryptedNotebooksOnSystemLock", contractRouteHandlers(apicontract.LockEncryptedNotebooksOnSystemLock, lockEncryptedNotebooksOnSystemLock)...)
 	ginServer.Handle("POST", "/api/notebook/touchEncryptedNotebooks", contractRouteHandlers(apicontract.TouchEncryptedNotebooks, touchEncryptedNotebooks)...)
+	// revlis3m mods: notebook PIN lock
+	ginServer.Handle("POST", "/api/notebook/getNotebookPINStatus", contractRouteHandlers(apicontract.GetNotebookPINStatus, getNotebookPINStatus)...)
+	ginServer.Handle("POST", "/api/notebook/setNotebookPIN", contractRouteHandlers(apicontract.SetNotebookPIN, setNotebookPIN)...)
+	ginServer.Handle("POST", "/api/notebook/removeNotebookPIN", contractRouteHandlers(apicontract.RemoveNotebookPIN, removeNotebookPIN)...)
+	ginServer.Handle("POST", "/api/notebook/unlockNotebookPIN", contractRouteHandlers(apicontract.UnlockNotebookPIN, unlockNotebookPIN)...)
+	ginServer.Handle("POST", "/api/notebook/lockNotebookPIN", contractRouteHandlers(apicontract.LockNotebookPIN, lockNotebookPIN)...)
+	ginServer.Handle("POST", "/api/notebook/setNotebookPINMinutes", contractRouteHandlers(apicontract.SetNotebookPINMinutes, setNotebookPINMinutes)...)
 }
 
 // registerFiletreeRoutes 注册本域的契约路由。

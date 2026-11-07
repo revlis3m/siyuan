@@ -33,7 +33,7 @@ jobs:
         run: CGO_ENABLED=1 go build -tags "fts5 sqlcipher" -o /tmp/kernel .
       - name: Kernel tests (attribute views)
         working-directory: kernel
-        run: CGO_ENABLED=1 go test -tags "fts5 sqlcipher" ./av/ ./apicontract/... && CGO_ENABLED=1 go test -tags "fts5 sqlcipher" ./model/ -run 'Status|Capabilit|AttributeView'
+        run: CGO_ENABLED=1 go test -tags "fts5 sqlcipher" ./av/ ./apicontract/... && CGO_ENABLED=1 go test -tags "fts5 sqlcipher" ./model/ -run 'Status|Capabilit|AttributeView|NotebookPIN'
       - name: Generated API files are current
         working-directory: app
         run: |

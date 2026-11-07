@@ -382,9 +382,21 @@ var (
 	// 自动锁定分钟数由内核内存值驱动锁定行为，写入后无需广播供其他客户端重读。
 	SetNotebookCryptoAutoLock = define[NotebookCryptoAutoLockRequest, Null]("setNotebookCryptoAutoLock", "/api/notebook/setNotebookCryptoAutoLock", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{Setting: SettingWrite{Namespace: "notebookCrypto", Mode: SettingSilent}}, "POST")
 	// 改密恢复和密钥切换保留现存加密笔记本的认证、信封格式及中断恢复检查。
-	ChangeMasterPassword         = define[ChangeMasterPasswordRequest, Null]("changeMasterPassword", "/api/notebook/changeMasterPassword", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{}, "POST")
-	ExportNotebookCryptoBackup   = define[EmptyRequest, NotebookCryptoBackupData]("exportNotebookCryptoBackup", "/api/notebook/exportNotebookCryptoBackup", AuthenticatedAccess|AdminAccess|WritableAccess, NoBody, ResponseOptions{}, "POST")
-	TouchEncryptedNotebooks      = define[EmptyRequest, Null]("touchEncryptedNotebooks", "/api/notebook/touchEncryptedNotebooks", AuthenticatedAccess|AdminAccess, NoBody, ResponseOptions{}, "POST")
+	ChangeMasterPassword       = define[ChangeMasterPasswordRequest, Null]("changeMasterPassword", "/api/notebook/changeMasterPassword", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{}, "POST")
+	ExportNotebookCryptoBackup = define[EmptyRequest, NotebookCryptoBackupData]("exportNotebookCryptoBackup", "/api/notebook/exportNotebookCryptoBackup", AuthenticatedAccess|AdminAccess|WritableAccess, NoBody, ResponseOptions{}, "POST")
+	TouchEncryptedNotebooks    = define[EmptyRequest, Null]("touchEncryptedNotebooks", "/api/notebook/touchEncryptedNotebooks", AuthenticatedAccess|AdminAccess, NoBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 返回设置了 PIN 的笔记本及其锁定状态和自动锁定分钟数。PIN 锁只是隐私锁，不加密数据。
+	GetNotebookPINStatus = define[EmptyRequest, NotebookPINStatusData]("getNotebookPINStatus", "/api/notebook/getNotebookPINStatus", AuthenticatedAccess|AdminAccess, NoBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 设置或修改笔记本 PIN；已有 PIN 时需要 currentPIN。PIN 保存在工作空间配置目录，不同步。
+	SetNotebookPIN = define[SetNotebookPINRequest, Null]("setNotebookPIN", "/api/notebook/setNotebookPIN", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 校验 PIN 后移除笔记本 PIN。
+	RemoveNotebookPIN = define[NotebookPINRequest, Null]("removeNotebookPIN", "/api/notebook/removeNotebookPIN", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 校验 PIN 后允许打开笔记本，闲置超过自动锁定分钟数后重新锁定；连续输错会逐步延迟。
+	UnlockNotebookPIN = define[NotebookPINRequest, Null]("unlockNotebookPIN", "/api/notebook/unlockNotebookPIN", AuthenticatedAccess|AdminAccess, JSONBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 立即锁定笔记本：关闭笔记本，再次打开需要 PIN。
+	LockNotebookPIN = define[NotebookIDRequest, Null]("lockNotebookPIN", "/api/notebook/lockNotebookPIN", AuthenticatedAccess|AdminAccess, JSONBody, ResponseOptions{}, "POST")
+	// revlis3m mods: 设置 PIN 笔记本闲置多少分钟后重新锁定，0 表示不自动锁定。
+	SetNotebookPINMinutes        = define[NotebookPINMinutesRequest, Null]("setNotebookPINMinutes", "/api/notebook/setNotebookPINMinutes", AuthenticatedAccess|AdminAccess|WritableAccess, JSONBody, ResponseOptions{}, "POST")
 	GetNotebookArchiveCandidates = define[EmptyRequest, NotebookArchiveCandidatesData]("getNotebookArchiveCandidates", "/api/notebook/getNotebookArchiveCandidates", AuthenticatedAccess|AdminAccess|WritableAccess, NoBody, ResponseOptions{}, "POST")
 	// 接收已锁定的加密笔记本 ID，返回归档 ID 和下载路径，不删除源数据，要求管理员权限。
 	// 下载完成后，必须由用户确认已保存归档，再调用 `/api/notebook/commitNotebookArchive` 并传入 saved: true。

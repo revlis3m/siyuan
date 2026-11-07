@@ -160,3 +160,33 @@ type CreateNotebookData struct {
 type ChangeSortNotebookRequest struct {
 	Notebooks []string `json:"notebooks"`
 }
+
+// revlis3m mods: notebook PIN lock.
+
+type NotebookPINRequest struct {
+	NotebookIDRequest
+	PIN string `json:"pin"`
+}
+
+type SetNotebookPINRequest struct {
+	NotebookIDRequest
+	// PIN 新 PIN，4 到 64 个字符。
+	PIN string `json:"pin"`
+	// CurrentPIN 已有 PIN 时必填，用于修改 PIN。
+	CurrentPIN string `json:"currentPIN" api:"optional"`
+}
+
+type NotebookPINMinutesRequest struct {
+	Minutes int `json:"minutes"`
+}
+
+type NotebookPINState struct {
+	Notebook string `json:"notebook"`
+	Locked   bool   `json:"locked"`
+}
+
+type NotebookPINStatusData struct {
+	Notebooks []*NotebookPINState `json:"notebooks"`
+	// Minutes 闲置多少分钟后重新锁定，0 表示不自动锁定。
+	Minutes int `json:"minutes"`
+}

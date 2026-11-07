@@ -31,3 +31,11 @@ Changes on top of the release:
   Code: app/src/protyle/util/maskAmounts.ts, maskAmountsText.ts.
 - Fix: creating a document with markdown no longer adds an empty `tags` attribute, which encrypted notebooks refused
   (`/api/filetree/createDocWithMd` failed with error 390 in encrypted notebooks).
+- Notebook PIN lock: notebook menu → "Lock with PIN…". A locked notebook is a closed notebook that the kernel only
+  opens after `/api/notebook/unlockNotebookPIN` (model.Mount refuses it otherwise), so it is out of the tree, search,
+  backlinks and embeds. It locks again after N idle minutes (default 15, `setNotebookPINMinutes`; activity is the
+  existing `touchEncryptedNotebooks` ping), with "Lock now", and on restart. PINs: PBKDF2-SHA256 in
+  `conf/mods-notebook-lock.json` (not synced); wrong PINs are slowed down. Privacy lock only, files are not encrypted.
+  Code: kernel/model/mods_notebook_lock.go, kernel/api/mods_notebook_lock.go, app/src/util/notebookPIN.ts.
+- Workflow "Mods API generate": push a commit to branch `mods-apigen` to get the generated schema/declarations as a
+  gzip+base64 patch in the job log (for environments that cannot run the Go generator).

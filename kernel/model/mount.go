@@ -504,6 +504,9 @@ func Mount(boxID string) (alreadyMount bool, err error) {
 	if !ast.IsNodeIDPattern(boxID) {
 		return false, errors.New("invalid notebook ID")
 	}
+	if IsNotebookPINLocked(boxID) { // revlis3m mods: a PIN notebook opens only after unlockNotebookPIN
+		return false, ErrNotebookPINLocked
+	}
 	if IsEncryptedBox(boxID) {
 		releaseTransition := holdEncryptedBoxTransition(boxID)
 		defer releaseTransition()
