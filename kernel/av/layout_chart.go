@@ -116,7 +116,7 @@ type ChartSettings struct {
 	DateBucket      ChartDateBucket `json:"dateBucket"`      // 分组字段为日期类字段时的时间粒度
 	Measure         ChartMeasure    `json:"measure"`         // 汇总方式
 	ValueKeyID      string          `json:"valueKeyID"`      // 非计数汇总使用的数字、汇总或模板字段
-	StackKeyID      string          `json:"stackKeyID"`      // 可选的子分组字段：单选、状态或复选框
+	StackKeyID      string          `json:"stackKeyID"`      // 可选的子分组字段：单选、状态、复选框、主键或关联
 	Sort            ChartSort       `json:"sort"`            // 分组排序
 	ShowEmptyGroups bool            `json:"showEmptyGroups"` // 显示没有条目的选项、日期区间和空值分组
 	ShowLegend      bool            `json:"showLegend"`      // 显示图例
@@ -643,6 +643,7 @@ func BuildChartData(columns []*TableColumn, rows []*TableRow, settings ChartSett
 	}
 
 	categoryIndexes := make([]int, 0, 4)
+	seriesIndexes := make([]int, 0, 4)
 	for _, row := range rows {
 		if nil == row {
 			continue
@@ -661,22 +662,27 @@ func BuildChartData(columns []*TableColumn, rows []*TableRow, settings ChartSett
 		if 0 == len(categoryIndexes) {
 			continue
 		}
-		series := 0
+		seriesIndexes = seriesIndexes[:0]
 		if nil != r.stackColumn {
-			series = r.rowSeries(row)
+			seriesIndexes = r.rowSeries(row, seriesIndexes)
+		} else {
+			seriesIndexes = append(seriesIndexes, 0)
 		}
 		for _, category := range categoryIndexes {
+			// 分组合计每个条目只计一次；关联多个页面时条目计入每个子分组。
 			r.groups[category].acc.add(number, hasNumber, r.needSum)
-			key := chartPointKey{category: category, series: series}
-			point := r.points[key]
-			if nil == point {
-				point = &chartPoint{}
-				r.points[key] = point
-			}
-			point.acc.add(number, hasNumber, r.needSum)
-			if ChartItemSampleLimit > len(point.items) && chartItemSampleTotal > r.samples {
-				point.items = append(point.items, newChartItem(row))
-				r.samples++
+			for _, series := range seriesIndexes {
+				key := chartPointKey{category: category, series: series}
+				point := r.points[key]
+				if nil == point {
+					point = &chartPoint{}
+					r.points[key] = point
+				}
+				point.acc.add(number, hasNumber, r.needSum)
+				if ChartItemSampleLimit > len(point.items) && chartItemSampleTotal > r.samples {
+					point.items = append(point.items, newChartItem(row))
+					r.samples++
+				}
 			}
 		}
 	}
@@ -845,20 +851,63 @@ func (r *chartResolver) seedOptionSeries() {
 	}
 }
 
-func (r *chartResolver) rowSeries(row *TableRow) int {
+// rowSeries 返回条目所属的子分组：单选、状态和复选框各一个；主键按条目各一个；关联按每个关联页面各一个。
+func (r *chartResolver) rowSeries(row *TableRow, indexes []int) []int {
 	value := chartCellValue(row, r.stackColumn, r.stackIndex)
-	if KeyTypeCheckbox == r.stackColumn.Type {
+	switch r.stackColumn.Type {
+	case KeyTypeCheckbox:
 		if nil != value && nil != value.Checkbox && value.Checkbox.Checked {
-			return r.registerSeries("checked", "", 0, false, nil)
+			return append(indexes, r.registerSeries("checked", "", 0, false, nil))
 		}
-		return r.registerSeries("unchecked", "", 1, false, nil)
+		return append(indexes, r.registerSeries("unchecked", "", 1, false, nil))
+	case KeyTypeBlock:
+		label := ""
+		if nil != value && nil != value.Block {
+			label = strings.TrimSpace(value.Block.Content)
+		}
+		if "" == label {
+			label = "—"
+		}
+		return append(indexes, r.registerLabelSeries(row.ID, label))
+	case KeyTypeRelation:
+		if nil != value && nil != value.Relation {
+			if 0 < len(value.Relation.Contents) {
+				for _, content := range value.Relation.Contents {
+					if nil == content || "" == content.BlockID {
+						continue
+					}
+					label := ""
+					if nil != content.Block {
+						label = strings.TrimSpace(content.Block.Content)
+					}
+					indexes = r.appendCategory(indexes, r.registerLabelSeries(content.BlockID, label))
+				}
+			} else {
+				for _, id := range value.Relation.BlockIDs {
+					if "" != id {
+						indexes = r.appendCategory(indexes, r.registerLabelSeries(id, id))
+					}
+				}
+			}
+		}
+		if 0 == len(indexes) {
+			indexes = append(indexes, r.registerSeries("", "", 0, true, nil))
+		}
+		return indexes
 	}
 	if nil == value || 1 > len(value.MSelect) || nil == value.MSelect[0] || "" == strings.TrimSpace(value.MSelect[0].Content) {
-		return r.registerSeries("", "", 0, true, nil)
+		return append(indexes, r.registerSeries("", "", 0, true, nil))
 	}
 	selected := value.MSelect[0]
-	return r.registerSeries(selected.Content, selected.Content, r.optionRank(r.stackKey, selected.Content), false,
-		chartOptionColor(r.stackKey, selected))
+	return append(indexes, r.registerSeries(selected.Content, selected.Content, r.optionRank(r.stackKey, selected.Content), false,
+		chartOptionColor(r.stackKey, selected)))
+}
+
+// registerLabelSeries 登记按页面区分的子分组（主键或关联），按标题排序。
+func (r *chartResolver) registerLabelSeries(key, label string) int {
+	index := r.registerSeries(key, label, 0, false, nil)
+	r.series[index].byLabel = true
+	return index
 }
 
 func (r *chartResolver) appendCategory(indexes []int, index int) []int {
@@ -1144,6 +1193,9 @@ func (r *chartResolver) sortedSeries() []int {
 		a, b := r.series[order[i]], r.series[order[j]]
 		if a.category.Empty != b.category.Empty {
 			return b.category.Empty
+		}
+		if a.rank == b.rank && a.byLabel && b.byLabel {
+			return strings.ToLower(a.category.Label) < strings.ToLower(b.category.Label)
 		}
 		return a.rank < b.rank
 	})

@@ -22,7 +22,7 @@ type KeyCapability struct {
 
 var keyCapabilities = map[KeyType]KeyCapability{
 	KeyTypeBlock: {
-		Groups:        KeyGroupRichText | KeyGroupLink | KeyGroupScalarContent | KeyGroupChartGroup,
+		Groups:        KeyGroupRichText | KeyGroupLink | KeyGroupScalarContent | KeyGroupChartGroup | KeyGroupChartStack,
 		FilterProfile: FilterProfileText,
 		order:         0, ValueKind: "text", Editable: true, Filterable: true,
 		Sortable: true, Groupable: true, DefaultOperator: FilterOperatorContains},
@@ -92,7 +92,7 @@ var keyCapabilities = map[KeyType]KeyCapability{
 		order:         13, ValueKind: "checkbox", Editable: true, Filterable: true,
 		Sortable: true, Groupable: true, DefaultOperator: FilterOperatorIsEqual},
 	KeyTypeRelation: {
-		Groups:        KeyGroupRollupCell | KeyGroupNewItemTemplate | KeyGroupRollupForeignRender | KeyGroupChartGroup,
+		Groups:        KeyGroupRollupCell | KeyGroupNewItemTemplate | KeyGroupRollupForeignRender | KeyGroupChartGroup | KeyGroupChartStack,
 		FilterProfile: FilterProfileRelation,
 		order:         14, ValueKind: "relation", Editable: true, Filterable: true,
 		Sortable: true, Groupable: true, DefaultOperator: FilterOperatorContainsAnyItem},

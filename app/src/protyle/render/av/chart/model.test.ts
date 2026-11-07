@@ -81,6 +81,8 @@ test("chart field predicates follow the kernel field types", () => {
     assert.equal(isChartValueColumn({type: "text"}), false);
     assert.equal(isChartStackColumn({type: "checkbox"}), true);
     assert.equal(isChartStackColumn({type: "mSelect"}), false);
+    assert.equal(isChartStackColumn({type: "relation"}), true);
+    assert.equal(isChartStackColumn({type: "block"}), true);
 });
 
 test("chart group labels localize empty, checkbox and date buckets", () => {

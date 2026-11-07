@@ -528,3 +528,55 @@ func TestChartGroupByPrimaryKey(t *testing.T) {
 		t.Fatalf("sum per item = %v, want 8", total)
 	}
 }
+
+// mods: stacking by a relation (one part per related page) or by the page name (one part per page).
+func TestChartStacksByRelationAndName(t *testing.T) {
+	relation := func(ids ...string) *Value {
+		value := &Value{KeyID: chartTestRelationKey, Type: KeyTypeRelation, Relation: &ValueRelation{BlockIDs: ids}}
+		for _, id := range ids {
+			value.Relation.Contents = append(value.Relation.Contents, &Value{BlockID: id, Type: KeyTypeBlock, Block: &ValueBlock{Content: "Project " + id[len(id)-1:]}})
+		}
+		return value
+	}
+	p1, p2 := "20261102000000-proj001", "20261102000000-proj002"
+	rows := []*TableRow{
+		chartTestRow(chartDate(2026, time.November, 2), chartNumber(1), relation(p2)),
+		chartTestRow(chartDate(2026, time.November, 2), chartNumber(0.5), relation(p1)),
+		chartTestRow(chartDate(2026, time.November, 2), chartNumber(2), relation(p1, p2)),
+		chartTestRow(chartDate(2026, time.November, 3), chartNumber(1), relation()),
+	}
+	settings := DefaultChartSettings()
+	settings.XKeyID, settings.DateBucket = chartTestDateKey, ChartDateBucketDay
+	settings.Measure, settings.ValueKeyID = ChartMeasureSum, chartTestNumberKey
+	settings.StackKeyID = chartTestRelationKey
+	data := BuildChartData(chartTestColumns(), rows, settings, time.UTC)
+	if data.StackType != KeyTypeRelation {
+		t.Fatalf("relation fields must be accepted as stacks: %q", data.StackType)
+	}
+	assertChartStrings(t, "days", chartKeys(data), []string{"2026-11-02", "2026-11-03"})
+	totals := []string{}
+	for _, category := range data.Categories {
+		totals = append(totals, fmt.Sprint(*category.Value))
+	}
+	assertChartStrings(t, "day totals count each item once", totals, []string{"3.5", "1"})
+	if 3 != len(data.Series) || data.Series[0].Label != "Project 1" || data.Series[1].Label != "Project 2" || !data.Series[2].Empty {
+		t.Fatalf("relation stacks must be sorted by title with the empty value last: %+v", data.Series)
+	}
+	assertChartStrings(t, "project 1", chartValues(data.Series[0].Values), []string{"2.5", "0"})
+	assertChartStrings(t, "project 2", chartValues(data.Series[1].Values), []string{"3", "0"})
+	assertChartStrings(t, "no project", chartValues(data.Series[2].Values), []string{"0", "1"})
+
+	settings.StackKeyID = chartTestBlockKey
+	data = BuildChartData(chartTestColumns(), rows, settings, time.UTC)
+	if data.StackType != KeyTypeBlock || 4 != len(data.Series) {
+		t.Fatalf("the page name must be accepted as a stack, one part per page: %+v", data.Series)
+	}
+	for i := 1; i < len(data.Series); i++ {
+		if data.Series[i-1].Label > data.Series[i].Label {
+			t.Fatalf("name stacks must be sorted by title: %+v", data.Series)
+		}
+	}
+	if !IsChartStackKeyType(KeyTypeRelation) || !IsChartStackKeyType(KeyTypeBlock) || IsChartStackKeyType(KeyTypeMSelect) {
+		t.Fatal("chart stack capabilities: relation and block allowed, multi-select not")
+	}
+}

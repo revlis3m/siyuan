@@ -17,7 +17,8 @@ Changes on top of the release:
 - Chart database layout (Notion-like): vertical/horizontal bar, line, donut and number charts of the view's filtered
   entries, grouped by an option, checkbox, date (day/ISO week/month/quarter/year), relation, text or number field,
   measured by count or sum/average/min/max of a number, rollup or template field, optional stacking by a
-  select/status/checkbox field. The kernel aggregates in one pass and returns only the summary (plus up to 10 sample
+  select/status/checkbox field, the page name (one part per page) or a relation (one part per related page; an entry
+  linked to several pages counts in each part, and once in the group total). The kernel aggregates in one pass and returns only the summary (plus up to 10 sample
   entries per data point for the click menu); ECharts draws it. Kernel: av/layout_chart.go, model/attribute_view_chart.go,
   apicontract/av_chart.go; frontend: protyle/render/av/chart/ and assets/scss/business/_av-chart.scss.
   Sorting, grouping, conditional colours and paging do not apply to charts.
