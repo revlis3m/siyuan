@@ -1,0 +1,31 @@
+# revlis3m mods: regenerates the API declarations and schema on demand and uploads them as an artifact,
+# for environments that cannot run the Go generator. Push the commit to check to branch `mods-apigen`.
+name: Mods API generate
+
+on:
+  push:
+    branches: [mods-apigen]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: kernel/go.mod
+          cache-dependency-path: kernel/go.sum
+      - name: Generate
+        working-directory: kernel
+        run: go run ./apicontract/cmd/apigen && git -C .. diff --stat && git -C .. diff --word-diff=plain --word-diff-regex="[^;]+" -U0
+      - uses: actions/upload-artifact@v4
+        with:
+          name: generated-api
+          path: |
+            app/src/types/api/index.d.ts
+            kernel/apicontract/schema.json
