@@ -29,3 +29,5 @@ Changes on top of the release:
   Every marked notebook starts masked when the app loads; the eye button in the editor toolbar reveals it until the
   next load. The block being edited stays visible. Marked notebooks are kept in local storage `local-mask-notebooks`.
   Code: app/src/protyle/util/maskAmounts.ts, maskAmountsText.ts.
+- Fix: creating a document with markdown no longer adds an empty `tags` attribute, which encrypted notebooks refused
+  (`/api/filetree/createDocWithMd` failed with error 390 in encrypted notebooks).

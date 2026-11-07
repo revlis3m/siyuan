@@ -1420,7 +1420,12 @@ func CreateWithMarkdown(tags, boxID, hPath, md, parentID, id string, withMath bo
 	if id == "" {
 		id = ast.NewNodeID()
 	}
-	retID, err = createLegacyDocuments(box.ID, hPath, dom, parentID, id, titleEmpty, map[string]string{"tags": tags})
+	// revlis3m mods: no empty tags attribute, which encrypted notebooks refuse.
+	var attrs map[string]string
+	if "" != tags {
+		attrs = map[string]string{"tags": tags}
+	}
+	retID, err = createLegacyDocuments(box.ID, hPath, dom, parentID, id, titleEmpty, attrs)
 	if err != nil {
 		return
 	}
