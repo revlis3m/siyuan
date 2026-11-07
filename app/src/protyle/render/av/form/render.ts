@@ -30,6 +30,8 @@ import {
 } from "./model";
 
 const drafts = new Map<string, Record<string, TFormRaw>>();
+// When each form last added an item, so "Added" survives the re-render that follows.
+const addedAt = new Map<string, number>();
 const relationCache = new Map<string, Promise<{ id: string, name: string }[]>>();
 
 export const canEditForm = (protyle: IProtyle) => !protyle.disabled && !window.siyuan.isPublish &&
@@ -239,7 +241,7 @@ export const renderForm = async (blockElement: HTMLElement, protyle: IProtyle, d
         <div class="av__form-actions">
             <button class="b3-button" type="submit"${editable ? "" : " disabled"}>${escapeHtml(settings.submitLabel || lang.formSubmit)}</button>
             <button class="b3-button b3-button--cancel" type="button" data-type="form-reset">${escapeHtml(lang.formReset)}</button>
-            <span class="av__form-status"></span>
+            <span class="av__form-status">${Date.now() - (addedAt.get(key) || 0) < 3000 ? escapeHtml(lang.formAdded) : ""}</span>
         </div>
     </form>
     <div class="av__cursor" contenteditable="true">${Constants.ZWSP}</div>
@@ -371,13 +373,14 @@ export const renderForm = async (blockElement: HTMLElement, protyle: IProtyle, d
             });
         });
         applyConditions();
-        const status = root.querySelector(".av__form-status");
-        status.textContent = lang.formAdded;
+        addedAt.set(key, Date.now());
+        root.querySelector(".av__form-status").textContent = lang.formAdded;
         setTimeout(() => {
-            if (status.textContent === lang.formAdded) {
+            const status = blockElement.querySelector(".av__form-status");
+            if (status && Date.now() - (addedAt.get(key) || 0) >= 3000) {
                 status.textContent = "";
             }
-        }, 3000);
+        }, 3100);
         root.querySelector<HTMLElement>(".av__form-field:not(.fn__none) [data-form-input], .av__form-field:not(.fn__none) input")?.focus();
     });
 
