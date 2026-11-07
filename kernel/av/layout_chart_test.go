@@ -471,7 +471,7 @@ func TestChartFieldTypes(t *testing.T) {
 		group := typ != KeyTypeMAsset && typ != KeyTypeRollup && typ != KeyTypeLineNumber &&
 			typ != KeyTypeLocation
 		value := typ == KeyTypeNumber || typ == KeyTypeRollup || typ == KeyTypeTemplate
-		stack := typ == KeyTypeSelect || typ == KeyTypeStatus || typ == KeyTypeCheckbox
+		stack := typ == KeyTypeSelect || typ == KeyTypeStatus || typ == KeyTypeCheckbox || typ == KeyTypeBlock || typ == KeyTypeRelation
 		if IsChartGroupKeyType(typ) != group || IsChartValueKeyType(typ) != value || IsChartStackKeyType(typ) != stack {
 			t.Fatalf("chart field capabilities changed for %s", typ)
 		}
