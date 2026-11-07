@@ -8273,6 +8273,7 @@
       },
       "required": [
         "chartType",
+        "cumulative",
         "dateBucket",
         "height",
         "measure",

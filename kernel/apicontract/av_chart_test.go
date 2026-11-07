@@ -19,15 +19,15 @@ func TestAVContractChartSettingsAndRenderData(t *testing.T) {
 		t.Fatal(err)
 	}
 	full := `"chartType":"bar","xKeyID":"20261101000000-cstatus","dateBucket":"week","measure":"sum","valueKeyID":"20261101000000-cnumber",` +
-		`"stackKeyID":"","sort":"valueDesc","showEmptyGroups":true,"showLegend":true,"showDataLabels":false,"height":360`
+		`"stackKeyID":"","sort":"valueDesc","showEmptyGroups":true,"showLegend":true,"showDataLabels":false,"cumulative":false,"height":360`
 	for _, fixture := range []struct {
 		data  string
 		valid bool
 	}{
 		{`{` + full + `}`, true},
-		{`{` + full + `,"cumulative":true}`, true},
-		{`{` + full + `,"cumulative":"yes"}`, false},
-		{`{"chartType":"","xKeyID":"","dateBucket":"","measure":"","valueKeyID":"","stackKeyID":"","sort":"","showEmptyGroups":false,"showLegend":false,"showDataLabels":false,"height":0}`, true},
+		{`{` + strings.Replace(full, `"cumulative":false`, `"cumulative":true`, 1) + `}`, true},
+		{`{` + strings.Replace(full, `"cumulative":false`, `"cumulative":"yes"`, 1) + `}`, false},
+		{`{"chartType":"","xKeyID":"","dateBucket":"","measure":"","valueKeyID":"","stackKeyID":"","sort":"","showEmptyGroups":false,"showLegend":false,"showDataLabels":false,"cumulative":false,"height":0}`, true},
 		{`{` + strings.Replace(full, `"bar"`, `"pie"`, 1) + `}`, false},
 		{`{` + strings.Replace(full, `"week"`, `"hour"`, 1) + `}`, false},
 		{`{` + strings.Replace(full, `"sum"`, `"median"`, 1) + `}`, false},
