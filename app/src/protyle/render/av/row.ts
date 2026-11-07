@@ -952,7 +952,7 @@ export const deleteRow = (blockElement: HTMLElement, protyle: IProtyle,
     });
     clearSelect(["row", "galleryItem"], blockElement);
     if (blockElement.dataset.avType !== "calendar" && blockElement.dataset.avType !== "timeline" &&
-        blockElement.dataset.avType !== "chart") {
+        blockElement.dataset.avType !== "chart" && blockElement.dataset.avType !== "form") {
         stickyRow(blockElement, protyle.contentElement, "all");
         updateHeader(blockElement.querySelector(".av__row"));
     }

@@ -25,7 +25,7 @@ type TEventBus = "ws-main" | "sync-start" | "sync-end" | "sync-fail" |
     "kernel-plugin-state-change" |
     "before-show-tooltip" | "before-hide-tooltip" |
     "common-menu-open" | "common-menu-closed"
-type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar" | "timeline" | "chart";
+type TAVView = "table" | "list" | "gallery" | "kanban" | "calendar" | "timeline" | "chart" | "form";
 type TAVAlign = "" | "left" | "center" | "right"
 type TAVDateFormat = "" | "full" | "month-day-year" | "day-month-year" | "year-month-day" | "lunar"
 type TAVCol = import("./av").AVKeyType;
@@ -1325,6 +1325,27 @@ interface IAVTimelineItem {
     color?: IAVCellSelectValue;
 }
 
+/** revlis3m mods: 表单中一个字段的设置，也用于 setAttrViewForm 事务。 */
+interface IAVFormField {
+    keyID: string;
+    required: boolean;
+    /** 默认值来源：空、value（固定值）、today（今天）或 last（最近新增条目的值）。 */
+    default: "" | "value" | "today" | "last";
+    /** 固定默认值的文本形式。 */
+    value: string;
+    /** 只有该字段的值是 showWhenValues 之一时才显示。 */
+    showWhenKeyID: string;
+    showWhenValues: string[];
+}
+
+/** revlis3m mods: 表单视图设置，也是 setAttrViewForm 事务的完整 data。 */
+interface IAVFormSettings {
+    title: string;
+    description: string;
+    submitLabel: string;
+    fields: IAVFormField[];
+}
+
 /**
  * 图表的持久化设置，也是 setAttrViewChart 事务的完整 data。
  * 图表在视图筛选之后汇总条目，不应用排序、分组和条目分页。
@@ -1418,6 +1439,10 @@ interface IAVTable extends IAVView {
     chart?: IAVChartSettings;
     /** 仅图表布局返回：视图筛选后的汇总结果，此时 rows 为空列表，rowCount 为筛选后的条目数。 */
     chartData?: IAVChartData;
+    /** revlis3m mods: 仅表单布局返回的设置；表单的 rows 为空列表。 */
+    form?: IAVFormSettings;
+    /** revlis3m mods: 仅表单布局返回：默认值为 last 的字段在最近新增条目中的值。 */
+    formLast?: Record<string, IAVCellValue>;
     columns: IAVColumn[],
     rows: IAVRow[],
     rowCount: number,

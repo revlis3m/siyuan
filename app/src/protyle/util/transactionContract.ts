@@ -8,6 +8,7 @@ const transactionActions: Record<IOperation["action"], true> = {
     "setAttrViewCalendar": true,
     "setAttrViewTimeline": true,
     "setAttrViewChart": true,
+    "setAttrViewForm": true,
     "updateAttrs": true,
     "create": true,
     "restoreCreatedDoc": true,

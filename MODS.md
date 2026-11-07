@@ -39,3 +39,9 @@ Changes on top of the release:
   Code: kernel/model/mods_notebook_lock.go, kernel/api/mods_notebook_lock.go, app/src/util/notebookPIN.ts.
 - Workflow "Mods API generate": push a commit to branch `mods-apigen` to get the generated schema/declarations as a
   gzip+base64 patch in the job log (for environments that cannot run the Go generator).
+- Form view (layout `form`): the view's visible fields, in order, are the questions; Submit adds an item through
+  `/api/av/appendAttributeViewDetachedBlocksWithValues`. Per-field settings (`setAttrViewForm`): required, default
+  (fixed value, today, last used = value of the newest item matching the view filters) and "show only when" a
+  select/status/checkbox field has given values. Rows are not returned (`formLast` carries the last values). Unsent
+  answers survive re-renders. Code: kernel/av/layout_form.go, kernel/model/attribute_view_form.go,
+  app/src/protyle/render/av/form/.

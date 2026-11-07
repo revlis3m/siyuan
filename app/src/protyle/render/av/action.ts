@@ -413,7 +413,7 @@ export const avClick = (protyle: IProtyle, event: MouseEvent & { target: HTMLEle
             return true;
         } else if (type === "av-add-more" && !protyle.disabled) {
             const templateID = blockElement.querySelector<HTMLElement>(".av__header")?.dataset.defaultTemplateId;
-            if (templateID || viewType === "calendar" || viewType === "timeline" || viewType === "chart") {
+            if (templateID || viewType === "calendar" || viewType === "timeline" || viewType === "chart" || viewType === "form") {
                 createAttributeViewItem({blockElement, protyle, templateID});
             } else {
                 insertRows({
@@ -1246,7 +1246,7 @@ export const avContextmenu = (protyle: IProtyle, rowElement: HTMLElement | undef
                 });
             }
         });
-        if (selectedItemInfos.length === 1 && avType !== "calendar" && avType !== "timeline" && avType !== "chart") {
+        if (selectedItemInfos.length === 1 && avType !== "calendar" && avType !== "timeline" && avType !== "chart" && avType !== "form") {
             if (!primaryRows[0].isDetached) {
                 menu.addSeparator({id: "separator_1"});
             }

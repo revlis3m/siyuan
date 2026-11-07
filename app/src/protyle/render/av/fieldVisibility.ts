@@ -13,6 +13,8 @@ const getViewIcon = (type: TAVView) => {
             return "iconAlignSettings";
         case "chart":
             return "iconAlignBottom";
+        case "form":
+            return "iconEdit";
         case "list":
             return "iconList";
         case "gallery":

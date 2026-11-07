@@ -27,7 +27,7 @@ const findItemCell = (view: IAVView, viewType: TAVView, itemID: string, fieldInd
         }
         return;
     }
-    const isTable = isTableLikeView(viewType) || viewType === "calendar" || viewType === "timeline" || viewType === "chart";
+    const isTable = isTableLikeView(viewType) || viewType === "calendar" || viewType === "timeline" || viewType === "chart" || viewType === "form";
     if (isTable) {
         const item = (view as IAVTable).rows?.find((currentItem) => currentItem.id === itemID);
         return item?.cells[fieldIndex];

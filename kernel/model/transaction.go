@@ -535,6 +535,8 @@ func performTx(tx *Transaction) (ret *TxErr) {
 				ret = tx.doSetAttrViewTimeline(op)
 			case "setAttrViewChart":
 				ret = tx.doSetAttrViewChart(op)
+			case "setAttrViewForm":
+				ret = tx.doSetAttrViewForm(op)
 			case "setAttrViewCardLayout":
 				ret = tx.doSetAttrViewCardLayout(op)
 			case "setAttrViewColFullRow":

@@ -5168,7 +5168,7 @@ func exportRefTreesWithConfig(tree *parse.Tree, defBlockIDs *[]string, retTrees 
 
 func getAttrViewTable(attrView *av.AttributeView, view *av.View, query string) (ret *av.Table) {
 	switch view.LayoutType {
-	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
+	case av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart, av.LayoutTypeForm:
 		// 复用行列导出，读取各布局的字段顺序和显隐设置。
 	case av.LayoutTypeGallery:
 		view.Table = av.NewLayoutTable()

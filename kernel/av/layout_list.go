@@ -42,6 +42,9 @@ func (view *View) GetTableLayout() *LayoutTable {
 	if LayoutTypeChart == view.LayoutType {
 		return view.Chart.LayoutTable
 	}
+	if LayoutTypeForm == view.LayoutType {
+		return view.Form.LayoutTable
+	}
 	if LayoutTypeList == view.LayoutType {
 		return view.List
 	}
@@ -60,6 +63,8 @@ func TableFromViewable(viewable Viewable) *Table {
 	case *Timeline:
 		return instance.Table
 	case *Chart:
+		return instance.Table
+	case *Form:
 		return instance.Table
 	}
 	return nil

@@ -174,7 +174,7 @@ func RenderGroupViewWithSourceContext(attrView *av.AttributeView, view, groupVie
 	source *GroupViewRenderSource, ignoreRows bool, context *AttributeViewRenderContext) (ret av.Viewable) {
 	var err error
 	switch groupView.LayoutType {
-	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
+	case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart, av.LayoutTypeForm:
 		// 这里需要使用深拷贝，因为字段上可能会带有计算（FieldCalc），每个分组视图的计算结果都需要分别存储在不同的字段实例上
 		err = copier.CopyWithOption(&groupView.GetTableLayout().Columns, &view.GetTableLayout().Columns, copier.Option{DeepCopy: true})
 		groupView.GetTableLayout().ShowIcon = view.GetTableLayout().ShowIcon
@@ -214,7 +214,7 @@ func RenderGroupViewWithSourceContext(attrView *av.AttributeView, view, groupVie
 	if nil != err {
 		logging.LogErrorf("copy view fields [%s] to group [%s] failed: %s", view.ID, groupView.ID, err)
 		switch groupView.LayoutType {
-		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart:
+		case av.LayoutTypeTable, av.LayoutTypeList, av.LayoutTypeCalendar, av.LayoutTypeTimeline, av.LayoutTypeChart, av.LayoutTypeForm:
 			groupView.GetTableLayout().Columns = view.GetTableLayout().Columns
 		case av.LayoutTypeGallery:
 			groupView.Gallery.CardFields = view.Gallery.CardFields
@@ -295,7 +295,7 @@ func renderViewWithContext(attrView *av.AttributeView, view *av.View, query stri
 
 	// 元数据、延迟模板、日历、时间线和图表渲染不写入缓存，避免后续渲染读取已裁剪或已汇总的条目。
 	if !ignoreRows && !deferTemplateValues && view.LayoutType != av.LayoutTypeCalendar &&
-		view.LayoutType != av.LayoutTypeTimeline && view.LayoutType != av.LayoutTypeChart {
+		view.LayoutType != av.LayoutTypeTimeline && view.LayoutType != av.LayoutTypeChart && view.LayoutType != av.LayoutTypeForm {
 		attrView.RenderedViewables[ret.GetID()] = ret
 	}
 	renderedAttrViews[attrView.ID] = attrView
@@ -332,6 +332,12 @@ func renderView(attrView *av.AttributeView, view *av.View, query string, depth *
 		table.Chart = &settings
 		table.Group = nil
 		ret = &av.Chart{Table: table}
+	case av.LayoutTypeForm:
+		table := renderAttributeViewTable(attrView, view, query, depth, cachedAttrViews, ignoreRows, deferTemplateValues, renderContext)
+		settings := view.Form.Settings
+		table.FormSettings = &settings
+		table.Group = nil
+		ret = &av.Form{Table: table}
 	case av.LayoutTypeList:
 		ret = &av.List{Table: renderAttributeViewTable(attrView, view, query, depth, cachedAttrViews, ignoreRows, deferTemplateValues, renderContext)}
 	case av.LayoutTypeGallery:

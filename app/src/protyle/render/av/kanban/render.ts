@@ -122,7 +122,7 @@ export const renderKanban = async (options: {
     applyAVRenderContext(options.blockElement, data);
     prepareAVLocate(options.blockElement, data, resetData);
     if (isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ||
-        data.viewType === "chart") {
+        data.viewType === "chart" || data.viewType === "form") {
         avRender(options.blockElement, options.protyle, options.cb, options.renderAll, data);
         return;
     }

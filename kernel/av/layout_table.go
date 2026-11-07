@@ -74,6 +74,10 @@ type Table struct {
 	Chart     *ChartSettings `json:"chart,omitempty"`
 	ChartData *ChartData     `json:"chartData,omitempty"`
 	ChartRows []*TableRow    `json:"-"`
+
+	// revlis3m mods: 以下仅表单返回：设置和最近新增条目的值。
+	FormSettings *FormSettings     `json:"form,omitempty"`
+	FormLast     map[string]*Value `json:"formLast,omitempty"`
 }
 
 // TableColumn 描述了表格实例列的结构。

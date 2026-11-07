@@ -91,7 +91,7 @@ const getLocalAVLocateData = (data: IAV | undefined, request: IAVLocateRequest) 
     }
     const findTarget = (view: IAVTable | IAVGallery | IAVKanban, groupID = "") => {
         const items = isTableLikeView(data.viewType) || data.viewType === "calendar" || data.viewType === "timeline" ||
-            data.viewType === "chart" ? (view as IAVTable).rows : (view as IAVGallery | IAVKanban).cards;
+            data.viewType === "chart" || data.viewType === "form" ? (view as IAVTable).rows : (view as IAVGallery | IAVKanban).cards;
         const localIndex = items?.findIndex(item => item.id === request.itemID) ?? -1;
         if (localIndex < 0) {
             return;
@@ -322,7 +322,7 @@ export const prepareAVLocate = (blockElement: HTMLElement, data: IAV, resetData:
     if (request.viewID && request.previousViewID !== undefined && request.viewID !== request.previousViewID) {
         clearSelect(["row", "galleryItem"], blockElement);
     }
-    if (data.viewType === "calendar" || data.viewType === "timeline" || data.viewType === "chart") {
+    if (data.viewType === "calendar" || data.viewType === "timeline" || data.viewType === "chart" || data.viewType === "form") {
         return;
     }
     const key = data.target.groupID || "all";
@@ -367,7 +367,7 @@ export const finishAVLocate = (blockElement: HTMLElement, protyle: IProtyle, dat
         return;
     }
     // 图表只显示汇总结果，没有可定位的条目元素。
-    if (data.viewType === "chart") {
+    if (data.viewType === "chart" || data.viewType === "form") {
         clearAVLocateRequest(blockElement, request);
         return;
     }

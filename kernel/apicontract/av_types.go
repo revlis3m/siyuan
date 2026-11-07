@@ -22,6 +22,10 @@ type AVTable struct {
 	Chart *AVChartSettings `json:"chart,omitempty" api:"optional"`
 	// 仅图表布局返回：视图筛选后的汇总结果；图表的 rows 为空列表，rowCount 为筛选后的条目数。
 	ChartData *AVChartData `json:"chartData,omitempty" api:"optional"`
+	// revlis3m mods: 仅表单布局返回的持久化设置；表单的 rows 为空列表。
+	Form *AVFormSettings `json:"form,omitempty" api:"optional"`
+	// revlis3m mods: 仅表单布局返回：默认值为 last 的字段在最近新增条目中的值，按字段 ID 索引。
+	FormLast map[string]*AVValue `json:"formLast,omitempty" api:"optional"`
 	*AVBaseInstance
 	Columns  []*AVTableColumn `json:"columns" api:"optional,nullable"`
 	Rows     []*AVTableRow    `json:"rows" api:"optional,nullable"`
@@ -449,7 +453,7 @@ type AVViewData struct {
 	Name             string `json:"name" api:"optional,nullable"`
 	Desc             string `json:"desc" api:"optional,nullable"`
 	HideAttrViewName bool   `json:"hideAttrViewName" api:"optional,nullable"`
-	Type             string `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart"`
+	Type             string `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart|form"`
 	PageSize         int    `json:"pageSize" api:"optional,nullable"`
 }
 
@@ -522,11 +526,12 @@ type AVView struct {
 	Filters           []*AVViewFilter           `json:"filters,omitempty" api:"optional,nullable"`
 	Sorts             []*AVViewSort             `json:"sorts,omitempty" api:"optional,nullable"`
 	PageSize          int                       `json:"pageSize" api:"optional,nullable"`
-	LayoutType        string                    `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart"`
+	LayoutType        string                    `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart|form"`
 	Table             *AVLayoutTable            `json:"table,omitempty" api:"optional,nullable"`
 	Calendar          *AVLayoutCalendar         `json:"calendar,omitempty" api:"optional,nullable"`
 	Timeline          *AVLayoutTimeline         `json:"timeline,omitempty" api:"optional,nullable"`
 	Chart             *AVLayoutChart            `json:"chart,omitempty" api:"optional,nullable"`
+	Form              *AVLayoutForm             `json:"form,omitempty" api:"optional,nullable"`
 	List              *AVLayoutTable            `json:"list,omitempty" api:"optional,nullable"`
 	Gallery           *AVLayoutGallery          `json:"gallery,omitempty" api:"optional,nullable"`
 	Kanban            *AVLayoutKanban           `json:"kanban,omitempty" api:"optional,nullable"`
@@ -616,7 +621,7 @@ type AVAttributeViewFieldView struct {
 	ID     string `json:"id" api:"optional,nullable"`
 	Icon   string `json:"icon" api:"optional,nullable"`
 	Name   string `json:"name" api:"optional,nullable"`
-	Type   string `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart"`
+	Type   string `json:"type" api:"optional,nullable,enum=table|list|gallery|kanban|calendar|timeline|chart|form"`
 	Hidden bool   `json:"hidden" api:"optional,nullable"`
 }
 
@@ -625,7 +630,7 @@ type AVAvSearchResult struct {
 	AvName     string              `json:"avName" api:"optional,nullable"`
 	ViewName   string              `json:"viewName" api:"optional,nullable"`
 	ViewID     string              `json:"viewID" api:"optional,nullable"`
-	ViewLayout string              `json:"viewLayout" api:"optional,nullable,enum=|table|list|gallery|kanban|calendar|timeline|chart"`
+	ViewLayout string              `json:"viewLayout" api:"optional,nullable,enum=|table|list|gallery|kanban|calendar|timeline|chart|form"`
 	BlockID    string              `json:"blockID" api:"optional,nullable"`
 	HPath      string              `json:"hPath" api:"optional,nullable"`
 	Matched    bool                `json:"matched,omitempty" api:"optional,nullable"`

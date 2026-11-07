@@ -662,7 +662,7 @@ export const createAttributeViewItem = (options: {
     position?: ICreatePosition;
 }) => {
     // 日历和时间线按日期排布条目，图表不显示条目，新建后默认打开条目以便补充内容。
-    const isCalendar = ["calendar", "timeline", "chart"].includes(options.blockElement.dataset.avType);
+    const isCalendar = ["calendar", "timeline", "chart", "form"].includes(options.blockElement.dataset.avType);
     fetchPost("/api/av/createAttributeViewItem", {
         calendarDate: options.position?.calendarDate ?? getCalendarCreationDate(options.blockElement),
         calendarEndDate: options.position?.calendarEndDate,

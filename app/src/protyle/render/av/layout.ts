@@ -158,6 +158,11 @@ export const getLayoutHTML = (data: IAV) => {
                 <div class="fn__hr"></div>
                 <div>${window.siyuan.languages.chartView}</div>
             </div>
+            <div data-type="set-layout" data-view-type="form" class="av__layout-item${data.viewType === "form" ? " av__layout-item--select" : ""}">
+                <svg><use xlink:href="#iconEdit"></use></svg>
+                <div class="fn__hr"></div>
+                <div>${window.siyuan.languages.formView}</div>
+            </div>
         </div>
     </button>
     <label class="b3-menu__item">
@@ -166,7 +171,7 @@ export const getLayoutHTML = (data: IAV) => {
         <input data-type="toggle-view-title" type="checkbox" class="b3-switch b3-switch--menu" ${view.hideAttrViewName ? "" : "checked"}>
     </label>
     ${html}
-    ${data.viewType === "chart" ? "" : `<label class="b3-menu__item">
+    ${data.viewType === "chart" || data.viewType === "form" ? "" : `<label class="b3-menu__item">
         <span class="fn__flex-center">${window.siyuan.languages.showAllEntriesIcons}</span>
         <span class="fn__space fn__flex-1"></span>
         <input data-type="toggle-entries-icons" type="checkbox" class="b3-switch b3-switch--menu" ${view.showIcon ? "checked" : ""}>
@@ -193,6 +198,10 @@ export const getLayoutHTML = (data: IAV) => {
     if (data.viewType === "chart") {
         // 图表只显示汇总结果，不提供条目图标、换行和分页设置。
         return html + getChartSettingsHTML(data.view as IAVTable, true) + "</div>";
+    }
+    if (data.viewType === "form") {
+        // revlis3m mods: the form's settings are on the form itself (⚙ next to the title and each field).
+        return html + `<div class="b3-menu__item b3-menu__item--readonly"><span class="ft__on-surface ft__smaller">${window.siyuan.languages.formFieldsTip}</span></div></div>`;
     }
     if (data.viewType === "timeline") {
         const columns = (data.view as IAVTable).columns;
@@ -348,6 +357,9 @@ export const bindLayoutEvent = (options: {
     }
     if (options.data.viewType === "chart") {
         bindChartSettings({...options, onChange: rerender});
+        return;
+    }
+    if (options.data.viewType === "form") {
         return;
     }
     if (isTableLikeView(options.data.viewType)) {

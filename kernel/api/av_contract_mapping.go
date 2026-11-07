@@ -40,6 +40,8 @@ func avContractView(value av.Viewable) apicontract.AVViewInstance {
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.Chart:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
+	case *av.Form:
+		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.List:
 		return apicontract.NewAVTableInstance(toContractAVTable(view.Table))
 	case *av.Gallery:
@@ -68,6 +70,13 @@ func toContractAVTable(value *av.Table) *apicontract.AVTable {
 	ret.TimelineUnscheduled = avContractSlice(value.TimelineUnscheduled, toContractAVTableRow)
 	ret.Chart = toContractAVChartSettings(value.Chart)
 	ret.ChartData = toContractAVChartData(value.ChartData)
+	ret.Form = toContractAVFormSettings(value.FormSettings)
+	if len(value.FormLast) > 0 {
+		ret.FormLast = map[string]*apicontract.AVValue{}
+		for id, v := range value.FormLast {
+			ret.FormLast[id] = toContractAVValue(v)
+		}
+	}
 	return ret
 }
 func toContractAVBaseInstance(value *av.BaseInstance) *apicontract.AVBaseInstance {
@@ -1049,6 +1058,7 @@ func toContractAVView(value *av.View) *apicontract.AVView {
 		Calendar:          toContractAVLayoutCalendar(value.Calendar),
 		Timeline:          toContractAVLayoutTimeline(value.Timeline),
 		Chart:             toContractAVLayoutChart(value.Chart),
+		Form:              toContractAVLayoutForm(value.Form),
 		Gallery:           toContractAVLayoutGallery(value.Gallery),
 		Kanban:            toContractAVLayoutKanban(value.Kanban),
 		ItemIDs:           value.ItemIDs,

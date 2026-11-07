@@ -255,6 +255,9 @@ func (view *View) TableLayouts() []*LayoutTable {
 	if nil != view.Chart {
 		ret = append(ret, view.Chart.LayoutTable)
 	}
+	if nil != view.Form {
+		ret = append(ret, view.Form.LayoutTable)
+	}
 	return ret
 }
 
