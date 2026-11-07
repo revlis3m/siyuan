@@ -324,9 +324,9 @@ export type AVChartItem = { "blockID": string; "id": string; "isDetached": boole
 
 export type AVChartSeries = { "color"?: string; "counts": Array<number> | null; "empty"?: boolean; "items": Array<Array<AVChartItem | null> | null> | null; "key": string; "label": string; "resolvedColor"?: AVAttributeViewColor; "values": Array<number | null> | null; };
 
-export type AVChartSettings = { "chartType": "" | "bar" | "horizontalBar" | "line" | "donut" | "number"; "dateBucket": "" | "day" | "week" | "month" | "quarter" | "year"; "height": number; "measure": "" | "count" | "sum" | "average" | "min" | "max"; "showDataLabels": boolean; "showEmptyGroups": boolean; "showLegend": boolean; "sort": "" | "default" | "valueDesc" | "valueAsc" | "labelAsc"; "stackKeyID": string; "valueKeyID": string; "xKeyID": string; };
+export type AVChartSettings = { "chartType": "" | "bar" | "horizontalBar" | "line" | "donut" | "number"; "cumulative"?: boolean; "dateBucket": "" | "day" | "week" | "month" | "quarter" | "year"; "height": number; "measure": "" | "count" | "sum" | "average" | "min" | "max"; "showDataLabels": boolean; "showEmptyGroups": boolean; "showLegend": boolean; "sort": "" | "default" | "valueDesc" | "valueAsc" | "labelAsc"; "stackKeyID": string; "valueKeyID": string; "xKeyID": string; };
 
-export type AVChartSettingsInput = { "chartType": "" | "bar" | "horizontalBar" | "line" | "donut" | "number"; "dateBucket": "" | "day" | "week" | "month" | "quarter" | "year"; "height": number; "measure": "" | "count" | "sum" | "average" | "min" | "max"; "showDataLabels": boolean; "showEmptyGroups": boolean; "showLegend": boolean; "sort": "" | "default" | "valueDesc" | "valueAsc" | "labelAsc"; "stackKeyID": string; "valueKeyID": string; "xKeyID": string; };
+export type AVChartSettingsInput = { "chartType": "" | "bar" | "horizontalBar" | "line" | "donut" | "number"; "cumulative"?: boolean; "dateBucket": "" | "day" | "week" | "month" | "quarter" | "year"; "height": number; "measure": "" | "count" | "sum" | "average" | "min" | "max"; "showDataLabels": boolean; "showEmptyGroups": boolean; "showLegend": boolean; "sort": "" | "default" | "valueDesc" | "valueAsc" | "labelAsc"; "stackKeyID": string; "valueKeyID": string; "xKeyID": string; };
 
 export type AVCollectBlocksInput = { "blockIDs": Array<string>; "ruleID": string; };
 

@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Zobraziť prázdne skupiny",
 	"chartShowLegend": "Zobraziť legendu",
 	"chartShowDataLabels": "Zobraziť popisky údajov",
+	"chartCumulative": "Priebežný súčet",
 	"chartSelectGroupField": "Vyberte pole na zoskupenie na zobrazenie grafu",
 	"chartNoData": "Žiadne položky na zobrazenie",
 	"chartWeekOf": "Týždeň od ${x}",

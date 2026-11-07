@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Показывать пустые группы",
 	"chartShowLegend": "Показывать легенду",
 	"chartShowDataLabels": "Показывать подписи данных",
+	"chartCumulative": "Нарастающий итог",
 	"chartSelectGroupField": "Выберите поле группировки для отображения диаграммы",
 	"chartNoData": "Нет записей для отображения",
 	"chartWeekOf": "Неделя с ${x}",

@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "顯示空分組",
 	"chartShowLegend": "顯示圖例",
 	"chartShowDataLabels": "顯示資料標籤",
+	"chartCumulative": "累計值",
 	"chartSelectGroupField": "選擇分組欄位以顯示圖表",
 	"chartNoData": "沒有可顯示的條目",
 	"chartWeekOf": "${x} 起的一週",

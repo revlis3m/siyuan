@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "빈 그룹 표시",
 	"chartShowLegend": "범례 표시",
 	"chartShowDataLabels": "데이터 레이블 표시",
+	"chartCumulative": "누적 합계",
 	"chartSelectGroupField": "차트를 표시할 그룹화 필드를 선택하세요",
 	"chartNoData": "표시할 항목이 없습니다",
 	"chartWeekOf": "${x} 주",

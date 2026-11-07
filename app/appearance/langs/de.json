@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Leere Gruppen anzeigen",
 	"chartShowLegend": "Legende anzeigen",
 	"chartShowDataLabels": "Datenbeschriftungen anzeigen",
+	"chartCumulative": "Laufende Summe",
 	"chartSelectGroupField": "Feld zum Gruppieren auswählen, um das Diagramm anzuzeigen",
 	"chartNoData": "Keine Einträge zum Anzeigen",
 	"chartWeekOf": "Woche ab ${x}",

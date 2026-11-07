@@ -22,3 +22,5 @@ Changes on top of the release:
   entries per data point for the click menu); ECharts draws it. Kernel: av/layout_chart.go, model/attribute_view_chart.go,
   apicontract/av_chart.go; frontend: protyle/render/av/chart/ and assets/scss/business/_av-chart.scss.
   Sorting, grouping, conditional colours and paging do not apply to charts.
+  Running total (`cumulative`): bar, horizontal bar and line charts of a count or sum show each group's value as the
+  total up to that group (per series when stacked; the empty group keeps its own value), e.g. a balance-over-time line.

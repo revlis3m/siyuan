@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Tampilkan grup kosong",
 	"chartShowLegend": "Tampilkan legenda",
 	"chartShowDataLabels": "Tampilkan label data",
+	"chartCumulative": "Total kumulatif",
 	"chartSelectGroupField": "Pilih bidang pengelompokan untuk menampilkan bagan",
 	"chartNoData": "Tidak ada entri untuk ditampilkan",
 	"chartWeekOf": "Minggu ${x}",

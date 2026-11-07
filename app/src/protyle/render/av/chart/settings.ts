@@ -22,7 +22,7 @@ import {
 } from "./model";
 
 type TChartChoiceKey = "chartType" | "xKeyID" | "dateBucket" | "measure" | "valueKeyID" | "stackKeyID" | "sort" | "height";
-type TChartToggleKey = "showEmptyGroups" | "showLegend" | "showDataLabels";
+type TChartToggleKey = "showEmptyGroups" | "showLegend" | "showDataLabels" | "cumulative";
 
 export interface IChartSettingItem {
     key: TChartChoiceKey;
@@ -125,16 +125,24 @@ export const getChartSettingItems = (view: IAVTable): IChartSettingItem[] => {
     return items;
 };
 
+/** 累计值只适用于柱形、条形和折线图的计数或求和。 */
+export const chartSupportsCumulative = (settings: Pick<IAVChartSettings, "chartType" | "measure">) =>
+    ["bar", "horizontalBar", "line"].includes(settings.chartType || "bar") && ["count", "sum"].includes(settings.measure || "count");
+
 export const getChartToggleItems = (view: IAVTable): IChartToggleItem[] => {
-    const type = getChartSettings(view).chartType;
-    if (type === "number") {
+    const settings = getChartSettings(view);
+    if (settings.chartType === "number") {
         return [];
     }
-    return [
+    const items: IChartToggleItem[] = [
         {key: "showEmptyGroups", label: window.siyuan.languages.chartShowEmptyGroups},
         {key: "showLegend", label: window.siyuan.languages.chartShowLegend},
         {key: "showDataLabels", label: window.siyuan.languages.chartShowDataLabels},
     ];
+    if (chartSupportsCumulative(settings)) {
+        items.push({key: "cumulative", label: window.siyuan.languages.chartCumulative});
+    }
+    return items;
 };
 
 const getSettingValue = (settings: IAVChartSettings, key: TChartChoiceKey) =>
@@ -151,6 +159,7 @@ export const updateChartSettings = (settings: IAVChartSettings, key: TChartChoic
         case "showEmptyGroups":
         case "showLegend":
         case "showDataLabels":
+        case "cumulative":
             next[key] = !!value;
             break;
         case "chartType":

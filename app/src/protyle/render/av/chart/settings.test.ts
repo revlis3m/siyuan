@@ -16,7 +16,7 @@ const languages = {
     chartValueField: "Value field", chartStackBy: "Sub-group by", sort: "Sort", default: "Default",
     chartSortValueDesc: "Value high to low", chartSortValueAsc: "Value low to high", chartSortLabelAsc: "Name A to Z",
     height: "Height", chartShowEmptyGroups: "Show empty groups", chartShowLegend: "Show legend",
-    chartShowDataLabels: "Show data labels", timelineZoomDay: "Day", timelineZoomWeek: "Week", timelineZoomMonth: "Month",
+    chartShowDataLabels: "Show data labels", chartCumulative: "Running total", timelineZoomDay: "Day", timelineZoomWeek: "Week", timelineZoomMonth: "Month",
     timelineZoomQuarter: "Quarter", empty: "Empty", checked: "Checked", unchecked: "Unchecked", chartWeekOf: "Week of ${x}",
 };
 
@@ -79,7 +79,14 @@ test("chart settings list only the options that apply to the chart type", () => 
     assert.deepEqual(keysOf(methods.getChartSettingItems(data({chartType: "number"}).view as IAVTable)),
         ["chartType", "measure", "height"]);
     assert.deepEqual(keysOf(methods.getChartToggleItems(data({chartType: "number"}).view as IAVTable)), []);
-    assert.deepEqual(keysOf(methods.getChartToggleItems(data({}).view as IAVTable)), ["showEmptyGroups", "showLegend", "showDataLabels"]);
+    assert.deepEqual(keysOf(methods.getChartToggleItems(data({}).view as IAVTable)),
+        ["showEmptyGroups", "showLegend", "showDataLabels", "cumulative"]);
+    assert.deepEqual(keysOf(methods.getChartToggleItems(data({chartType: "line", measure: "sum"}).view as IAVTable)),
+        ["showEmptyGroups", "showLegend", "showDataLabels", "cumulative"]);
+    assert.deepEqual(keysOf(methods.getChartToggleItems(data({chartType: "donut"}).view as IAVTable)),
+        ["showEmptyGroups", "showLegend", "showDataLabels"]);
+    assert.deepEqual(keysOf(methods.getChartToggleItems(data({measure: "average"}).view as IAVTable)),
+        ["showEmptyGroups", "showLegend", "showDataLabels"]);
 });
 
 test("chart setting updates normalize values and keep the stack apart from the group field", () => {
@@ -95,6 +102,8 @@ test("chart setting updates normalize values and keep the stack apart from the g
     assert.equal(methods.updateChartSettings(base, "dateBucket", "quarter").dateBucket, "quarter");
     assert.equal(methods.updateChartSettings(base, "showDataLabels", true).showDataLabels, true);
     assert.equal(base.showDataLabels, false);
+    assert.equal(methods.updateChartSettings(base, "cumulative", true).cumulative, true);
+    assert.equal(base.cumulative, false);
 });
 
 test("chart settings write undoable transactions and skip unchanged settings", () => {

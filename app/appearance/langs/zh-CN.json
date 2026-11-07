@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "显示空分组",
 	"chartShowLegend": "显示图例",
 	"chartShowDataLabels": "显示数据标签",
+	"chartCumulative": "累计值",
 	"chartSelectGroupField": "选择分组字段以显示图表",
 	"chartNoData": "没有可显示的条目",
 	"chartWeekOf": "${x} 起的一周",

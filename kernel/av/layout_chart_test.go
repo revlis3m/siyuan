@@ -158,7 +158,7 @@ func TestChartDefaultSettings(t *testing.T) {
 	settings := NewChartSettings(attrView)
 	if settings.XKeyID != chartTestStatusKey || settings.ChartType != ChartTypeBar || settings.Measure != ChartMeasureCount ||
 		settings.Sort != ChartSortDefault || settings.DateBucket != ChartDateBucketMonth || !settings.ShowLegend ||
-		settings.ShowDataLabels || settings.ShowEmptyGroups || settings.Height != ChartDefaultHeight || settings.StackKeyID != "" {
+		settings.ShowDataLabels || settings.Cumulative || settings.ShowEmptyGroups || settings.Height != ChartDefaultHeight || settings.StackKeyID != "" {
 		t.Fatalf("unexpected default chart settings: %+v", settings)
 	}
 	attrView.KeyValues = attrView.KeyValues[:4]
@@ -579,4 +579,44 @@ func TestChartStacksByRelationAndName(t *testing.T) {
 	if !IsChartStackKeyType(KeyTypeRelation) || !IsChartStackKeyType(KeyTypeBlock) || IsChartStackKeyType(KeyTypeMSelect) {
 		t.Fatal("chart stack capabilities: relation and block allowed, multi-select not")
 	}
+}
+
+func TestChartCumulative(t *testing.T) {
+	location := time.UTC
+	rows := []*TableRow{
+		chartTestRow(chartDate(2026, 1, 5), chartNumber(100), chartSelect("A")),
+		chartTestRow(chartDate(2026, 1, 20), chartNumber(-30.5), chartSelect("B")),
+		chartTestRow(chartDate(2026, 3, 2), chartNumber(-20), chartSelect("A")),
+		chartTestRow(chartNumber(7), chartSelect("A")),
+	}
+	settings := DefaultChartSettings()
+	settings.ChartType = ChartTypeLine
+	settings.XKeyID, settings.Measure, settings.ValueKeyID = chartTestDateKey, ChartMeasureSum, chartTestNumberKey
+	settings.Cumulative, settings.ShowEmptyGroups = true, true
+	data := BuildChartData(chartTestColumns(), rows, settings, location)
+	assertChartStrings(t, "keys", chartKeys(data), []string{"2026-01", "2026-02", "2026-03", "(empty)"})
+	assertChartStrings(t, "running totals", chartValues(data.Series[0].Values), []string{"69.5", "69.5", "49.5", "7"})
+	if nil == data.Categories[2].Value || 49.5 != *data.Categories[2].Value || nil == data.Total || 56.5 != *data.Total {
+		t.Fatalf("category running total and overall total: %+v %v", data.Categories[2].Value, data.Total)
+	}
+
+	settings.StackKeyID, settings.ShowEmptyGroups = chartTestSelectKey, false
+	data = BuildChartData(chartTestColumns(), rows, settings, location)
+	assertChartStrings(t, "stack keys", chartKeys(data), []string{"2026-01", "2026-03"})
+	for _, series := range data.Series {
+		switch series.Key {
+		case "A":
+			assertChartStrings(t, "A running", chartValues(series.Values), []string{"100", "80"})
+		case "B":
+			assertChartStrings(t, "B running", chartValues(series.Values), []string{"-30.5", "-30.5"})
+		}
+	}
+
+	settings.StackKeyID = ""
+	settings.ChartType = ChartTypeDonut
+	data = BuildChartData(chartTestColumns(), rows, settings, location)
+	assertChartStrings(t, "donut ignores cumulative", chartValues(data.Series[0].Values), []string{"69.5", "-20"})
+	settings.ChartType, settings.Measure = ChartTypeBar, ChartMeasureAverage
+	data = BuildChartData(chartTestColumns(), rows, settings, location)
+	assertChartStrings(t, "average ignores cumulative", chartValues(data.Series[0].Values), []string{"34.75", "-20"})
 }

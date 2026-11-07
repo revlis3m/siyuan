@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "הצגת קבוצות ריקות",
 	"chartShowLegend": "הצגת מקרא",
 	"chartShowDataLabels": "הצגת תוויות נתונים",
+	"chartCumulative": "סכום מצטבר",
 	"chartSelectGroupField": "בחרו שדה לקיבוץ כדי להציג את התרשים",
 	"chartNoData": "אין רשומות להצגה",
 	"chartWeekOf": "שבוע של ${x}",

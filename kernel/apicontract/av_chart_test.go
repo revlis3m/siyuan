@@ -25,6 +25,8 @@ func TestAVContractChartSettingsAndRenderData(t *testing.T) {
 		valid bool
 	}{
 		{`{` + full + `}`, true},
+		{`{` + full + `,"cumulative":true}`, true},
+		{`{` + full + `,"cumulative":"yes"}`, false},
 		{`{"chartType":"","xKeyID":"","dateBucket":"","measure":"","valueKeyID":"","stackKeyID":"","sort":"","showEmptyGroups":false,"showLegend":false,"showDataLabels":false,"height":0}`, true},
 		{`{` + strings.Replace(full, `"bar"`, `"pie"`, 1) + `}`, false},
 		{`{` + strings.Replace(full, `"week"`, `"hour"`, 1) + `}`, false},

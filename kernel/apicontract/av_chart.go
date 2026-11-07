@@ -26,6 +26,8 @@ type AVChartSettings struct {
 	ShowEmptyGroups bool `json:"showEmptyGroups"`
 	ShowLegend      bool `json:"showLegend"`
 	ShowDataLabels  bool `json:"showDataLabels"`
+	// 累计值：柱形、条形和折线图的计数或求和按分组顺序显示截至该分组的合计，空值分组不计入；其他图形和汇总方式忽略此设置。
+	Cumulative bool `json:"cumulative" api:"optional"`
 	// 图表高度，单位为像素：0 使用默认高度 360，否则为 160 至 1600。
 	Height int `json:"height"`
 }

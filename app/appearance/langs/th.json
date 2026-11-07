@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "แสดงกลุ่มว่าง",
 	"chartShowLegend": "แสดงคำอธิบายแผนภูมิ",
 	"chartShowDataLabels": "แสดงป้ายข้อมูล",
+	"chartCumulative": "ยอดสะสม",
 	"chartSelectGroupField": "เลือกฟิลด์สำหรับจัดกลุ่มเพื่อแสดงแผนภูมิ",
 	"chartNoData": "ไม่มีรายการให้แสดง",
 	"chartWeekOf": "สัปดาห์ของ ${x}",

@@ -52,7 +52,7 @@ const optionData = (patch: Partial<IAVChartData> = {}): IAVChartData => ({
 test("chart settings fall back to defaults and normalize invalid values", () => {
     assert.deepEqual(getChartSettings({}), {
         chartType: "bar", xKeyID: "", dateBucket: "month", measure: "count", valueKeyID: "", stackKeyID: "",
-        sort: "default", showEmptyGroups: false, showLegend: true, showDataLabels: false, height: 360,
+        sort: "default", showEmptyGroups: false, showLegend: true, showDataLabels: false, cumulative: false, height: 360,
     });
     const normalized = getChartSettings({chart: {
         chartType: "pie" as IAVChartSettings["chartType"], xKeyID: "x", dateBucket: "hour" as IAVChartSettings["dateBucket"],

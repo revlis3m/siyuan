@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "खाली समूह दिखाएं",
 	"chartShowLegend": "लेजेंड दिखाएं",
 	"chartShowDataLabels": "डेटा लेबल दिखाएं",
+	"chartCumulative": "संचयी योग",
 	"chartSelectGroupField": "चार्ट दिखाने के लिए समूह बनाने वाला फ़ील्ड चुनें",
 	"chartNoData": "दिखाने के लिए कोई प्रविष्टि नहीं",
 	"chartWeekOf": "${x} से शुरू सप्ताह",

@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "空のグループを表示",
 	"chartShowLegend": "凡例を表示",
 	"chartShowDataLabels": "データラベルを表示",
+	"chartCumulative": "累計",
 	"chartSelectGroupField": "グラフを表示するにはグループ化するフィールドを選択してください",
 	"chartNoData": "表示するエントリがありません",
 	"chartWeekOf": "${x} の週",

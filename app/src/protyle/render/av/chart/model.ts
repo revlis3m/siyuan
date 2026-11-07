@@ -44,6 +44,7 @@ export const getChartSettings = (view: Pick<IAVTable, "chart">): IAVChartSetting
         showEmptyGroups: !!settings?.showEmptyGroups,
         showLegend: settings ? !!settings.showLegend : true,
         showDataLabels: !!settings?.showDataLabels,
+        cumulative: !!settings?.cumulative,
         height: normalizeChartHeight(settings?.height),
     };
 };

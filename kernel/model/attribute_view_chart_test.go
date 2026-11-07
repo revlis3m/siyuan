@@ -285,7 +285,7 @@ func TestAttributeViewChartSettingsTransaction(t *testing.T) {
 	selectKey := attrView.KeyValues[1].Key
 	next := map[string]any{"chartType": "horizontalBar", "xKeyID": selectKey.ID, "dateBucket": "week", "measure": "average",
 		"valueKeyID": number.ID, "stackKeyID": "", "sort": "valueDesc", "showEmptyGroups": true, "showLegend": false,
-		"showDataLabels": true, "height": 480}
+		"showDataLabels": true, "cumulative": true, "height": 480}
 	if err := setAttrViewChart(operation(view.ID, next)); nil != err {
 		t.Fatal(err)
 	}
@@ -296,7 +296,7 @@ func TestAttributeViewChartSettingsTransaction(t *testing.T) {
 	}
 	want := av.ChartSettings{ChartType: av.ChartTypeHorizontalBar, XKeyID: selectKey.ID, DateBucket: av.ChartDateBucketWeek,
 		Measure: av.ChartMeasureAverage, ValueKeyID: number.ID, Sort: av.ChartSortValueDesc, ShowEmptyGroups: true,
-		ShowDataLabels: true, Height: 480}
+		ShowDataLabels: true, Cumulative: true, Height: 480}
 	if stored.Views[0].Chart.Settings != want {
 		t.Fatalf("chart settings were not saved: %+v", stored.Views[0].Chart.Settings)
 	}

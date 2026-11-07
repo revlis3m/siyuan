@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Lege groepen tonen",
 	"chartShowLegend": "Legenda tonen",
 	"chartShowDataLabels": "Gegevenslabels tonen",
+	"chartCumulative": "Lopend totaal",
 	"chartSelectGroupField": "Kies een veld om op te groeperen om de grafiek weer te geven",
 	"chartNoData": "Geen items om weer te geven",
 	"chartWeekOf": "Week van ${x}",

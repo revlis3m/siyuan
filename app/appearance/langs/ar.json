@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "إظهار المجموعات الفارغة",
 	"chartShowLegend": "إظهار وسيلة الإيضاح",
 	"chartShowDataLabels": "إظهار تسميات البيانات",
+	"chartCumulative": "إجمالي تراكمي",
 	"chartSelectGroupField": "اختر حقلًا للتجميع حسبه لعرض المخطط",
 	"chartNoData": "لا توجد مدخلات لعرضها",
 	"chartWeekOf": "أسبوع ${x}",

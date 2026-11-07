@@ -8214,6 +8214,9 @@
             "number"
           ]
         },
+        "cumulative": {
+          "type": "boolean"
+        },
         "dateBucket": {
           "type": "string",
           "enum": [
@@ -8296,6 +8299,9 @@
             "donut",
             "number"
           ]
+        },
+        "cumulative": {
+          "type": "boolean"
         },
         "dateBucket": {
           "type": "string",

@@ -1344,6 +1344,8 @@ interface IAVChartSettings {
     showEmptyGroups: boolean;
     showLegend: boolean;
     showDataLabels: boolean;
+    /** 累计值：柱形、条形和折线图的计数或求和显示截至每个分组的合计。 */
+    cumulative?: boolean;
     /** 图表高度（像素），0 使用默认高度。 */
     height: number;
 }

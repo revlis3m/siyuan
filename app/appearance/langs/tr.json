@@ -20,6 +20,7 @@
 	"chartShowEmptyGroups": "Boş grupları göster",
 	"chartShowLegend": "Göstergeyi göster",
 	"chartShowDataLabels": "Veri etiketlerini göster",
+	"chartCumulative": "Kümülatif toplam",
 	"chartSelectGroupField": "Grafiği görüntülemek için bir gruplandırma alanı seçin",
 	"chartNoData": "Görüntülenecek girdi yok",
 	"chartWeekOf": "${x} haftası",

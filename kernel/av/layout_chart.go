@@ -121,6 +121,7 @@ type ChartSettings struct {
 	ShowEmptyGroups bool            `json:"showEmptyGroups"` // 显示没有条目的选项、日期区间和空值分组
 	ShowLegend      bool            `json:"showLegend"`      // 显示图例
 	ShowDataLabels  bool            `json:"showDataLabels"`  // 显示数据标签
+	Cumulative      bool            `json:"cumulative"`      // 累计值：每个分组显示截至该分组的合计（柱形、条形和折线图的计数或求和）
 	Height          int             `json:"height"`          // 图表高度（像素），0 使用默认高度
 }
 
@@ -727,7 +728,49 @@ func BuildChartData(columns []*TableColumn, rows []*TableRow, settings ChartSett
 		}
 		ret.Series = append(ret.Series, series)
 	}
+	if settings.Cumulative && chartSupportsCumulative(chartType, r.measure) {
+		accumulateChartData(ret)
+	}
 	return ret
+}
+
+// chartSupportsCumulative 判断累计值是否适用：柱形、条形和折线图的计数或求和。
+func chartSupportsCumulative(chartType ChartType, measure ChartMeasure) bool {
+	switch chartType {
+	case "", ChartTypeBar, ChartTypeHorizontalBar, ChartTypeLine:
+	default:
+		return false
+	}
+	return ChartMeasureCount == measure || ChartMeasureSum == measure
+}
+
+// accumulateChartData 把分组和各系列的值改为按分组顺序的累计值；空值分组保持自身的值，不计入累计。
+func accumulateChartData(data *ChartData) {
+	running := func(values []*float64, empty func(int) bool) {
+		var sum chartSum
+		for i, value := range values {
+			if empty(i) {
+				continue
+			}
+			if nil != value {
+				sum.add(*value)
+			}
+			total := sum.float64()
+			values[i] = &total
+		}
+	}
+	isEmpty := func(i int) bool { return data.Categories[i].Empty }
+	values := make([]*float64, len(data.Categories))
+	for i, category := range data.Categories {
+		values[i] = category.Value
+	}
+	running(values, isEmpty)
+	for i, category := range data.Categories {
+		category.Value = values[i]
+	}
+	for _, series := range data.Series {
+		running(series.Values, isEmpty)
+	}
 }
 
 func newChartItem(row *TableRow) *ChartItem {

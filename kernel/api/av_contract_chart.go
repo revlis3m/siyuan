@@ -24,6 +24,7 @@ func toContractAVChartSettings(value *av.ChartSettings) *apicontract.AVChartSett
 		ShowEmptyGroups: value.ShowEmptyGroups,
 		ShowLegend:      value.ShowLegend,
 		ShowDataLabels:  value.ShowDataLabels,
+		Cumulative:      value.Cumulative,
 		Height:          value.Height,
 	}
 }
