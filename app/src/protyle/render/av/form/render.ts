@@ -282,16 +282,23 @@ export const renderForm = async (blockElement: HTMLElement, protyle: IProtyle, d
         applyConditions();
     };
     root.addEventListener("input", event => {
+        event.stopPropagation();
         const fieldElement = (event.target as HTMLElement).closest<HTMLElement>(".av__form-field");
         if (fieldElement) {
             update(fieldElement);
         }
     });
     root.addEventListener("change", event => {
+        event.stopPropagation();
         const fieldElement = (event.target as HTMLElement).closest<HTMLElement>(".av__form-field");
         if (fieldElement) {
             update(fieldElement);
         }
+    });
+    // The editor around the form handles typing, selection and clipboard for its own content: keep the form's events away.
+    ["beforeinput", "keyup", "keypress", "compositionstart", "compositionupdate", "compositionend", "paste", "cut", "copy",
+        "focusout", "focusin", "mousedown", "mouseup", "select", "selectstart", "dragstart", "drop"].forEach(type => {
+        root.addEventListener(type, event => event.stopPropagation());
     });
     root.addEventListener("keydown", event => {
         // Typing in the form must not reach the editor; Enter in a single-line field submits.

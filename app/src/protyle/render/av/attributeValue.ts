@@ -65,6 +65,11 @@ export const getAVTemplateInteractiveElement = (target: EventTarget | null) => {
     if (!(target instanceof Element)) {
         return;
     }
+    // revlis3m mods: a database form is a set of native inputs; the editor must leave its events alone.
+    const formElement = target.closest<HTMLElement>(".av__form");
+    if (formElement) {
+        return formElement;
+    }
     const templateElement = target.closest(".av__celltext--template");
     if (!templateElement) {
         return;

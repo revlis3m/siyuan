@@ -43,5 +43,6 @@ Changes on top of the release:
   `/api/av/appendAttributeViewDetachedBlocksWithValues`. Per-field settings (`setAttrViewForm`): required, default
   (fixed value, today, last used = value of the newest item matching the view filters) and "show only when" a
   select/status/checkbox field has given values. Rows are not returned (`formLast` carries the last values). Unsent
-  answers survive re-renders. Code: kernel/av/layout_form.go, kernel/model/attribute_view_form.go,
+  answers survive re-renders. The editor ignores events from inside a form (`getAVTemplateInteractiveElement`), so
+  typing, selecting and pasting in its inputs stay in the inputs. Code: kernel/av/layout_form.go, kernel/model/attribute_view_form.go,
   app/src/protyle/render/av/form/.
