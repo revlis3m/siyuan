@@ -4,7 +4,7 @@ name: Mods image
 on:
   push:
     branches: [mods]
-    paths: ['app/**', 'kernel/**', 'scripts/prepare-ocr.py', 'scripts/ocr-assets.json', 'docker/Dockerfile.mods', '.github/workflows/mods-image.yml']
+    paths: ['app/**', 'kernel/**', 'mods-tests/**', 'scripts/prepare-ocr.py', 'scripts/ocr-assets.json', 'docker/Dockerfile.mods', '.github/workflows/mods-image.yml']
   workflow_dispatch:
 
 permissions:
@@ -40,6 +40,14 @@ jobs:
           corepack enable
           pnpm install --frozen-lockfile --silent
           pnpm run api:check
+      - name: Editor tests (databases and mods)
+        working-directory: app
+        run: >
+          node --import tsx --test --test-concurrency=4
+          "src/protyle/render/av/**/*.test.ts"
+          src/protyle/util/maskAmountsText.test.ts
+          src/config/entryVisibility/catalog.test.ts
+          src/protyle/hint/slashMenu.test.ts
 
   image:
     needs: checks
@@ -61,7 +69,53 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v6
+      # Build the image locally first: it is only published after it has started and passed the checks.
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile.mods
+          platforms: linux/amd64
+          load: true
+          tags: siyuan-mods:candidate
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Start the image
+        run: |
+          mkdir -p "$RUNNER_TEMP/ws"
+          docker run -d --name candidate -p 6806:6806 -v "$RUNNER_TEMP/ws:/siyuan/workspace" \
+            -e PUID="$(id -u)" -e PGID="$(id -g)" siyuan-mods:candidate \
+            --workspace=/siyuan/workspace/ --accessAuthCode=test1234 --lang=en
+          for i in $(seq 1 60); do
+            if curl -fsS -m 2 -X POST http://127.0.0.1:6806/api/system/version; then echo; exit 0; fi
+            sleep 2
+          done
+          echo "the image did not start"; docker logs --tail 80 candidate; exit 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Checks on the running image (API and browser)
+        working-directory: mods-tests
+        env:
+          SIYUAN_URL: http://127.0.0.1:6806
+          SIYUAN_ACCESS_CODE: test1234
+        run: |
+          export SIYUAN_WORKSPACE="$RUNNER_TEMP/ws"
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          node api.mjs
+          node ui.mjs
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mods-tests-shots
+          path: mods-tests/shots
+          if-no-files-found: ignore
+      - name: Container log when a check fails
+        if: failure()
+        run: docker logs --tail 120 candidate || true
+      - name: Publish
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: docker/Dockerfile.mods
@@ -71,6 +125,5 @@ jobs:
             ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
             ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.latest }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
       - name: Summary
         run: echo "Built ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}" >> "$GITHUB_STEP_SUMMARY"

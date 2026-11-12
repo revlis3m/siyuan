@@ -6,16 +6,33 @@
  * a list for multiple choices and relations, a boolean for checkboxes.
  */
 
+import {isAVSingleSelectType} from "../capabilities";
+
 export type TFormRaw = string | string[] | boolean;
 
-const TEXT_TYPES = ["block", "text", "url", "email", "phone"];
-const FORM_TYPES = [...TEXT_TYPES, "number", "date", "select", "status", "mSelect", "checkbox", "relation"];
-
 /** Whether a field type can be answered in a form; computed and file fields are left out. */
-export const isFormInputType = (type: string) => FORM_TYPES.includes(type);
+export const isFormInputType = (type: string) => {
+    switch (type) {
+        case "block":
+        case "text":
+        case "url":
+        case "email":
+        case "phone":
+        case "number":
+        case "date":
+        case "select":
+        case "status":
+        case "mSelect":
+        case "checkbox":
+        case "relation":
+            return true;
+        default:
+            return false;
+    }
+};
 
 /** Fields whose value can decide whether another field is shown. */
-export const isFormConditionType = (type: string) => ["select", "status", "checkbox"].includes(type);
+export const isFormConditionType = (type: string) => isAVSingleSelectType(type) || type === "checkbox";
 
 export const getFormSettings = (view: Pick<IAVTable, "form">): IAVFormSettings => ({
     title: view.form?.title || "",
