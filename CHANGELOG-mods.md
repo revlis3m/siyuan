@@ -6,6 +6,17 @@ What each mod does in detail is in [MODS.md](MODS.md).
 
 ## 3.8.9
 
+### mods.22 — 2026-11-12
+- PIN lock, guessing: PINs are checked one at a time. After 5 wrong PINs in a row the notebook refuses every PIN
+  for 5 minutes, then 10, 20… up to a day. A restart does not reset this. (Before, guesses sent together skipped the delay.)
+- PIN lock, relock: each notebook locks again after the idle delay without activity in that notebook. Activity in
+  other notebooks no longer keeps it open.
+- PIN lock, side doors: while a notebook is locked, its files, its history and the databases placed in its pages
+  are refused by every route (file API, history, database rendering, mirrors in other notebooks). Full workspace
+  export and data-snapshot browsing are refused while any notebook is locked.
+- PIN lock: changing the idle delay needs a PIN.
+- Automations: "Is complete" and "Is not complete" work in conditions on Status fields.
+
 ### mods.21 — 2026-11-12
 - Build: the editor's database and mods tests now run before an image is built.
 - Build: the image is started and checked (API and browser checks in `mods-tests/`) before it is published.
