@@ -85,7 +85,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/ws"
           docker run -d --name candidate -p 6806:6806 -v "$RUNNER_TEMP/ws:/siyuan/workspace" \
             -e PUID="$(id -u)" -e PGID="$(id -g)" siyuan-mods:candidate \
-            --workspace=/siyuan/workspace/ --accessAuthCode=test1234 --lang=en
+            serve --workspace=/siyuan/workspace/ --accessAuthCode=test1234 --lang=en
           for i in $(seq 1 60); do
             if curl -fsS -m 2 -X POST http://127.0.0.1:6806/api/system/version; then echo; exit 0; fi
             sleep 2
