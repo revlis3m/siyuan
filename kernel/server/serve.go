@@ -161,6 +161,7 @@ func Serve(fastMode bool, cookieKey string) {
 	// https://github.com/siyuan-note/siyuan/security/advisories/GHSA-hpj5-f7cj-vvwr
 	ginServer.Use(tlsEnforceMiddleware())
 	ginServer.Use(sessions.Sessions("siyuan", sessionStore))
+	ginServer.Use(api.NotebookPINGuard) // revlis3m mods: nothing of a PIN-locked notebook by any route
 
 	serveDebug(ginServer)
 	serveAssets(ginServer)

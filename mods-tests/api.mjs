@@ -44,6 +44,7 @@ await api("/api/av/changeAttrViewLayout", {avID, blockID, layoutType: "table"});
 
 console.log("Notebook PIN lock");
 const pinNotebook = await createNotebook("mods-lock-" + stamp);
+const money = await createDatabaseDoc(pinNotebook, "/Money");
 const opened = async () => (await api("/api/notebook/lsNotebooks")).notebooks.find(item => item.id === pinNotebook)?.closed === false;
 check("a short PIN is refused", (await raw("/api/notebook/setNotebookPIN", {notebook: pinNotebook, pin: "12"})).code !== 0);
 check("a PIN can be set", (await raw("/api/notebook/setNotebookPIN", {notebook: pinNotebook, pin: "4821"})).code === 0);
@@ -53,14 +54,53 @@ check("it is reported as locked", statusData.notebooks.find(item => item.noteboo
 await raw("/api/notebook/openNotebook", {notebook: pinNotebook});
 await sleep(300);
 check("a locked notebook does not open without the PIN", !(await opened()));
+
+console.log("Notebook PIN lock: side doors while locked");
+const refused = result => result.code !== 0 && /PIN/.test(result.msg || "");
+const file = await raw("/api/file/getFile", {path: `/data/${pinNotebook}/${money.docID}.sy`});
+check("its files cannot be read through the file API", refused(file), JSON.stringify(file).slice(0, 120));
+const dir = await raw("/api/file/readDir", {path: `/data/${pinNotebook}`});
+check("its folder cannot be listed", refused(dir), JSON.stringify(dir).slice(0, 120));
+const database = await raw("/api/av/renderAttributeView", {id: money.avID});
+check("its databases cannot be rendered", refused(database), JSON.stringify(database).slice(0, 120));
+const databaseFile = await raw("/api/file/getFile", {path: `/data/storage/av/${money.avID}.json`});
+check("its database files cannot be read", refused(databaseFile), JSON.stringify(databaseFile).slice(0, 120));
+const history = await raw("/api/history/getNotebookHistory", {notebook: pinNotebook});
+check("its history cannot be asked for", refused(history), JSON.stringify(history).slice(0, 120));
+const exported = await raw("/api/export/exportData", {});
+check("the whole workspace cannot be exported", refused(exported), JSON.stringify(exported).slice(0, 120));
+const otherTable = await raw("/api/av/renderAttributeView", {id: avID});
+check("other notebooks keep working", otherTable.code === 0, otherTable.msg);
+check("the delay cannot be changed without a PIN", (await raw("/api/notebook/setNotebookPINMinutes", {minutes: 0})).code !== 0);
+check("the delay cannot be changed with a wrong PIN", (await raw("/api/notebook/setNotebookPINMinutes", {notebook: pinNotebook, pin: "0000", minutes: 0})).code !== 0);
+check("the delay is unchanged", (await api("/api/notebook/getNotebookPINStatus")).minutes === 15);
 check("a wrong PIN is refused", (await raw("/api/notebook/unlockNotebookPIN", {notebook: pinNotebook, pin: "0000"})).code !== 0);
 check("the right PIN is accepted", (await raw("/api/notebook/unlockNotebookPIN", {notebook: pinNotebook, pin: "4821"})).code === 0);
 await raw("/api/notebook/openNotebook", {notebook: pinNotebook});
 await sleep(300);
 check("the notebook opens once unlocked", await opened());
+check("the delay can be changed with the PIN", (await raw("/api/notebook/setNotebookPINMinutes", {notebook: pinNotebook, pin: "4821", minutes: 20})).code === 0 &&
+    (await api("/api/notebook/getNotebookPINStatus")).minutes === 20);
+await api("/api/notebook/setNotebookPINMinutes", {notebook: pinNotebook, pin: "4821", minutes: 15});
+check("once unlocked, its databases render again", (await raw("/api/av/renderAttributeView", {id: money.avID})).code === 0);
+check("activity in the notebook can be reported", (await raw("/api/notebook/touchNotebookPIN", {notebook: pinNotebook})).code === 0);
 check("the PIN can be removed", (await raw("/api/notebook/removeNotebookPIN", {notebook: pinNotebook, pin: "4821"})).code === 0);
 
+console.log("Notebook PIN lock: guessing");
+const guessNotebook = await createNotebook("mods-guess-" + stamp);
+await api("/api/notebook/setNotebookPIN", {notebook: guessNotebook, pin: "7305"});
+await api("/api/notebook/lockNotebookPIN", {notebook: guessNotebook});
+// 12 wrong PINs sent together: only 5 are counted before every PIN is refused.
+const guesses = await Promise.all(Array.from({length: 12}, (_, i) =>
+    raw("/api/notebook/unlockNotebookPIN", {notebook: guessNotebook, pin: String(1000 + i)})));
+check("wrong PINs sent together are all refused", guesses.every(result => result.code !== 0));
+check("after 5 wrong PINs the notebook refuses to check more", guesses.some(result => /too many/i.test(result.msg || "")),
+    guesses.map(result => result.msg).join(" | ").slice(0, 200));
+const right = await raw("/api/notebook/unlockNotebookPIN", {notebook: guessNotebook, pin: "7305"});
+check("even the right PIN is refused during the lockout", right.code !== 0 && /too many/i.test(right.msg || ""), right.msg);
+
 // Leave the test instance clean.
+// (The guessing notebook stays: it is locked out, and the test instance is thrown away.)
 for (const id of [notebook, pinNotebook]) {
     await raw("/api/notebook/removeNotebook", {notebook: id});
 }

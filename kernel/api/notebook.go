@@ -557,7 +557,6 @@ var setNotebookCryptoAutoLock = contractHandler(apicontract.SetNotebookCryptoAut
 // touchEncryptedNotebooks 由前端真实用户交互或 headless 客户端显式保活调用，刷新已解锁加密笔记本的闲置计时。
 var touchEncryptedNotebooks = contractHandler(apicontract.TouchEncryptedNotebooks, func(c *gin.Context, request apicontract.EmptyRequest) apicontract.Response[apicontract.Null] {
 	model.TouchUnlockedEncryptedBoxes()
-	model.TouchNotebookPINs() // revlis3m mods
 	return apicontract.Success(apicontract.Null{})
 })
 

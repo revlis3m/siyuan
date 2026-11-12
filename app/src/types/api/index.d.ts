@@ -1682,7 +1682,7 @@ export type NotebookInfo = { "ctime": number; "docCount": number; "hCtime": stri
 
 export type NotebookInfoData = { "boxInfo": NotebookInfo | null; };
 
-export type NotebookPINMinutesRequestInput = { "minutes": number; };
+export type NotebookPINMinutesRequestInput = { "minutes": number; "notebook": string; "pin": string; };
 
 export type NotebookPINRequestInput = { "notebook": string; "pin": string; };
 
@@ -6625,7 +6625,7 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated","admin","writable"];
     };
     /**
-     * revlis3m mods: 设置 PIN 笔记本闲置多少分钟后重新锁定，0 表示不自动锁定。
+     * revlis3m mods: 设置 PIN 笔记本闲置多少分钟后重新锁定，0 表示不自动锁定；需要任一 PIN 笔记本的 PIN。
      */
     "/api/notebook/setNotebookPINMinutes": {
         request: NotebookPINMinutesRequestInput;
@@ -6638,6 +6638,16 @@ export interface APIPOSTRoutes {
         request: EmptyRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "none";
+        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
+        authorization?: readonly ["authenticated","admin"];
+    };
+    /**
+     * revlis3m mods: 记录某个已解锁 PIN 笔记本内的用户活动，推迟其重新锁定；其他笔记本内的活动不计入。
+     */
+    "/api/notebook/touchNotebookPIN": {
+        request: NotebookIDRequestInput;
+        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };

@@ -291,6 +291,7 @@ func registerNotebookRoutes(ginServer *gin.Engine) {
 	ginServer.Handle("POST", "/api/notebook/unlockNotebookPIN", contractRouteHandlers(apicontract.UnlockNotebookPIN, unlockNotebookPIN)...)
 	ginServer.Handle("POST", "/api/notebook/lockNotebookPIN", contractRouteHandlers(apicontract.LockNotebookPIN, lockNotebookPIN)...)
 	ginServer.Handle("POST", "/api/notebook/setNotebookPINMinutes", contractRouteHandlers(apicontract.SetNotebookPINMinutes, setNotebookPINMinutes)...)
+	ginServer.Handle("POST", "/api/notebook/touchNotebookPIN", contractRouteHandlers(apicontract.TouchNotebookPIN, touchNotebookPIN)...)
 }
 
 // registerFiletreeRoutes 注册本域的契约路由。

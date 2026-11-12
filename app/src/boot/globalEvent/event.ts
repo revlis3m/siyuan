@@ -1,3 +1,4 @@
+import {touchNotebookPINFromEvent} from "../../util/notebookPIN";
 import type {App} from "../../index";
 import {getTableResizeBounds, windowMouseMove} from "./mousemove";
 import {windowKeyUp} from "./keyup";
@@ -43,6 +44,10 @@ export const initWindowEvent = (app: App) => {
     window.addEventListener("pointerdown", touchEncryptedNotebooks, {passive: true});
     window.addEventListener("keydown", touchEncryptedNotebooks);
     document.addEventListener("touchstart", touchEncryptedNotebooks, {passive: true});
+    // revlis3m mods: activity inside a PIN notebook postpones that notebook's relock.
+    window.addEventListener("pointerdown", touchNotebookPINFromEvent, {passive: true});
+    window.addEventListener("keydown", touchNotebookPINFromEvent);
+    document.addEventListener("touchstart", touchNotebookPINFromEvent, {passive: true});
 
     bindGutterPointerLeave(document.body, () => {
         if (window.siyuan.layout.leftDock) {
