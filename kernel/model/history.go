@@ -942,6 +942,8 @@ func buildSearchHistoryQueryFilter(query, op, box, table string, typ int) (stmt 
 		stmt += " AND path LIKE '%/storage/av/%'"
 	}
 
+	stmt += notebookPINHistoryFilter() // revlis3m mods: nothing from a PIN-locked notebook
+
 	ago := time.Now().Add(-24 * time.Hour * time.Duration(Conf.Editor.Load().HistoryRetentionDays))
 	stmt += " AND CAST(created AS INTEGER) > " + fmt.Sprintf("%d", ago.Unix()) + ""
 	return

@@ -50,8 +50,13 @@ var lockNotebookPIN = contractHandler(apicontract.LockNotebookPIN, func(c *gin.C
 })
 
 var setNotebookPINMinutes = contractHandler(apicontract.SetNotebookPINMinutes, func(c *gin.Context, request apicontract.NotebookPINMinutesRequest) apicontract.Response[apicontract.Null] {
-	if err := model.SetNotebookPINMinutes(request.Minutes); err != nil {
+	if err := model.SetNotebookPINMinutes(request.Notebook, request.PIN, request.Minutes); err != nil {
 		return apicontract.Failure[apicontract.Null](-1, err.Error())
 	}
+	return apicontract.Success(apicontract.Null{})
+})
+
+var touchNotebookPIN = contractHandler(apicontract.TouchNotebookPIN, func(c *gin.Context, request apicontract.NotebookIDRequest) apicontract.Response[apicontract.Null] {
+	model.TouchNotebookPIN(request.Notebook)
 	return apicontract.Success(apicontract.Null{})
 })

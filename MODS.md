@@ -35,10 +35,19 @@ Changes on top of the release:
   (`/api/filetree/createDocWithMd` failed with error 390 in encrypted notebooks).
 - Notebook PIN lock: notebook menu → "Lock with PIN…". A locked notebook is a closed notebook that the kernel only
   opens after `/api/notebook/unlockNotebookPIN` (model.Mount refuses it otherwise), so it is out of the tree, search,
-  backlinks and embeds. It locks again after N idle minutes (default 15, `setNotebookPINMinutes`; activity is the
-  existing `touchEncryptedNotebooks` ping), with "Lock now", and on restart. PINs: PBKDF2-SHA256 in
-  `conf/mods-notebook-lock.json` (not synced); wrong PINs are slowed down. Privacy lock only, files are not encrypted.
-  Code: kernel/model/mods_notebook_lock.go, kernel/api/mods_notebook_lock.go, app/src/util/notebookPIN.ts.
+  backlinks and embeds. Privacy lock only, files are not encrypted.
+  - Relock: each notebook locks again after N minutes (default 15) without activity in that notebook: the editor
+    reports pointer/key activity inside its pages or its part of the tree with `/api/notebook/touchNotebookPIN`.
+    Also "Lock now", and on restart. Changing N (`setNotebookPINMinutes`) needs the PIN of a PIN notebook.
+  - Guessing: PINs are checked one at a time; after 5 wrong PINs in a row every PIN is refused for 5 minutes,
+    doubling at each new lockout up to a day. The counters are saved, so a restart does not reset them.
+    PINs: PBKDF2-SHA256 in `conf/mods-notebook-lock.json` (not synced).
+  - Side doors: `api.NotebookPINGuard` (registered before every route) refuses any request naming a locked notebook
+    or a database placed in one of its pages (file API, history, database rendering, mirrors…), and the routes that
+    read the whole workspace (full export, data snapshots) while any PIN notebook is locked. History search leaves
+    out locked notebooks.
+  Code: kernel/model/mods_notebook_lock.go, kernel/api/mods_notebook_lock.go, kernel/api/mods_notebook_lock_guard.go,
+  app/src/util/notebookPIN.ts.
 - Workflow "Mods API generate": push a commit to branch `mods-apigen` to get the generated schema/declarations as a
   gzip+base64 patch in the job log (for environments that cannot run the Go generator).
 - Form view (layout `form`): the view's visible fields, in order, are the questions; Submit adds an item through

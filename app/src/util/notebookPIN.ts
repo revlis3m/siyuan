@@ -2,13 +2,15 @@
  * revlis3m mods: PIN lock for chosen notebooks.
  *
  * A locked notebook is a closed notebook that the kernel only opens after /api/notebook/unlockNotebookPIN. It locks
- * again (closes) after the idle delay or with "Lock now". It is a privacy lock, not encryption.
+ * again (closes) after the idle delay without activity in that notebook, or with "Lock now". It is a privacy lock,
+ * not encryption.
  */
 import {openInputDialog} from "../dialog/inputDialog";
 import {showMessage} from "../dialog/message";
 import {fetchPost, fetchSyncPost} from "./fetch";
 import {escapeHtml} from "./escape";
 import {getFileTreeIconHTML} from "../emoji/fileTreeIcon";
+import {getAllEditor} from "../layout/getAll";
 
 const protectedNotebooks = new Set<string>();
 let minutes = 15;
@@ -125,7 +127,8 @@ export const setNotebookPIN = async (notebookId: string, name: string) => {
             }
             const nextMinutes = Math.max(0, Math.floor(Number(value("minutes")) || 0));
             if (nextMinutes !== minutes) {
-                await fetchSyncPost("/api/notebook/setNotebookPINMinutes", {minutes: nextMinutes});
+                // Changing the delay needs a PIN: the one just set for this notebook.
+                await fetchSyncPost("/api/notebook/setNotebookPINMinutes", {notebook: notebookId, pin, minutes: nextMinutes});
             }
             dialog.destroy();
             await refreshNotebookPINs();
@@ -149,6 +152,43 @@ export const removeNotebookPIN = (notebookId: string, name: string) => {
             await refreshNotebookPINs();
         },
     });
+};
+
+const lastActivity = new Map<string, number>();
+
+/**
+ * Tells the kernel that the user is active in a PIN notebook (in one of its pages or in its part of the document
+ * tree), which postpones that notebook's relock. Activity anywhere else does not count.
+ */
+export const touchNotebookPINFromEvent = (event: Event) => {
+    if (window.siyuan.isPublish) {
+        return;
+    }
+    if (!loaded) {
+        refreshNotebookPINs();
+        return;
+    }
+    const target = event.target as HTMLElement;
+    if (!protectedNotebooks.size || !target || typeof target.closest !== "function") {
+        return;
+    }
+    let notebookId = target.closest("ul[data-url]")?.getAttribute("data-url") || "";
+    if (!notebookId) {
+        const element = target.closest(".protyle");
+        if (element) {
+            notebookId = getAllEditor().find(editor => editor.protyle.element === element)?.protyle.notebookId ||
+                element.getAttribute("data-notebook-id") || "";
+        }
+    }
+    if (!notebookId || !protectedNotebooks.has(notebookId)) {
+        return;
+    }
+    const now = Date.now();
+    if (now - (lastActivity.get(notebookId) || 0) < 30000) {
+        return;
+    }
+    lastActivity.set(notebookId, now);
+    fetchPost("/api/notebook/touchNotebookPIN", {notebook: notebookId});
 };
 
 export const lockNotebookNow = (notebookId: string) => {

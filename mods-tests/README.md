@@ -8,7 +8,7 @@ editor and use them like a user or a script would.
 
 | File | What it checks |
 |---|---|
-| `api.mjs` | Status property (default options and groups, values), Timeline / Chart / Form layouts render, notebook PIN lock (set, lock, refuse without PIN, wrong PIN, unlock, remove) |
+| `api.mjs` | Status property (default options and groups, values), Timeline / Chart / Form layouts render, notebook PIN lock (set, lock, refuse without PIN, wrong PIN, unlock, remove; files, databases, history and full export refused while locked; PIN needed to change the delay; lockout after 5 wrong PINs, also when sent together) |
 | `ui.mjs` | Logs in, opens a page with a database, sees rows and Status chips, switches to Chart and sees it drawn, fails on any page error. Screenshots in `shots/` |
 | `lib.mjs` | API helpers shared by both (create a notebook, a database page, add rows) |
 

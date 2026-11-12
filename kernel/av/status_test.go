@@ -387,3 +387,46 @@ func TestStatusValueStorageMatchesSelect(t *testing.T) {
 		t.Fatal("status must share single-select storage")
 	}
 }
+
+// revlis3m mods: automation conditions accept the status completion operators and match by option group.
+func TestAutomationStatusCompletionFilters(t *testing.T) {
+	key := newStatusTestKey()
+	values := []*Value{}
+	for itemID, content := range map[string]string{"done": "Done", "shipped": "Shipped", "doing": "Doing", "empty": ""} {
+		value := newStatusTestValue(content)
+		value.BlockID = itemID
+		values = append(values, value)
+	}
+	text := &Key{ID: "text", Type: KeyTypeText}
+	view := &AttributeView{ID: "tasks", KeyValues: []*KeyValues{{Key: key, Values: values}, {Key: text}}}
+
+	for _, operator := range []FilterOperator{FilterOperatorIsComplete, FilterOperatorIsNotComplete} {
+		for name, value := range map[string]*Value{"with value": {Type: KeyTypeStatus, MSelect: []*ValueSelect{}}, "without value": nil} {
+			filters := []*ViewFilter{{Column: key.ID, Operator: operator, Value: value}}
+			if err := ValidateAutomationFilters(view, filters); err != nil {
+				t.Fatalf("%s %s rejected: %v", operator, name, err)
+			}
+			for itemID, complete := range map[string]bool{"done": true, "shipped": true, "doing": false, "empty": false} {
+				got, err := view.MatchesAutomationFilters(itemID, filters, nil)
+				if err != nil {
+					t.Fatalf("%s %s on %s: %v", operator, name, itemID, err)
+				}
+				if want := complete == (FilterOperatorIsComplete == operator); got != want {
+					t.Errorf("%s %s on %s = %v, want %v", operator, name, itemID, got, want)
+				}
+			}
+		}
+	}
+
+	// Only status fields have groups: the operators stay refused on other field types.
+	for _, operator := range []FilterOperator{FilterOperatorIsComplete, FilterOperatorIsNotComplete} {
+		filters := []*ViewFilter{{Column: text.ID, Operator: operator, Value: &Value{Type: KeyTypeText, Text: &ValueText{}}}}
+		if err := ValidateAutomationFilters(view, filters); err == nil {
+			t.Errorf("%s accepted on a text field", operator)
+		}
+	}
+	// Other operators on a status field still need a value.
+	if err := ValidateAutomationFilters(view, []*ViewFilter{{Column: key.ID, Operator: FilterOperatorContains}}); err == nil {
+		t.Error("Contains without a value accepted")
+	}
+}

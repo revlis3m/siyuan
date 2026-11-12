@@ -278,7 +278,14 @@ func ValidateAutomationFilters(view *AttributeView, filters []*ViewFilter) error
 		if err != nil || !AutomationEditableKey(key.Type) {
 			return fmt.Errorf("automation condition field [%s] is unavailable", filter.Column)
 		}
-		if filter.Value == nil || filter.Value.Type != key.Type || filter.ValueSource != "" && filter.ValueSource != ValueSourceStored {
+		// revlis3m mods: "Is complete" / "Is not complete" compare the status option's group, not a value,
+		// so they may come without one; they only apply to status fields.
+		statusCompletion := IsValuelessStatusFilterOperator(filter.Operator)
+		if statusCompletion && KeyTypeStatus != key.Type {
+			return fmt.Errorf("invalid automation condition operator")
+		}
+		if (filter.Value == nil && !statusCompletion) || (filter.Value != nil && filter.Value.Type != key.Type) ||
+			filter.ValueSource != "" && filter.ValueSource != ValueSourceStored {
 			return fmt.Errorf("invalid automation condition value [%s]", filter.Column)
 		}
 		if KeyTypeLocation == key.Type && (!IsFilterOperatorAllowed(key.Type, filter.Operator) ||
@@ -290,7 +297,7 @@ func ValidateAutomationFilters(view *AttributeView, filters []*ViewFilter) error
 			FilterOperatorIsLess, FilterOperatorIsLessOrEqual, FilterOperatorContains, FilterOperatorDoesNotContain,
 			FilterOperatorContainsAnyItem, FilterOperatorDoesNotContainAnyItem, FilterOperatorIsEmpty,
 			FilterOperatorIsNotEmpty, FilterOperatorStartsWith, FilterOperatorEndsWith, FilterOperatorIsTrue,
-			FilterOperatorIsFalse, FilterOperatorIsBetween:
+			FilterOperatorIsFalse, FilterOperatorIsBetween, FilterOperatorIsComplete, FilterOperatorIsNotComplete:
 		default:
 			return fmt.Errorf("invalid automation condition operator")
 		}

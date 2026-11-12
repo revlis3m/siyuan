@@ -177,7 +177,10 @@ type SetNotebookPINRequest struct {
 }
 
 type NotebookPINMinutesRequest struct {
-	Minutes int `json:"minutes"`
+	// Notebook 与 PIN：任一已设置 PIN 的笔记本及其 PIN，用于确认有权修改自动锁定时间。
+	NotebookIDRequest
+	PIN     string `json:"pin"`
+	Minutes int    `json:"minutes"`
 }
 
 type NotebookPINState struct {
