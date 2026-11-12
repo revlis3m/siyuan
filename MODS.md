@@ -46,3 +46,4 @@ Changes on top of the release:
   answers survive re-renders. The editor ignores events from inside a form (`getAVTemplateInteractiveElement`), so
   typing, selecting and pasting in its inputs stay in the inputs. Code: kernel/av/layout_form.go, kernel/model/attribute_view_form.go,
   app/src/protyle/render/av/form/.
+- Checks on a real instance: `mods-tests/` (API and browser checks run against the "mods-preview" build; see its README).
