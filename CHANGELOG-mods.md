@@ -1,12 +1,12 @@
 # revlis3m mods: changelog
 
 One entry per published image `ghcr.io/revlis3m/siyuan:<release>-mods.<n>`. Newest first.
-Numbers that are missing (2, 3, 8, 10, 17) were builds that failed or were cancelled: no image exists for them.
+Numbers that are missing (2, 3, 8, 10, 17, 20) were builds that failed or were cancelled: no image exists for them.
 What each mod does in detail is in [MODS.md](MODS.md).
 
 ## 3.8.9
 
-### mods.20 — 2026-11-12
+### mods.21 — 2026-11-12
 - Build: the editor's database and mods tests now run before an image is built.
 - Build: the image is started and checked (API and browser checks in `mods-tests/`) before it is published.
 - Form: the list of field types a form can ask is written the way the editor's own rules require. No change in behaviour.
